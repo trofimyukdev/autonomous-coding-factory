@@ -482,7 +482,7 @@ Carrier #47, the same day this ADR was written. Section 6 was a draft that
 minted nothing; this addendum records what turned it into rows and the two
 things that changed between the draft and the mint.
 
-**The operator's word**, given in the Claude application at about 12:50 on
+**The operator's word**, given at about 12:50 on
 2026-09-08, answering the foreman's dashboard question 1 verbatim:
 
 > 1. Да, раз ты уверен что стоит
@@ -544,7 +544,7 @@ Between the sanction and the enqueue the foreman re-measured the consumer's
 acceptance path, at 13:21 on 2026-09-08, and found it closed:
 
 ```text
-node dist/cli.js record-landed CR-01 --sha c461ece... --quality-attempts 1 ... --metric-effect direct
+node dist/cli.js record-landed <row> --sha <sha> --quality-attempts 1 ... --metric-effect direct
 exit 78: a task in PAUSED is not on the linear chain, so this command cannot walk it to DONE
 DESIGN.md section 6: only the chain states lead to DONE; a side state is the operator's to resolve
 ```
@@ -555,7 +555,7 @@ src/controller/shadow.ts), the state machine declares `PAUSED: ["READY",
 `grep -rn resume src/cli.ts` printed nothing at f5715f6 on 2026-09-08. So a
 candidate the operator accepts by hand can never be recorded, and the first
 (private) consumer's own `queue --next` printed no selection and eleven refusals, every one waiting on
-CR-01. That is M0-179's defect class for the other side edge.
+that first row. That is M0-179's defect class for the other side edge.
 
 **M0-190 was minted at 99, above this chain**, and the chain moved one slot down
 in consequence: M0-176 98, M0-110 97, M4-01 96, M4-02 95, M0-109 94, M4-03 93,

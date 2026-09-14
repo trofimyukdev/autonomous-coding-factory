@@ -139,7 +139,7 @@ other row of this table.
 
 **An incident is what made the version worth naming, and it is recorded here
 rather than in a session's memory.** The machine was rebooted between 2026-09-05
-and 2026-09-06, the bot restored the surviving sessions, and the foreman seat
+and 2026-09-06, the surviving sessions were restored, and the foreman seat
 came back SILENTLY on Opus 4.8 - a tier below the one this table names, with no
 error and no notice. Nothing in the restore path asserts the model of a seat. It
 was caught by the MODEL TAG in the session's own statusline and fixed by the
