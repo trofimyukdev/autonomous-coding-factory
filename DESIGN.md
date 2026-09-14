@@ -1,10 +1,10 @@
 # Millwright - design
 
-> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at 0871ab189b6d4a89134677450fbc1a9e973191c1 taken 2026-08-31; private paths and the private consumer's name removed.
+> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at c8848460a30da990ce2eae793ee83f3a1f1dbfd7 taken 2026-09-14; private paths and the private consumer's name removed.
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
-> `docs/decisions/NNNN-...` name files in the private repository; the eight ADRs
+> `docs/decisions/NNNN-...` name files in the private repository; the eleven ADRs
 > reproduced in this repository are listed in `decisions/README.md`.
 
 
@@ -406,12 +406,15 @@ Notably:
 ## 8. Verification DAG
 
 Order is fixed: everything that costs zero tokens runs first, and an LLM appears
-only after the deterministic stages pass.
+only after the deterministic stages pass - which is also what puts stage 5's
+deterministic lens AHEAD of stage 4's reviewer, so a surviving mutant is
+something the reviewer is handed rather than something it discovers (M3-13);
+the numbering below, and the order the stages are recorded in, are unchanged.
 
 | Stage | Name | Cost | Content |
 |---|---|---|---|
 | 0 | Identity | 0 | expected task/branch/workspace; `base_sha` as recorded; candidate is a descendant of base; clean tree; no foreign refs touched |
-| 1 | Scope and anti-cheat | 0 | diff within `allowed_paths`; forbidden paths untouched; no secrets; no deleted or weakened tests (`.skip`/`.only`, lowered thresholds, snapshot refreshes); factory gates and config not disabled; no unexplained lockfile drift; commit-range ASCII and identity hygiene over `base..candidate` (M0-07) |
+| 1 | Scope and anti-cheat | 0 | diff within `allowed_paths`; forbidden paths untouched; no secrets; no deleted or weakened tests (`.skip`/`.only`, lowered thresholds, snapshot refreshes); factory gates and config not disabled; only a `factory_admin` task may change the factory's own core (ADR 0018 section 3 (f)); no unexplained lockfile drift; commit-range ASCII and identity hygiene over `base..candidate` (M0-07) |
 | 2 | Deterministic ladder | 0 LLM | from `checks.yaml`: format -> focused tests -> typecheck -> lint -> unit -> build -> project truth checks -> full suite |
 | 3 | Runtime smoke | 0..low | triggered when startup/routes/DI/schema/CLI/lifecycle are touched: start it, hit it, check it, stop it by PID |
 | 4 | Semantic reviewer | LLM | fresh context, read-only *tools* (it walks the repo and runs read/test commands rather than reading a bare diff). Input: TaskSpec, SHA, diff, deterministic results. Not input: the builder's narrative or confidence. Output: a schema verdict - `verdict`, `findings[{severity, claim, evidence, would_block}]`, `unverified_dimensions` |
@@ -556,7 +559,11 @@ accumulated, the default table applies.
 **The subscription weekly cap is the real budget.** It is not one number: a rolling
 five-hour window sits under two weekly limits, a general one and a separate, much
 smaller one for Opus, so a router escalating to Opus is drawing on the scarcer of
-the two. All Claude surfaces draw from the same buckets, and N parallel workers
+the two. **Only the general weekly window reaches the factory**, which reads the
+statusline channel and that channel carries no Opus figure, so an escalation to
+Opus is bounded by the general cap rather than by its own; the operator decision
+and the row that goes looking for a channel are ADR 0025 and M0-197.
+All Claude surfaces draw from the same buckets, and N parallel workers
 consume the week N times faster rather than producing N times the throughput. The factory therefore: reads the rate-limit
 figures the statusline channel provides - `rate_limits.five_hour.{used_percentage,
 resets_at}` and `rate_limits.seven_day.{...}`, dumped atomically into a state file

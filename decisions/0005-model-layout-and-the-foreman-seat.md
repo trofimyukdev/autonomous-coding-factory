@@ -118,3 +118,39 @@ Two consequences worth stating once:
   table stays the one home of which model and which effort a seat runs on
   (discipline 12), and the two agree by pointing at each other rather than by
   restating.
+
+## Point release 2026-09-06 - the foreman row names a point version
+
+**The foreman (acceptance) row reads `claude-fable-5-1`, effort max.** The
+amendment above is unchanged in everything but the model string: the effort was
+already `max` and stays `max`, and the rows for the block session, the builder
+subagents and adversarial verification are untouched. The rows above are not
+rewritten, for the reason the amendment above gives about its own predecessor -
+the table is dated, and what it said between 2026-08-25 and today is the record.
+
+The operator's decision, quoted for the reason ADR 0006 set and this ADR's own
+amendment repeats - the sanction is the authority and a translation is a
+paraphrase. On 2026-09-06, relayed through the foreman:
+
+> форман = claude-fable-5-1 + max
+
+("the foreman = claude-fable-5-1 + max".) **[operator-confirmable]** like every
+other row of this table.
+
+**An incident is what made the version worth naming, and it is recorded here
+rather than in a session's memory.** The machine was rebooted between 2026-09-05
+and 2026-09-06, the bot restored the surviving sessions, and the foreman seat
+came back SILENTLY on Opus 4.8 - a tier below the one this table names, with no
+error and no notice. Nothing in the restore path asserts the model of a seat. It
+was caught by the MODEL TAG in the session's own statusline and fixed by the
+operator by hand, and the whole reason it was caught at all is that the tag is
+read as a matter of routine.
+
+Two consequences, both of which this ADR states and neither of which it fixes:
+a fallback that is silent is a fallback nobody notices at 3am, and a table that
+names a family rather than a version cannot tell a fallback from a release. The
+first is a real gap with no owner in `factory/tasks/` and it is not filed by this
+edit - the seat layout is an operator convention until the controller launches
+its own workers, which section 3 says already, and there is nothing in this
+repository's source to assert it against. The second is what this point release
+closes.

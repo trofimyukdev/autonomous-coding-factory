@@ -34,26 +34,32 @@ the non-goals it excludes.
 
 ## Status
 
-**Bootstrap. M2 complete, M3 in progress.** The factory currently builds against
-its own repository: it is its own first consumer.
+**Bootstrap. M0 to M4 landed; M5 - the first consumer in production - in
+progress.** The factory builds against its own repository and, since 2026-09-12,
+drives the queue of a second one from outside its own tree.
 
-Measured on **2026-08-31** against the private `main` at
-`0871ab189b6d4a89134677450fbc1a9e973191c1`, with `git -C <repo> ... main`:
+Measured on **2026-09-14** against the private `main` at
+`c8848460a30da990ce2eae793ee83f3a1f1dbfd7`, with `git -C <repo> ... main`:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `550` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `51` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-08-30` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
-| M2 landings | `24` | `git log --format='%s' main \| grep -c '^merge: M2-'` |
-| M3 landings | `0` | `git log --format='%s' main \| grep -c '^merge: M3-'` |
-| M3 rows filed in the queue | `13` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M3-'` |
-| TaskSpecs in the queue | `201` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `22` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| Commits on `main` | `934` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `96` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-09-12` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
+| M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
+| M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
+| TaskSpecs in the queue | `277` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `27` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
 
-M2's last landing is dated 2026-08-30 (`merge: M2-16`) and M3 has rows and no
-landings; that pair is what "M2 complete, M3 in progress" means here. The full
-derivation is `TIMELINE.md`.
+**Landed is not the same fact as done, and this repository will not let the two
+blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
+systemd unit and timer, the durable circuit breakers, the morning report, the
+fault-injection categories, the soak ladder - has landed. M4's definition of done
+is "soak ladder through step 5", and the ladder stands at its first rung with no
+task promoted through it. `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md`
+is the reading that says so, and it is published here for exactly that reason.
+M5 has seven rows filed and two landings. The full derivation is `TIMELINE.md`.
 
 A number on this page without a command beside it would not be a fact
 (`PRINCIPLES.md`, discipline 1). If you find one, it is a defect.
@@ -68,10 +74,11 @@ A number on this page without a command beside it would not be a fact
    split, repository layout and consumer contract, TaskSpec, state machine, tick,
    verification DAG, merge gate, integration, economics, security, configuration,
    roadmap.
-3. **`decisions/`** - eight architecture decision records: the things a reader of
-   the design cannot infer from it, including the ones that record a task being
-   stopped four times and an operator splitting it. `decisions/README.md` is the
-   index.
+3. **`decisions/`** - eleven architecture decision records: the things a reader
+   of the design cannot infer from it, including the ones that record a task
+   being stopped four times and an operator splitting it, and a milestone whose
+   mechanisms all landed and whose exit criterion was not met.
+   `decisions/README.md` is the index.
 4. **`TIMELINE.md`** - the operating record: milestones, dates and counts, each
    with the command that prints it.
 
@@ -82,7 +89,10 @@ repository) is the portable form of the factory's own gates - commit-range
 hygiene, the measurement rule, trailer checks, a weakened-tests detector - as a
 CLI. It is the first repository whose queue the factory drives from outside its
 own tree: its tasks live in `factory/tasks/`, and the factory takes them in shadow
-mode before any live merge.
+mode before any live merge. The onboarding command that points the factory at a
+repository outside its own tree landed on 2026-09-12 (`merge: M5-01` in
+`TIMELINE.md`), and the first shadow run over this repository was taken before
+it, by hand.
 
 ## What is here and what is not
 

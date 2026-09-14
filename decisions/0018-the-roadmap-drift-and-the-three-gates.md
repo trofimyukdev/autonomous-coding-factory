@@ -410,6 +410,17 @@ compares a spec's `budget` against its own amendment history, and nothing in
 this repository reads that history yet. The second instance is what buys the
 gate, and this paragraph is where the count starts.
 
+**The count is CLOSED, 2026-09-07, by foreman decision under section 0.** The
+second instance was the amendment M0-137 took on 2026-09-05 from carrier #35,
+which added an acceptance item and said nothing about that row's budget either
+way; a later carrier re-priced the row and handed the observation up rather than
+deciding it. The executable form is therefore bought and filed as **M0-184** at
+priority 78, and the pin it builds, the landing-date floor it needs because
+amendments predating the rule cannot be judged by it, and its refusal of the
+intake-check-over-git-history sketch this subsection wrote all live in
+`factory/tasks/M0-184.yaml`, which this paragraph points at rather than restates
+(discipline 12). No further instance advances a count that has ended.
+
 ### (iii) Applied once, immediately
 
 M0-07 is the next row the picker takes and its `wall_minutes` was 45. The same
@@ -418,3 +429,114 @@ into stage 1, which is work that row did not previously owe - and re-prices it
 to 90 under section 3 (g), with this subsection as the argument. The edit and
 its own reasoning are in `factory/tasks/M0-07.yaml`, which this section points at
 rather than restating (discipline 12).
+
+## 8. Addendum, 2026-09-12 - the amendment of 2026-09-08 that seventeen specs cite and this file never carried
+
+Added by a carrier session (carrier #53) by foreman decision under the standing
+delegation of 2026-08-25, not by a block. `main` stood at `dcfdba6` when the
+package began and the tree was clean apart from two untracked operator handoff
+files in a private archive that is not published. Nothing under `src/`, `test/`, `scripts/`,
+`.githooks/`, `factory/checks.yaml` or `DESIGN.md` was touched by it. This
+section is **[operator-confirmable]** and stands unless the operator vetoes it.
+
+**This addendum records a decision already in force; it does not make a new
+one.** Seventeen spec files in `factory/tasks/` price their wall by citing "ADR
+0018 decision (g) as amended on 2026-09-08", and until this section was written
+that pointer had no target:
+`grep -ln 'as amended on 2026-09-08' factory/tasks/*.yaml | wc -l` printed 17 in
+this checkout on 2026-09-12, and `grep -c '09-08' docs/decisions/0018*.md`
+printed 0 on 2026-09-11 and again on 2026-09-12 before this section existed.
+A pointer with no target is the same defect as a restatement, seen from the
+other end: the reader cannot check what the rule says, so the rule is whatever
+the citing file claims it says.
+
+### What section 3 (g) said, and what 2026-09-08 changed
+
+Decision (g) prices **"logic-heavy M2 specs"** at `wall_minutes` between 90 and
+120 with `quality_attempts: 2`. Its evidence was M0-90 - about 145 minutes
+against a spec authorising 45.
+
+The amendment came from block100's handover on 2026-09-08, and it is quoted from
+the run journal of that day rather than reconstructed:
+
+```text
+(6) a 35-min wall on a src row is under-priced: test:kill alone is 5m26 and a
+verifier mutation campaign 20-30 min (M0-56 and M0-60 were both 35) - a pricing
+note (ADR 0018 (g))
+```
+
+Those figures are the seats' stopwatches, attributed here and not re-taken: this
+carrier ran neither suite. **What the observation changes is the SCOPE of the
+rule, not its numbers.** Decision (g) bounded a class by its subject - logic-heavy,
+M2 - and the cost it was pricing is not a property of the subject at all. It is a
+property of the PATHS: a row that touches `src/**` owes a mutation campaign by a
+verifier and a kill suite the verifier must run, and those two together exceed 35
+minutes before the row's own work starts.
+
+**The amended rule, in one sentence: a row whose `allowed_paths` reach `src/**`
+carries `wall_minutes` of at least 90, whatever its milestone and whatever its
+subject, and a row that owes more than one suite or a real run says so and prices
+itself above the floor.** The upper end of decision (g)'s range is not a ceiling
+either; it was the range of one class.
+
+**The practice this records is already uniform.** *[The sentence that followed
+here is SUPERSEDED by the two paragraphs below and is kept verbatim as the record
+of what one grep answered on the day.]* Of the seventeen files citing the
+amendment, read on 2026-09-12 by `grep -h 'wall_minutes:'` over exactly those
+files: twelve carry 90, one carries 100, three carry 120 and one carries 140.
+Every one of them is at or above the floor, and every one of the five above it
+states in its own comment what it owes that the floor does not cover. Nothing is
+re-priced by this section.
+
+RE-TAKEN 2026-09-12 by carrier #54, twice: once because that carrier's own
+package moved one of the figures, and once more because the first re-take
+defended the undercount instead of finding it. A tally nobody re-runs is the
+defect this whole section is about, and a tally re-run with the grep that
+produced it is the same defect wearing the command.
+
+**The count is 18 and not 17, and the grep is why.** The claim is about the files
+that CITE the amendment, not about what one pattern matches:
+`grep -l 'amended on 2026-09-08' factory/tasks/*.yaml | wc -l` printed 18 on
+2026-09-12, while the narrower `grep -l 'as amended on 2026-09-08' factory/tasks/*.yaml | wc -l` printed 17,
+and `comm -13` between the two sorted listings printed
+`factory/tasks/M4-03.yaml` on the same day. That file cites the amendment with
+the phrase broken across two comment lines - "decision (g) as" ending one and
+"# amended on 2026-09-08" opening the next - so a pattern carrying the word "as"
+steps over it. Its `wall_minutes` is 150, which is why the four buckets never
+added up to the whole. The transport-proof form is the one above and it is what
+this paragraph uses.
+
+**The distribution, over those eighteen files.**
+`for f in $(grep -l 'amended on 2026-09-08' factory/tasks/*.yaml); do grep -m1 'wall_minutes:' $f; done | awk '{print $2}' | sort -n | uniq -c`
+printed twelve at 90, one at 100, two at 120, two at 140 and one at 150 on
+2026-09-12. The same command run against `fb4c3ad` - the commit that wrote this
+section - and against `4fb7ccd` printed twelve at 90, one at 100, three at 120,
+one at 140 and one at 150 on that day, so the undercount predates this package
+and only the 120-to-140 move is this package's: `M0-198`, reissued after its
+first stop, for the reason that row's own decision (e) gives. SIX files are above
+the floor and not five, and each states in its own comment what it owes - M4-03's
+argument for 150 is in its own foot, beside three precedents it re-measured.
+
+**The heading of this addendum says "seventeen specs cite" and carries the same
+undercount.** It is left as written, because an addendum's heading is dated with
+its body and rewriting it would hide the correction rather than record it; a
+reader who counts should count with the command two paragraphs above.
+
+**And the verifier that reported this was right where a session here said it was
+not.** The commit that first re-took this tally (`2f7cfd2`) says in its body that
+a wider claim "was checked and refuted", on the ground that the section cites its
+own narrower grep. That reasoning is wrong: the sentence is a claim about citing
+files, and the grep is an instrument for finding them rather than the definition
+of the set. The finding stood, and this paragraph is where that is admitted
+rather than left in a commit body nobody re-reads.
+
+### What this addendum does not do
+
+It does not turn the floor into a gate. Nothing reads `wall_minutes` and
+compares it against a row's paths, and this section does not ask for that: the
+executable form of a pricing rule is the count section 7 (ii) already opened and
+closed for amendments, and a second mechanism over the same field would be a
+gate nobody's evidence asked for. It does not touch `quality_attempts`, which
+decision (g) sets at 2 for its class and which every row still argues for
+itself. And it does not re-open M0-90's figure, which decision (g) already
+labels an order of magnitude rather than a measurement.

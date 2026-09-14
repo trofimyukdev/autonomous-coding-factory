@@ -127,3 +127,110 @@ The findings this package collected from M0-116, M2-12, M2-13 and M2-23 are in
 `factory/tasks/` and are not listed here: a decision document that carries a
 backlog acquires two homes for every row in it. The rows this package minted or
 appended to are named in its commit messages.
+
+## 4. Addendum, 2026-09-08 - the price has moved a third time, and four fifths of it answers a different question
+
+Added by a carrier session (carrier #46) by foreman decision, not a block. `main`
+stood at `3c6c5c8` when this section was written and the tree was clean apart
+from two untracked operator handoff files in a private archive that is not published. Nothing under
+`src/`, `test/`, `scripts/`, `.githooks/`, `factory/checks.yaml` or `DESIGN.md`
+was touched. Section 2 (c) escalated a question to the operator and took no
+position; this section answers it with a fact that was not available then, and
+its recommendation is **[operator-confirmable]**.
+
+### (i) The third reading
+
+Section 2 (c) records two readings of `{ time npm run test:kill ; }`, both on
+2026-08-29: `real 0m16.477s` in M2-23's docstring, and `real 1m44.944s` at
+`f249562` after M2-13 landed the controller kill suite. Re-run in this checkout
+at `bbae1f7` on 2026-09-08 at 09:54, after M3-11 landed three more processes:
+
+```text
+{ time npm run test:kill ; }
+=== 5/5 kill suite runs passed
+real    5m25.108s
+```
+
+That is a factor of 19.7 in ten days, and it reproduces the foreman's own
+reading of `real 5m24.985s` taken at 09:40 the same day on the same commit. The
+rung is still one check whose command is `npm run test:kill`
+(`factory/checks.yaml`), and the runner has still not been edited since M0-05.
+What moved is again what it runs: `ls test/faultinjection/*.test.ts | wc -l`
+printed `6` on 2026-09-08, where M2-23 measured a tree that held the store suite
+alone.
+
+### (ii) The fact section 2 (c) did not have: the smoke pays five times for one answer
+
+`npm run test:kill` does not run the suite. It runs `npm run build` and then the
+suite **five times, in five separate processes** - `const RUNS = 5;` in
+`test/faultinjection/run-kill-suite.mjs`, and the same file's docstring says
+exactly what the repetition is for: "The five runs are this suite's flakiness
+detector - 'passes and fails on the same commit' is a forbidden outcome for this
+task".
+
+The five `Duration` lines of the run above, from the same log:
+
+```text
+   Duration  63.73s ... 63.91s ... 63.75s ... 63.87s ... 64.05s
+```
+
+So one pass of the fault-injection suite costs about 64 seconds and the other
+four minutes twenty are a flakiness ladder. **A post-merge smoke does not ask
+whether the suite is flaky. It asks whether the merged SHA is broken**, and it
+asks it once, after the work is already on the base branch.
+
+That reframes section 2 (c)'s question. It read as a choice between the heavy
+rung and a cheaper subset of it, and the honest answer to that choice was
+uncomfortable, because M2-23's argument against a subset is correct and has only
+got stronger: an exclusion that is safe only because something later runs the
+heavy rung is not safe if nothing does, and the integration ladder has been
+excluding more of it with every fault-injection test this factory writes. The
+choice on the table now is not between rungs. It is between running one rung
+once and running it five times.
+
+### (iii) The direction of the error also favours one run, which is the part that is not about money
+
+Five runs reduce a false GREEN - a flaky test that happens to pass - and
+multiply a false RED, because five independent chances to fail is five chances
+to open an incident on work that is already merged. For a CANDIDATE's ladder that
+trade is right, and it is where the ladder belongs: a new fault-injection test
+that passes four times out of five must not land. For a post-merge smoke the
+trade inverts. This module's own docstring says why in its argument against
+reverting: "a smoke whose rung is flaky reverts good work". Nothing reverts today
+(section 2 (b)), so what a false RED buys is an incident and an operator's
+attention at whatever hour the tick ran, which is precisely the three-in-the-
+morning false alert `DESIGN.md` section 12 is written to avoid.
+
+So one run is not the cheap answer and the five-run ladder the careful one. For
+this check, one run is also the more accurate one.
+
+### (iv) The recommendation, and it is not this carrier's to execute
+
+**The SELECTION stays `full_suite`.** M2-23's trade is re-affirmed, not reversed,
+and section 2 (c)'s worry that "fast" has to become a bound rather than a word
+is answered by removing four fifths of the cost instead of by dropping tests.
+
+**What is questioned is the command behind that rung in a post-merge context,
+and nothing else.** The candidate's `full_suite` rung keeps the five runs; the
+smoke runs the suite once. On the readings above that is about 64 seconds a
+merge instead of five and a half minutes, with no test dropped and no exclusion
+re-opened.
+
+This carrier does not execute it. It changes what a gate runs, which lives in
+`src/**` and `factory/checks.yaml`, and both are outside a carrier's paths - so
+this is a recommendation and a row candidate, and the row is owed a decision
+about WHERE the difference is expressed (a smoke-specific run count, a second
+check entry, or an environment the runner reads), which is a design question and
+not a carrier's.
+
+### (v) Why this matters more at M4 than it does today
+
+Today the smoke costs five and a half minutes once per merged task, on a factory
+run by hand, and nobody is waiting on it. `DESIGN.md` section 12 puts the
+unattended factory on `OnCalendar=*:0/15` inside a unit bounded by
+`TimeoutStartSec` of 15 minutes. **A post-merge smoke of 5m25 is 36 per cent of
+that unit's entire wall clock**, spent after the work is done, and it grows with
+every fault-injection test the M4 row for that suite adds. ADR 0024 section 6
+puts that suite's completion at slot 91 of the M4 chain draft, which means the
+number in this section is going to move again before the first crontab entry -
+and by then it is a rung of the soak ladder rather than a line in a report.
