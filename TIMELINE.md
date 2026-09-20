@@ -1,8 +1,8 @@
 # Timeline
 
 Every number on this page is printed by the command beside it. All of them were
-re-run on **2026-09-14** against the private `main` at
-`c8848460a30da990ce2eae793ee83f3a1f1dbfd7`, and none is copied from an upstream
+re-run on **2026-09-20** against the private `main` at
+`e10c627de793aea5f290d160ec4bee509872ca58`, and none is copied from an upstream
 document - a figure inherited from another file is an assumption wearing a
 number's clothes (discipline 1, `PRINCIPLES.md`).
 
@@ -13,23 +13,23 @@ with `git -C <repo> ... main`; they read history and write nothing.
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `934` | `git rev-list --count main` |
-| Calendar days with a commit | `22` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
+| Commits on `main` | `1036` | `git rev-list --count main` |
+| Calendar days with a commit | `26` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
 | First commit | `2026-08-17` | `git log --format='%ad' --date=short --reverse main \| head -1` |
-| Latest commit in this snapshot | `2026-09-12` | `git log --format='%ad' --date=short main \| head -1` |
-| Landings (commits whose subject begins `merge: `) | `96` | `git log --format='%s' main \| grep -c '^merge: '` |
-| ADRs | `27` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| TaskSpecs in the queue | `277` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| `.ts` files under `src/` | `118` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
+| Latest commit in this snapshot | `2026-09-20` | `git log --format='%ad' --date=short main \| head -1` |
+| Landings (commits whose subject begins `merge: `) | `105` | `git log --format='%s' main \| grep -c '^merge: '` |
+| ADRs | `28` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `295` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| `.ts` files under `src/` | `119` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
 | `.ts` files under `test/` | `73` | `git ls-tree -r --name-only main test/ \| grep -c '\.ts$'` |
-| Lines of `DESIGN.md` | `795` | `git show main:DESIGN.md \| wc -l` |
+| Lines of `DESIGN.md` | `801` | `git show main:DESIGN.md \| wc -l` |
 
 Landings by milestone, from
 `for p in M0 M1 M2 M3 M4 M5; do git log --format='%s' main | grep -c "^merge: $p-"; done`:
 
 | Milestone | Landings |
 |---|---|
-| M0 | `48` |
+| M0 | `57` |
 | M1 | `1` |
 | M2 | `25` |
 | M3 | `13` |
@@ -43,44 +43,56 @@ landings, not blocks, and the earlier blocks are visible only as their `feat: `
 commits in the last table on this page. The milestones themselves are in
 `DESIGN.md` section 17.
 
-The six milestone counts add to `96`, which is the landings row above: no landing
-is outside a milestone, and none is counted twice.
+The six milestone counts add to `105`, which is the landings row above: no
+landing is outside a milestone, and none is counted twice.
+
+**M0 carries 57 landings and is the only count that moved since the previous
+snapshot** (it stood at `48` on 2026-09-14, with `96` landings in total). That is
+not M0 being re-opened: M0 is where this repository files the rows that repair a
+mechanism a later milestone leans on, and the nine landings since are all of that
+kind - the fix cycle, the tick's wall, the ladder's sight of a gate verdict. The
+last table on this page names four of them.
 
 ## Commits per day
 
 From `git log --format='%ad' --date=short main | sort | uniq -c | sort -k2`:
 
 ```text
-  30 2026-08-17
-  21 2026-08-18
-  38 2026-08-19
-  52 2026-08-20
-  32 2026-08-21
-  11 2026-08-22
-  50 2026-08-23
-  21 2026-08-24
-  97 2026-08-25
-  69 2026-08-26
-  10 2026-08-27
-  68 2026-08-29
-  54 2026-08-30
-   6 2026-08-31
-  30 2026-09-04
-  33 2026-09-05
-  12 2026-09-06
-  72 2026-09-07
-  73 2026-09-08
-  52 2026-09-10
-  31 2026-09-11
-  72 2026-09-12
+     30 2026-08-17
+     21 2026-08-18
+     38 2026-08-19
+     52 2026-08-20
+     32 2026-08-21
+     11 2026-08-22
+     50 2026-08-23
+     21 2026-08-24
+     97 2026-08-25
+     69 2026-08-26
+     10 2026-08-27
+     68 2026-08-29
+     54 2026-08-30
+      6 2026-08-31
+     30 2026-09-04
+     33 2026-09-05
+     12 2026-09-06
+     72 2026-09-07
+     73 2026-09-08
+     52 2026-09-10
+     31 2026-09-11
+     72 2026-09-12
+     16 2026-09-14
+     24 2026-09-15
+     24 2026-09-19
+     38 2026-09-20
 ```
 
-Five dates between the first and the last commit are absent from that output
-because no commit carries them: 2026-08-28, 2026-09-01, 2026-09-02, 2026-09-03
-and 2026-09-09. Of the days that are present, the two lowest are 2026-08-31
-(`6`), the day both public repositories were created, and 2026-08-27 (`10`), the
-day the comparison run of ADR 0022 section 0 took. 2026-08-22 (`11`) carries the
-first landing under the merge-commit convention:
+Nine dates between the first and the last commit are absent from that output
+because no commit carries them: 2026-08-28, 2026-09-01, 2026-09-02, 2026-09-03,
+2026-09-09, 2026-09-13, 2026-09-16, 2026-09-17 and 2026-09-18. Of the days that
+are present, the two lowest are 2026-08-31 (`6`), the day both public
+repositories were created, and 2026-08-27 (`10`), the day the comparison run of
+ADR 0022 section 0 took. 2026-08-22 (`11`) carries the first landing under the
+merge-commit convention:
 
 ```sh
 git log --format='%ad %s' --date=short --reverse main | grep '^\S* merge: ' | head -1
@@ -128,6 +140,10 @@ quoted rather than summarised.
 | 2026-09-11 | `merge: M4-07 - the soak ladder is state, and a tick above its rung is refused` | The last M4 landing: autonomy is a ladder with rungs, not a switch. |
 | 2026-09-12 | `merge: M5-01 - millwright onboard, one entrance for pointing the factory at a repository` | One command points the factory at a repository that is not its own. |
 | 2026-09-12 | `merge: M5-02 - no loading seam is owed, and the contract is configuration` | The consumer contract turns out to need configuration, not a plugin seam. |
+| 2026-09-15 | `merge: M0-217 - a fix cycle the tick's wall cannot hold waits for the next pass, uncharged` | A bounded tick stops destroying the work it cannot finish. |
+| 2026-09-20 | `merge: M0-224 - a gate refusal buys its fix cycle through INTEGRATING -> BUILDING, and the reaper is kept off the edge` | The edge the state machine had never declared - ADR 0028. |
+| 2026-09-20 | `merge: M0-225 - a seat after the builder the tick's wall cannot hold is carried to the next pass over the same candidate` | The reviewer and the goal evaluator are carried across ticks instead of being paid for twice. |
+| 2026-09-20 | `merge: M0-213 - the ladder names the act that opens its first window, counts a violation as a record it could not read, and finds a task under either spelling of its id` | The soak ladder can see a gate verdict, which is what its first rung counts. |
 
 ## Where the snapshot stands
 
@@ -154,4 +170,14 @@ git ls-tree --name-only main factory/tasks/ | grep -c 'M5-'      # 7
 git log --format='%s' main | grep -c '^merge: M5-'               # 2
 ```
 
-Both re-run on 2026-09-14 at `c884846`.
+Both re-run on 2026-09-20 at `e10c627`.
+
+**No milestone landing is dated later than 2026-09-12, and the nine landings
+since are all M0.** That is the honest shape of the last week: the M5 chain's
+central row runs the factory against the second repository, and each attempt at
+it has returned a defect in a mechanism M0 owns - the fix cycle a bounded tick
+could not hold, the edge a gate refusal had no route through, the seats a wall
+killed after they were paid for, the ladder's blindness to the verdict its first
+rung counts. Those are the landings above. The milestone does not advance until
+they stop arriving, and this page will not move it earlier by counting them as
+M5.

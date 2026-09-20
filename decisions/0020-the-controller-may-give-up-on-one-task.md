@@ -82,6 +82,9 @@ but "is the state machine the right place to say so, given that a second reader
 of the table changes behaviour with it". It is a change to ratified text, which
 is an operator act.
 
+**Closed 2026-09-19** by the operator's word: the edge is declared. The word, the
+decision and the row that carries it are ADR 0028 section 1 (1).
+
 ### (b) Should the factory ever revert its own merge?
 
 M2-23 delivered the post-merge check and parks a regression rather than

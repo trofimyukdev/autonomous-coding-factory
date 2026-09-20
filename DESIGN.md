@@ -1,10 +1,10 @@
 # Millwright - design
 
-> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at c8848460a30da990ce2eae793ee83f3a1f1dbfd7 taken 2026-09-14; private paths and the private consumer's name removed.
+> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at e10c627de793aea5f290d160ec4bee509872ca58 taken 2026-09-20; private paths and the private consumer's name removed.
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
-> `docs/decisions/NNNN-...` name files in the private repository; the eleven ADRs
+> `docs/decisions/NNNN-...` name files in the private repository; the twelve ADRs
 > reproduced in this repository are listed in `decisions/README.md`.
 
 
@@ -117,7 +117,7 @@ Millwright is a standalone product repository, laid out by concern: `src/`
 `report`, `doctor` - a module that holds no code yet states what it owns in a
 one-line index file), plus `scripts/`, `schemas/`, `test/unit/` and
 `test/faultinjection/`. The directories later milestones need - `prompts/`,
-`plugins/`, `templates/consumer/` - are still empty and arrive with the code that
+`plugins/`, `templates/consumer/` - are untracked and arrive with the code that
 fills them. `backend` is an interface on purpose: the headless CLI worker is its
 first implementation, and moving to the SDK must change neither the controller nor
 the state.
@@ -237,6 +237,12 @@ Only the controller performs transitions, transactionally. Key edges:
   `not_before = now + backoff`.
 - `VERIFYING -> BUILDING`: fix cycle with a fresh builder and a FailurePacket;
   `quality_attempts++`.
+- `INTEGRATING -> BUILDING`: the same fix cycle, bought by a gate refusal. The
+  gate is asked inside integration, so a refused candidate stands in
+  INTEGRATING; the refusal is charged like a walk's, and a refusal that spends
+  the quality ceiling lands `BLOCKED` instead. A recovery does not walk this
+  edge: the reaper holds no FailurePacket and reads no ceiling. Declared by the
+  operator on 2026-09-19 (ADR 0028).
 - `BUILDING|VERIFYING -> BLOCKED`: quality attempts exhausted; the branch is kept
   and an incident is raised.
 - `BLOCKED -> DEAD_LETTER`: the infrastructure ceiling is spent. A landing that

@@ -38,19 +38,19 @@ the non-goals it excludes.
 progress.** The factory builds against its own repository and, since 2026-09-12,
 drives the queue of a second one from outside its own tree.
 
-Measured on **2026-09-14** against the private `main` at
-`c8848460a30da990ce2eae793ee83f3a1f1dbfd7`, with `git -C <repo> ... main`:
+Measured on **2026-09-20** against the private `main` at
+`e10c627de793aea5f290d160ec4bee509872ca58`, with `git -C <repo> ... main`:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `934` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `96` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-09-12` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1036` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `105` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-09-20` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `277` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `27` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `295` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `28` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
@@ -59,7 +59,11 @@ fault-injection categories, the soak ladder - has landed. M4's definition of don
 is "soak ladder through step 5", and the ladder stands at its first rung with no
 task promoted through it. `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md`
 is the reading that says so, and it is published here for exactly that reason.
-M5 has seven rows filed and two landings. The full derivation is `TIMELINE.md`.
+M5 has seven rows filed and two landings, and the last landing of any milestone
+is dated 2026-09-12: the nine landings since are all M0 rows repairing the
+mechanisms the M5 run keeps finding - the fix cycle a bounded tick could not
+hold, the edge a gate refusal had no route through, the ladder's blindness to the
+verdict its first rung counts. The full derivation is `TIMELINE.md`.
 
 A number on this page without a command beside it would not be a fact
 (`PRINCIPLES.md`, discipline 1). If you find one, it is a defect.
@@ -74,7 +78,7 @@ A number on this page without a command beside it would not be a fact
    split, repository layout and consumer contract, TaskSpec, state machine, tick,
    verification DAG, merge gate, integration, economics, security, configuration,
    roadmap.
-3. **`decisions/`** - eleven architecture decision records: the things a reader
+3. **`decisions/`** - twelve architecture decision records: the things a reader
    of the design cannot infer from it, including the ones that record a task
    being stopped four times and an operator splitting it, and a milestone whose
    mechanisms all landed and whose exit criterion was not met.

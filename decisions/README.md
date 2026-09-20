@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 27 ADRs, measured on 2026-09-14 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `27`. Eleven
+The private repository carries 28 ADRs, measured on 2026-09-20 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `28`. Twelve
 of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the eleven listed
+inside `DESIGN.md` name files in the private repository. Only the twelve listed
 here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -28,9 +28,10 @@ English translation beside it.
 | [0024](0024-m3-exit-and-the-m4-chain.md) | 2026-09-08 | The M3 exit: what the milestone proved, the cost-per-verified-merge figure that could not be computed and why, and M4 as an ordered chain. |
 | [0025](0025-the-opus-weekly-cap-has-no-channel.md) | 2026-09-10 | The bigger model's own weekly window is not readable by anything the factory can call, so an escalation is bounded by the general cap instead. |
 | [0026](0026-m4-exit-and-the-ladder-nobody-climbed.md) | 2026-09-11 | Every M4 mechanism landed and M4's definition of done was not met: a milestone exits on a reading, not on a count of landings. |
+| [0028](0028-the-loop-closes-on-repo-truth.md) | 2026-09-19 | A gate refusal buys a fix cycle - the edge the state machine did not declare - and the seats a bounded tick cannot hold are carried to the next pass rather than killed by it. |
 
-Five ADRs were filed since the previous snapshot; three are added above and two
-are deliberately not reproduced.
+One ADR was filed since the previous snapshot (0028) and is added above. Two
+older ones are still deliberately not reproduced.
 0023 (the public showcase and the second repository) is the decision that defines
 this repository's own publication boundary, and its load-bearing half is the list
 of what is never published; publishing that list would publish the shape of what
@@ -39,8 +40,12 @@ chain that is still in flight - its central row has not landed - and this
 repository does not carry a claim ahead of the commit that proves it
 (`PRINCIPLES.md`, discipline 3). Both are candidates for a later snapshot.
 
+0020 is reproduced with one paragraph it did not carry at the previous snapshot:
+the question its section 2 (a) left open was closed on 2026-09-19, and 0028 is
+where it was closed.
+
 The `Filed` column is the date of the commit that added the file, measured on
-2026-09-14 with, for each file:
+2026-09-20 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
