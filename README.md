@@ -38,19 +38,19 @@ the non-goals it excludes.
 progress.** The factory builds against its own repository and, since 2026-09-12,
 drives the queue of a second one from outside its own tree.
 
-Measured on **2026-09-20** against the private `main` at
-`e10c627de793aea5f290d160ec4bee509872ca58`, with `git -C <repo> ... main`:
+Measured on **2026-09-22** against the private `main` at
+`260cc4a051bdba2779b10e6698606aa0c8ac2a5d`, with `git -C <repo> ... main`:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1036` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `105` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-09-20` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1051` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `106` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-09-22` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `295` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `28` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `300` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `29` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
@@ -60,10 +60,11 @@ is "soak ladder through step 5", and the ladder stands at its first rung with no
 task promoted through it. `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md`
 is the reading that says so, and it is published here for exactly that reason.
 M5 has seven rows filed and two landings, and the last landing of any milestone
-is dated 2026-09-12: the nine landings since are all M0 rows repairing the
+is dated 2026-09-12: the ten landings since are all M0 rows repairing the
 mechanisms the M5 run keeps finding - the fix cycle a bounded tick could not
 hold, the edge a gate refusal had no route through, the ladder's blindness to the
-verdict its first rung counts. The full derivation is `TIMELINE.md`.
+verdict its first rung counts, the one worker home every seat of a pass shared.
+The full derivation is `TIMELINE.md`.
 
 A number on this page without a command beside it would not be a fact
 (`PRINCIPLES.md`, discipline 1). If you find one, it is a defect.

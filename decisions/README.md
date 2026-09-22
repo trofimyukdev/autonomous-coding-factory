@@ -1,15 +1,15 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 28 ADRs, measured on 2026-09-20 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `28`. Twelve
-of them are reproduced here: the ones that decide something a reader of
+The private repository carries 29 ADRs, measured on 2026-09-22 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `29`.
+Thirteen of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the twelve listed
-here are published.
+inside `DESIGN.md` name files in the private repository. Only the thirteen
+listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
 the authority a decision stands on, and a translation is a paraphrase - with the
@@ -29,8 +29,9 @@ English translation beside it.
 | [0025](0025-the-opus-weekly-cap-has-no-channel.md) | 2026-09-10 | The bigger model's own weekly window is not readable by anything the factory can call, so an escalation is bounded by the general cap instead. |
 | [0026](0026-m4-exit-and-the-ladder-nobody-climbed.md) | 2026-09-11 | Every M4 mechanism landed and M4's definition of done was not met: a milestone exits on a reading, not on a count of landings. |
 | [0028](0028-the-loop-closes-on-repo-truth.md) | 2026-09-19 | A gate refusal buys a fix cycle - the edge the state machine did not declare - and the seats a bounded tick cannot hold are carried to the next pass rather than killed by it. |
+| [0029](0029-the-four-answers-and-the-word-on-one-tick.md) | 2026-09-21 | Four operator answers on what a policy breach is, who writes a read-only seat's scratch repository, and what a fix cycle's floor covers - plus the rule that a sanction to run the factory against a live repository covers one run and not a campaign. |
 
-One ADR was filed since the previous snapshot (0028) and is added above. Two
+One ADR was filed since the previous snapshot (0029) and is added above. Two
 older ones are still deliberately not reproduced.
 0023 (the public showcase and the second repository) is the decision that defines
 this repository's own publication boundary, and its load-bearing half is the list
@@ -40,12 +41,12 @@ chain that is still in flight - its central row has not landed - and this
 repository does not carry a claim ahead of the commit that proves it
 (`PRINCIPLES.md`, discipline 3). Both are candidates for a later snapshot.
 
-0020 is reproduced with one paragraph it did not carry at the previous snapshot:
-the question its section 2 (a) left open was closed on 2026-09-19, and 0028 is
-where it was closed.
+0020 is reproduced with one paragraph it did not carry at the 2026-09-14
+snapshot: the question its section 2 (a) left open was closed on 2026-09-19, and
+0028 is where it was closed.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-09-20 with, for each file:
+2026-09-22 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
