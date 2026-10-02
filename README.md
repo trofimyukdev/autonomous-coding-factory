@@ -38,19 +38,23 @@ the non-goals it excludes.
 progress.** The factory builds against its own repository and, since 2026-09-12,
 drives the queue of a second one from outside its own tree.
 
-Measured on **2026-09-22** against the private `main` at
-`260cc4a051bdba2779b10e6698606aa0c8ac2a5d`, with `git -C <repo> ... main`:
+Measured on **2026-10-02** against the private `main` at
+`31f54917bb2ec0c5a59c58b56fdf5718c61be744`, with `git -C <repo> ... main`:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1051` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `106` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-09-22` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1277` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `137` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-10-02` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `300` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `29` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `347` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `43` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| Landings since 2026-09-12, every one of them M0 | `41` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
+| Gate verdicts on the second repository, refused / passed | `13` / `5` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
+| Of those passes, with the held-out acceptance check run and passed | `4` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
+| Tasks of the second repository the gate has judged, refused or passed | `10` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
@@ -60,10 +64,26 @@ is "soak ladder through step 5", and the ladder stands at its first rung with no
 task promoted through it. `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md`
 is the reading that says so, and it is published here for exactly that reason.
 M5 has seven rows filed and two landings, and the last landing of any milestone
-is dated 2026-09-12: the ten landings since are all M0 rows repairing the
+is dated 2026-09-12: the forty-one landings since are all M0 rows repairing the
 mechanisms the M5 run keeps finding - the fix cycle a bounded tick could not
 hold, the edge a gate refusal had no route through, the ladder's blindness to the
-verdict its first rung counts, the one worker home every seat of a pass shared.
+verdict its first rung counts, the one worker home every seat of a pass shared,
+a goal evaluator whose reply the gate could not read, a ladder that measured
+the consumer's working tree instead of the commit, and since then the gate's own
+errors in both directions. The run on the second repository has reached gate
+verdicts - the last three rows of the table count them. Its first pass is
+recorded as a false one: `decisions/0039-the-factory-fixes-its-own-gate-first.md`
+is where the operator answered it - the factory does the work there itself, and
+its gate is fixed first. The four passes after it each ran the task's held-out
+acceptance check and passed it; in shadow mode none of them reached the base
+branch. With ten tasks now judged by the gate, refused or passed, the ladder's
+first rung met its threshold, and the climb to the second - supervised
+auto-merge, one task per tick - is offered and is the operator's to take
+(`TIMELINE.md`, "Where the snapshot stands";
+`decisions/0042-the-ten-task-programme-and-its-standing-tick-word.md`). The
+earlier series of ticks are recorded, with their commands, in
+`decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
+`decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.
 
 A number on this page without a command beside it would not be a fact
@@ -79,11 +99,13 @@ A number on this page without a command beside it would not be a fact
    split, repository layout and consumer contract, TaskSpec, state machine, tick,
    verification DAG, merge gate, integration, economics, security, configuration,
    roadmap.
-3. **`decisions/`** - twelve architecture decision records: the things a reader
-   of the design cannot infer from it, including the ones that record a task
-   being stopped four times and an operator splitting it, and a milestone whose
-   mechanisms all landed and whose exit criterion was not met.
-   `decisions/README.md` is the index.
+3. **`decisions/`** - the published subset of the architecture decision records:
+   the things a reader of the design cannot infer from it, including the ones
+   that record a task being stopped four times and an operator splitting it, a
+   milestone whose mechanisms all landed and whose exit criterion was not met,
+   and a place where the design's own text and the CLI it drives appear to
+   disagree.
+   `decisions/README.md` is the index, and says how many there are and which.
 4. **`TIMELINE.md`** - the operating record: milestones, dates and counts, each
    with the command that prints it.
 

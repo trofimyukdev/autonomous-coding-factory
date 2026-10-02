@@ -96,8 +96,8 @@ authority and a translation is a paraphrase. Asked on 2026-08-25:
 > Есть смысл перейти на max там у него, как и у тебя?
 
 ("Does it make sense to move him to max there too, as with you?" - `him` is
-the foreman seat just reincarnated as Forman-5, opened by Forman-4 at `xhigh`;
-`you` is Forman-4, which the operator had opened at max. Both sides of the
+the foreman seat just reincarnated as a new session, opened by its predecessor
+at `xhigh`; `you` is that predecessor, which the operator had opened at max. Both sides of the
 question are this table's foreman row; the block seat is not in it.) The foreman
 answered yes and the operator took the answer, then closed it:
 
@@ -154,3 +154,55 @@ edit - the seat layout is an operator convention until the controller launches
 its own workers, which section 3 says already, and there is nothing in this
 repository's source to assert it against. The second is what this point release
 closes.
+
+## Amendment 2026-09-23 - every row names a full model id, and the seats move to `claude-opus-5-5`
+
+**The rows of section 1 read as follows from 2026-09-23.** The rows above are
+not rewritten, for the reason both amendments above give - the table is dated,
+and what it said until today is the record.
+
+| Seat | Model |
+| --- | --- |
+| Foreman (acceptance) | `claude-opus-5-5`, effort max |
+| Block session | `claude-opus-5-5`, effort high |
+| Carrier session | `claude-opus-5-5`, effort high |
+| Builder subagents | `claude-sonnet-5` |
+| Adversarial verification | `claude-opus-5-5` |
+
+The carrier-session row is new: the table never had one, although a carrier
+session has been a seat of its own since at least 2026-08-24 - M0-88's filing
+comment in factory/tasks/M0-88.yaml reads "filed on 2026-08-24 by the carrier
+session".
+
+The operator's words that decide these rows, and the seat's decision on the
+builder-subagent row under the operator's sanction to compare, are ADR 0031's, which is
+their one home; they are not restated here (discipline 12). **[operator's
+word]** for the foreman, block, carrier and verification rows;
+**[operator-confirmable]** for the builder-subagent row, which is the seat's
+decision on its bench data.
+
+**Why every row now names a full id and none names a tier or an alias.** The
+point release above closed this for the foreman row alone; the other rows
+kept names that float, and one of them has already floated:
+
+- The row "Adversarial verification | Opus" named a tier, and the tier moved
+  under it without anyone's decision. A subagent launched through the Agent
+  tool's `opus` option on 2026-09-23 - `cat <subagent>.meta.json`
+  prints `"model":"opus"` and the description "Author the model-bench fixtures
+  and runner" - was served `claude-opus-5-5`:
+  `grep -o '"model":"claude-[a-z0-9-]*"' <subagent>.jsonl | sort | uniq -c`
+  printed `317 "model":"claude-opus-5-5"` on 2026-09-23 at 11:42.
+- The CLI's own alias table moved between two versions installed on this
+  machine. `node -e 'const b=require("fs").readFileSync("<claude-install>/versions/"+process.argv[1],"latin1");const i=b.indexOf("aliases:{opus:{default:");console.log(b.slice(i,i+40))' 2.1.278`
+  printed `aliases:{opus:{default:"claude-opus-5",p`, and the same command with
+  `2.1.280` printed `aliases:{opus:{default:"claude-opus-5-5"`, both on
+  2026-09-23 at 11:42. A seat opened with the alias runs whichever model the
+  installed CLI happens to map it to.
+- A block's verifier inherits the block session's model: nothing in the block
+  procedure names one - `grep -n -i opus .claude/commands/block.md | wc -l`
+  printed 0 on 2026-09-23 at 11:42 - so the verification row holds only as
+  long as the block session itself is opened with the full id.
+
+The operator's global `~/.claude/CLAUDE.md` carries the same seats for the
+session that opens them; it points at this ADR, and this ADR points back at it
+rather than quoting it, as the amendment of 2026-08-25 already says.

@@ -4,7 +4,7 @@
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
-> `docs/decisions/NNNN-...` name files in the private repository; the twelve ADRs
+> `docs/decisions/NNNN-...` name files in the private repository; the ADRs
 > reproduced in this repository are listed in `decisions/README.md`.
 
 
