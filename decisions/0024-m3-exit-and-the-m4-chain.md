@@ -282,7 +282,7 @@ factory that cannot read its own weekly cap is a way to discover the cap by
 hitting it."
 
 **(d) One claim about the reservation room is unmeasured.** The adversarial
-verifier of block97 (M3-10, attempt 2) raised, and nobody has measured, that the
+verifier of block #97 (M3-10, attempt 2) raised, and nobody has measured, that the
 room check goes stale against actual spending: at a tick cap of 18, two scouted
 rows pass a $17.80 promise, the two scouts then spend about $3 each, and the two
 `builder_hard` seats that follow hold $16 against a room of 12 - reachable, the
@@ -302,7 +302,7 @@ twice", DONE at priority 83 - and the CONCURRENT one does not exist. This is a t
 disclosed by the block that proved that clause.
 
 **(f) The escalation case in the middle of a two-row pass is unpinned.** Also
-from block97: `affordableRung` asks the room NET of what the pass has already
+from block #97: `affordableRung` asks the room NET of what the pass has already
 promised, and a mutant in that one site survives the suite. The code is landed
 and correct as far as anyone has argued; what is missing is the case that would
 notice if it stopped being.

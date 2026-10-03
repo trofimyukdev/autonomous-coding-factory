@@ -25,8 +25,9 @@ a model:
   historical rejection rate runs first and alone;
 - **merge gate** - seven machine conditions, each answering on its own, deciding
   whether a candidate reaches the base branch;
-- **integrator** - rebase onto a freshly fetched base, re-measure on the
-  integration SHA, fast-forward push, never `--force`.
+- **integrator** - merge the candidate onto a freshly fetched base with
+  `git merge --no-ff`, re-measure on that integration SHA, push it as a
+  fast-forward of the remote branch, never `--force`.
 
 The objective function is **`$` per verified merged task**, not tokens saved and
 not tasks attempted. `DESIGN.md` section 1 is the home of that definition and of
@@ -36,53 +37,77 @@ the non-goals it excludes.
 
 **Bootstrap. M0 to M4 landed; M5 - the first consumer in production - in
 progress.** The factory builds against its own repository and, since 2026-09-12,
-drives the queue of a second one from outside its own tree.
+drives the queue of a second one from outside its own tree. **On 2026-10-02 it
+merged through its own gate for the first time: nine tasks into that second
+repository's public `main`, each passed by the gate and merged and pushed by the
+factory itself, under supervision - no tick was started by the timer.**
 
-Measured on **2026-10-02** against the private `main` at
-`31f54917bb2ec0c5a59c58b56fdf5718c61be744`, with `git -C <repo> ... main`:
+Measured on **2026-10-03** against the private `main` at
+`1f0b09f93172e4fa709ae6ead59fb33e4e666958` - one landing, `merge: M0-136`, after
+the commit the previous snapshot named - with `git -C <repo> ... main`. The rows
+on the second repository are read in its working directory, except the merge
+count, which any clone of it prints:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1277` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `137` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-10-02` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1280` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `138` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-10-03` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
 | TaskSpecs in the queue | `347` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
 | ADRs | `43` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| Landings since 2026-09-12, every one of them M0 | `41` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
-| Gate verdicts on the second repository, refused / passed | `13` / `5` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
-| Of those passes, with the held-out acceptance check run and passed | `4` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
+| Landings since 2026-09-12, every one of them M0 | `42` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
+| Gate verdicts on the second repository, refused / passed | `16` / `14` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
+| Of those passes, with the held-out acceptance check run and passed | `13` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
 | Tasks of the second repository the gate has judged, refused or passed | `10` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
+| Merges the gate made into the second repository's `main` | `9` | in any clone of it: `git rev-list --merges --count 9eb3692..8338b5a` |
+| Verified merges there, as the factory counts them | `10` | from its working directory, the factory's `metrics`: the line `verified_merges` |
+| `$` per verified merge there, the factory's metric - the attempts of the merged rows only | `1.8779` | the same `metrics`: the line `usd_and_tokens_per_verified_merge.cost_usd` |
+| `$` per verified merge there, all in - every worker run the journal prices, over the same ten | `4.84` | from its working directory: `jq -s '[.[] \| select(.type=="AGENT_FINISHED") \| .payload.cost_usd // 0] \| add' factory/state/events.jsonl` -> `48.39...`, divided by `10` |
+| Soak-ladder rung there | `2`, and rung `3` offered | from its working directory, the factory's `ladder status`: the lines `rung`, `next` and `offered` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
 systemd unit and timer, the durable circuit breakers, the morning report, the
 fault-injection categories, the soak ladder - has landed. M4's definition of done
-is "soak ladder through step 5", and the ladder stands at its first rung with no
-task promoted through it. `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md`
-is the reading that says so, and it is published here for exactly that reason.
+is "soak ladder through step 5", and the landings did not meet it:
+`decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` is the reading that
+says so, and it is published here for exactly that reason. The ladder now stands
+at the second of its six rungs.
 M5 has seven rows filed and two landings, and the last landing of any milestone
-is dated 2026-09-12: the forty-one landings since are all M0 rows repairing the
+is dated 2026-09-12: the forty-two landings since are all M0 rows repairing the
 mechanisms the M5 run keeps finding - the fix cycle a bounded tick could not
 hold, the edge a gate refusal had no route through, the ladder's blindness to the
 verdict its first rung counts, the one worker home every seat of a pass shared,
 a goal evaluator whose reply the gate could not read, a ladder that measured
 the consumer's working tree instead of the commit, and since then the gate's own
-errors in both directions. The run on the second repository has reached gate
-verdicts - the last three rows of the table count them. Its first pass is
-recorded as a false one: `decisions/0039-the-factory-fixes-its-own-gate-first.md`
+errors in both directions.
+
+**On the second repository the gate has gone from verdicts to merges.** Its
+first pass is recorded as a false one: `decisions/0039-the-factory-fixes-its-own-gate-first.md`
 is where the operator answered it - the factory does the work there itself, and
-its gate is fixed first. The four passes after it each ran the task's held-out
+its gate is fixed first. The next four passes each ran the task's held-out
 acceptance check and passed it; in shadow mode none of them reached the base
-branch. With ten tasks now judged by the gate, refused or passed, the ladder's
-first rung met its threshold, and the climb to the second - supervised
-auto-merge, one task per tick - is offered and is the operator's to take
-(`TIMELINE.md`, "Where the snapshot stands";
-`decisions/0042-the-ten-task-programme-and-its-standing-tick-word.md`). The
-earlier series of ticks are recorded, with their commands, in
-`decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
+branch. With ten tasks judged by the gate, the ladder's first rung met its
+threshold, and on 2026-10-02 the operator took the second - supervised
+auto-merge, one task per tick
+(`decisions/0042-the-ten-task-programme-and-its-standing-tick-word.md` left
+that move to him) - and switched that repository's shadow mode off.
+The same day the gate passed nine tasks on all seven conditions, each with its
+held-out check run and passed, and the factory merged each candidate onto the
+base it had just fetched and pushed the result: nine two-parent merge commits,
+each adding one check and its tests, each carrying the trailers `DESIGN.md`
+section 10 names. A tenth task was refused twice that evening by its held-out
+check alone and is blocked. The factory's own metric puts a verified merge
+there at under two dollars of model cost, counting every attempt of the rows
+that merged, the refused ones included; with the cancelled versions of a spec
+and the blocked task added, it is more than twice that, and both are the price
+the CLI reports for its runs, not a bill. The ladder now offers the third rung, two
+parallel builders, and it has not been taken (`TIMELINE.md`, "Where the
+snapshot stands"). The earlier series of ticks are recorded, with their
+commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.
 
@@ -113,13 +138,31 @@ A number on this page without a command beside it would not be a fact
 
 [`repo-truth`](https://github.com/trofimyukdev/repo-truth) (created alongside this
 repository) is the portable form of the factory's own gates - commit-range
-hygiene, the measurement rule, trailer checks, a weakened-tests detector - as a
-CLI. It is the first repository whose queue the factory drives from outside its
-own tree: its tasks live in `factory/tasks/`, and the factory takes them in shadow
-mode before any live merge. The onboarding command that points the factory at a
-repository outside its own tree landed on 2026-09-12 (`merge: M5-01` in
-`TIMELINE.md`), and the first shadow run over this repository was taken before
-it, by hand.
+hygiene, the measurement rule, trailer checks, a weakened-tests detector and
+more - as a CLI. It is the first repository whose queue the factory drives from
+outside its own tree: its tasks live in `factory/tasks/`. The onboarding command
+that points the factory at a repository outside its own tree landed on
+2026-09-12 (`merge: M5-01` in `TIMELINE.md`), and the first shadow run over this
+repository was taken before it, by hand.
+
+The factory took its tasks in shadow mode - verdicts, and nothing merged - until
+2026-10-02, when the operator moved the soak ladder to supervised auto-merge
+and, in a separate commit there, switched shadow mode off (`9eb3692`, `chore:
+merge shadow off - a candidate that passes the gate is merged`). What the
+factory merged after it is public: in any clone of that repository,
+
+```sh
+git log --first-parent --reverse --format='%h %ad %s' --date=short 9eb3692..8338b5a
+```
+
+prints nine merge commits, from `merge: RT-10` to `merge: RT-12`, each adding
+one check and its tests; `git log -1 --format=%p <sha>` names two parents for
+each, the base and the candidate. Its first task, `RT-01`, landed before them
+and was accepted by hand. The task that gives the checks their single
+command-line entry point, `RT-07`, is the one the gate refused twice that
+evening and left blocked: the checks are on `main`, and the command that runs
+them is not yet. `TIMELINE.md`, "Where the snapshot stands", quotes the nine
+lines and what the gate recorded for each.
 
 ## What is here and what is not
 

@@ -181,7 +181,7 @@ and the factory currently cannot print it.
 ### (6) The auto-mode prompt, globally
 
 Two sessions stalled on 2026-08-30 waiting on a Claude Code menu rather than on
-work - carrier #29 and block67, both reported by the foreman from its own
+work - carrier #29 and block #67, both reported by the foreman from its own
 observation of the panels rather than by a command, which is why no timestamps
 are asserted here. The fix is a Claude Code setting and therefore the operator's
 act; a session cannot change the setting that is blocking it. Recorded as the

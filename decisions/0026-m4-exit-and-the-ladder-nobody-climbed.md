@@ -230,7 +230,7 @@ the constraint `DESIGN.md` section 11 calls the real budget is still invisible t
 the factory.
 
 **(f) Three fault-injection conditions are named and uncovered**, disclosed by
-block113 while it landed M4-06 rather than discovered afterwards: a task branch
+block #113 while it landed M4-06 rather than discovered afterwards: a task branch
 deleted under a live run; a STALE worktree (`parallel-worktree-kill` covers
 collision, not staleness); and a hung test. Four more are recorded there as not
 reproducible without root or a paid call - a full disk, exhausted descriptors
@@ -240,7 +240,7 @@ expired credential.
 **(g) The integration lock publishes its name before its contents.** From the
 same block: `create` opens with `openSync(path, "wx")` and writes the record
 afterwards, so a competitor reading the gap is told the lock is unreadable.
-Block113 REPORTED one occurrence in twelve runs under load; this package read the
+Block #113 REPORTED one occurrence in twelve runs under load; this package read the
 code and did not reproduce the race, so that figure is inherited rather than
 re-measured and the row says so. It cannot merge twice and cannot free a held
 lock; what it costs is a wrong diagnosis. The module's own docstring says the

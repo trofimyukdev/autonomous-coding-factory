@@ -456,7 +456,7 @@ Decision (g) prices **"logic-heavy M2 specs"** at `wall_minutes` between 90 and
 120 with `quality_attempts: 2`. Its evidence was M0-90 - about 145 minutes
 against a spec authorising 45.
 
-The amendment came from block100's handover on 2026-09-08, and it is quoted from
+The amendment came from block #100's handover on 2026-09-08, and it is quoted from
 the run journal of that day rather than reconstructed:
 
 ```text
