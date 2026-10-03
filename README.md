@@ -42,26 +42,26 @@ merged through its own gate for the first time: nine tasks into that second
 repository's public `main`, each passed by the gate and merged and pushed by the
 factory itself, under supervision - no tick was started by the timer.**
 
-Measured on **2026-10-03** against the private `main` at
-`1f0b09f93172e4fa709ae6ead59fb33e4e666958` - one landing, `merge: M0-136`, after
-the commit the previous snapshot named - with `git -C <repo> ... main`. The rows
-on the second repository are read in its working directory - the three gate-verdict
-rows early that day, the last four at 13:50 +0300, after `RT-07` merged there - except
+Measured on the evening of **2026-10-03** against the private `main` at
+`87e45c3753e93de9e34c5e9bebc3704df68e9034` - no landing after the commit the
+previous snapshot named that morning, ten commits of queue and decision
+records - with `git -C <repo> ... main`. The rows on the second repository are
+read in its working directory between 23:09 and 23:10 +0300 that evening, except
 the merge count, which any clone of it prints:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1280` | `git rev-list --count main` |
+| Commits on `main` | `1290` | `git rev-list --count main` |
 | Landings (subject begins `merge: `) | `138` | `git log --format='%s' main \| grep -c '^merge: '` |
 | First / latest commit date | `2026-08-17` / `2026-10-03` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `2` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `347` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `43` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `350` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `45` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
 | Landings since 2026-09-12, every one of them M0 | `42` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
-| Gate verdicts on the second repository, refused / passed | `16` / `14` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
-| Of those passes, with the held-out acceptance check run and passed | `13` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
+| Gate verdicts on the second repository, refused / passed | `16` / `15` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
+| Of those passes, with the held-out acceptance check run and passed | `14` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
 | Tasks of the second repository the gate has judged, refused or passed | `10` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
 | Merges the gate made into the second repository's `main` | `10` | in any clone of it: `git rev-list --merges --count 9eb3692..fcf6d3b` |
 | Verified merges there, as the factory counts them | `11` | from its working directory, the factory's `metrics`: the line `verified_merges` |
@@ -110,7 +110,10 @@ for its runs, not a bill. The ladder offered the third rung, two parallel
 builders, and it was not taken; since that tenth merge the ladder reads one of
 the three refusals in the second rung's window as overturned, a false-block
 rate over the 10% the third rung allows, and no longer offers it (`TIMELINE.md`,
-"Where the snapshot stands"). The earlier series of ticks are recorded, with their
+"Where the snapshot stands"). The operator has since deferred that repository's
+next task until four of the factory's own rows have landed, with ticks there
+stopped meanwhile
+(`decisions/0045-m0-222-behind-the-three-rt-08-waits-and-item-4-taken.md`). The earlier series of ticks are recorded, with their
 commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.

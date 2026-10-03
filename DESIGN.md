@@ -1,6 +1,6 @@
 # Millwright - design
 
-> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at e10c627de793aea5f290d160ec4bee509872ca58 taken 2026-09-20; private paths and the private consumer's name removed.
+> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at 87e45c3753e93de9e34c5e9bebc3704df68e9034 taken 2026-10-03; private paths and the private consumer's name removed.
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
@@ -342,7 +342,8 @@ integration, update reports, exit.
     configured threshold
  2. janitor (start is recovery): expired leases -> the recovery above; targeted
     reaping of orphans by PID (never a pattern kill; the predicate is in section
-    13); tmp older than 36 h; `git worktree prune --expire 2.days.ago`;
+    13); tmp older than 36 h; run trees past their expiry (src/workspace/reclaim.ts),
+    each deregistered by its own path and never by `git worktree prune`;
     delete bot branches of merged tasks
  3. base branch green? if not -> circuit OPEN, notify, exit 75
  4. budget: available = caps - spent - reservations; no room -> exit 0
@@ -394,6 +395,11 @@ Notably:
 - subagents inside a builder are off by default - parallelism belongs to the
   controller, not to a worker spawning a hidden mini-factory - and are switched on
   only for a task the operator has explicitly marked wide;
+- the session transcript is the vector's one variant, and it is off by default:
+  with `MILLWRIGHT_KEEP_TRANSCRIPT=1` in the call's environment a worker call
+  drops `--no-session-persistence` and changes nothing else, so the CLI keeps
+  its transcript in the worker's own home - off, because a transcript costs disk
+  and holds whatever the session saw (src/backend/invocation.ts; ADR 0045);
 - the builder's report is schema-valid or it is nothing: `status: candidate|blocked`,
   the commits it made, the files it changed, the tests it ran and its known risks.
   `tests_run` is diagnostics, never evidence - the controller re-runs the ladder
@@ -421,7 +427,7 @@ the numbering below, and the order the stages are recorded in, are unchanged.
 |---|---|---|---|
 | 0 | Identity | 0 | expected task/branch/workspace; `base_sha` as recorded; candidate is a descendant of base; clean tree; no foreign refs touched |
 | 1 | Scope and anti-cheat | 0 | diff within `allowed_paths`; forbidden paths untouched; no secrets; no deleted or weakened tests (`.skip`/`.only`, lowered thresholds, snapshot refreshes); factory gates and config not disabled; only a `factory_admin` task may change the factory's own core (ADR 0018 section 3 (f)); no unexplained lockfile drift; commit-range ASCII and identity hygiene over `base..candidate` (M0-07) |
-| 2 | Deterministic ladder | 0 LLM | from `checks.yaml`: format -> focused tests -> typecheck -> lint -> unit -> build -> project truth checks -> full suite |
+| 2 | Deterministic ladder | 0 LLM | from `checks.yaml`, but for the focused tests, which come from the TaskSpec (section 5): format -> focused tests -> typecheck -> lint -> unit -> build -> project truth checks -> full suite |
 | 3 | Runtime smoke | 0..low | triggered when startup/routes/DI/schema/CLI/lifecycle are touched: start it, hit it, check it, stop it by PID |
 | 4 | Semantic reviewer | LLM | fresh context, read-only *tools* (it walks the repo and runs read/test commands rather than reading a bare diff). Input: TaskSpec, SHA, diff, deterministic results. Not input: the builder's narrative or confidence. Output: a schema verdict - `verdict`, `findings[{severity, claim, evidence, would_block}]`, `unverified_dimensions` |
 | 5 | Risk lenses | LLM, parallel | only by trigger: auth/crypto -> security; migrations -> data integrity; async/queues -> concurrency; public API -> compatibility; docs and numbers -> doc-truth; UX -> taste/a11y; weak suite -> test strength (mutation probe or reproduction test) |
@@ -681,7 +687,10 @@ fact for our own repositories and an attack surface in anyone else's.
 
 **OS layer.** Every worker runs in its own process group and cgroup with memory and
 CPU limits; an external `timeout -k` on the group kills it (SIGTERM, grace, SIGKILL)
-and the workspace is kept for forensics. The timeout is set at two to three times the
+and the workspace is kept for forensics - for as long as its row is BLOCKED,
+PAUSED or DEAD_LETTER or a standing record names it, and otherwise until the
+janitor's expiry for a run that did not land (src/workspace/reclaim.ts). The
+timeout is set at two to three times the
 typical duration of the call, and it is set whether or not the CLI is believed to
 bound itself. Blind pattern-based process killing is forbidden to everyone,
 always; workers may not kill anything outside their own children; the controller's

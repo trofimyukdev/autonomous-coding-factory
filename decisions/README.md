@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 43 ADRs, measured on 2026-10-02 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `43`.
-Twenty-six of them are reproduced here: the ones that decide something a reader of
+The private repository carries 45 ADRs, measured on 2026-10-03 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `45`.
+Twenty-seven of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the twenty-six
+inside `DESIGN.md` name files in the private repository. Only the twenty-seven
 listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -52,9 +52,18 @@ rather than by its identifier.
 | [0041](0041-the-holdout-rule-the-scripts-rule-and-the-ceiling-at-95.md) | 2026-09-30 | Three operator words: on the second repository every `not_done_if` line of a spec is covered by a held-out check or a named deterministic one, and condition 1 stops passing a spec that declares none; the gate refuses a candidate that changes the `scripts` field of `package.json`; and that repository's weekly ceiling moves to 95 by both of its keys. |
 | [0042](0042-the-ten-task-programme-and-its-standing-tick-word.md) | 2026-09-30 | A ten-task programme on the second repository, run one tick at a time under a standing word at the ladder's first rung, its task packet approved by the operator and the move to rung 2 left to him - and the fact that the successor seat's first tick under that standing word was refused by the agent harness before it ran. |
 | [0043](0043-the-two-retirement-rules-permanent-and-bound-to-the-holdout.md) | 2026-10-01 | The temporary rules of 0035 and 0038 become permanent but bound to the holdout: an unverified entry either rule would retire leaves condition 2's count only on a candidate whose held-out checks ran and passed; 0036's scope is made permanent as it stands. |
+| [0045](0045-m0-222-behind-the-three-rt-08-waits-and-item-4-taken.md) | 2026-10-03 | Three operator words: the metric by model and role is built right after the three rows already above the roadmap line, before the builder's model is compared, and the reviewer keeps its model until that comparison; the second repository's next task waits for those four rows, with ticks there stopped meanwhile; and a batch of edits to the factory's procedures and to `DESIGN.md` sections 7, 8 and 13 is taken - among them the default 0032 left to the operator: a worker's transcript stays off. |
 
-Fourteen ADRs were filed since the previous published snapshot of 2026-09-22
-(0030 to 0043). Thirteen of them are added above. 0040 is held: its one
+Two ADRs were filed on 2026-10-03, after the previous published snapshot:
+0044 and 0045. 0045 is added above. 0044 is held, for the reason 0023 is
+(below): one of its five decisions sets a rule for what the factory's public
+outputs may carry, and publishing it would describe what the rule keeps out.
+Of its other decisions, the two a reader of this repository needs - the
+second rung of the soak ladder taken on the second repository, with shadow
+mode off, and the third left waiting - are stated with their facts in
+`TIMELINE.md`, "Where the snapshot stands".
+Of the fourteen filed between the snapshots of 2026-09-22 and 2026-10-02
+(0030 to 0043), thirteen are reproduced. 0040 is held: its one
 decision is the figure at which the seats that build the factory pause their
 own spending - an operating budget of the build, not a decision about the
 design - and the open question it recorded, whether a spec must declare a
@@ -78,7 +87,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-02 with, for each file:
+2026-10-03 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
