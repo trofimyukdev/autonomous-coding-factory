@@ -246,7 +246,8 @@ and the operator's promotion from rung 1 to rung 2 on 2026-10-02. The mechanisms
 are counted by their landings; the DoD is not a count, and the ADR says so rather
 than letting the seven landings stand in for it.
 
-**The second rung was taken on 2026-10-02; the third is offered, not taken.**
+**The second rung was taken on 2026-10-02; the third was offered and not taken,
+and since RT-07's merge on 2026-10-03 it is not offered.**
 `DESIGN.md` section 18 promotes shadow "on an agreed number of tasks with zero
 policy violations"; the first rung met that on ten tasks, as the previous
 snapshot of this page recorded, and the promotion was the operator's
@@ -255,30 +256,40 @@ The rung alone merges nothing: that repository's `factory/millwright.toml` keeps
 shadow mode under `[merge]` as a switch of its own, and the operator threw it the
 same day in a separate commit there - `9eb3692`, `chore: merge shadow off - a
 candidate that passes the gate is merged`. Each rung counts over its own window.
-From the second repository's working directory on 2026-10-03, the factory's
-`ladder status` printed `2 (supervised auto-merge)` for `rung` and
+From the second repository's working directory early on 2026-10-03, the
+factory's `ladder status` printed `2 (supervised auto-merge)` for `rung` and
 `2026-10-02T07:12:08.357Z` for `since`, and over the window since then `10` for
 `fact.tasks` - the ten tasks the gate judged that day - `0` for
 `fact.policy_violations` and for `fact.double_merges`, `3` for
 `fact.gate_refusals`, `0` for `fact.overturned_refusals`, and `yes` for
-`offered`: rung 3, two parallel builders, may be climbed, its three clauses -
+`offered`: rung 3, two parallel builders, could be climbed, its three clauses -
 at least ten tasks, no double merge, a false-block rate of at most 10% - each
-`met`. It has not been taken. Rung 2 is supervised, and no tick on that
-repository was started by the timer, whose wrapper runs
+`met`. It was not taken. At 13:50 +0300 the same day, after RT-07 merged, the same
+`ladder status` printed `10` for `fact.tasks`, `0` for `fact.policy_violations`
+and for `fact.double_merges` and `3` for `fact.gate_refusals` as before, but `1`
+for `fact.overturned_refusals`, `33.33333333333333` for
+`fact.false_block_percent` and `no` for `offered`; its `offer` line lists the
+three clauses, and the one that fails is
+`false_block_rate 33.33333333333333 (at most 10% ([ladder] max_false_block_percent))`.
+Rung 2 is supervised, and up to early on 2026-10-03 no tick on that repository
+had been started by the timer, whose wrapper runs
 `millwright tick --trigger cron` (`DESIGN.md` section 12):
 `grep '"type":"RUN_STARTED"' factory/state/events.jsonl | grep -c '"trigger":"operator"'`
-printed `69` there on 2026-10-03, as many as
+printed `69` there then, as many as
 `grep -c '"type":"RUN_STARTED"' factory/state/events.jsonl`. The ladder reads a
-refusal as overturned only once the refused task has merged, so until RT-07
-merges its two refusals count as true ones. Of the three refusals it counts,
-two are RT-07's, below, and one is RT-02's, on condition 2 with no confirmed
+refusal as overturned only once the refused task has merged, and not every such
+refusal. Of the three refusals it counts, two are RT-07's, below, and one is
+RT-02's, on condition 2 with no confirmed
 finding: the factory's own record of it opens "nothing was measured false"
 (`jq -r 'select(.seq==2060) | .payload.reason' factory/state/events.jsonl`), it
 charged no quality attempt and briefed no builder, and the candidate the gate
 then passed and the factory merged is a fresh build on the same base, not a fix
 of the refused one (`git log -1 --format=%p e108475` and the same for `7e9c5aa`
-both print `c83d135`). The ladder does not read it as overturned: the
-`fact.overturned_refusals` above is `0`.
+both print `c83d135`). The ladder does not read it as overturned: its
+`fact.overturned_refusals` was `0` early on 2026-10-03, with RT-02 merged since
+the day before. The one refusal it reads as overturned since RT-07's merge is
+therefore one of RT-07's two - one false block in three refusals, over the 10%
+the third rung allows.
 
 M5 has rows and two landings, which is what "M5 in progress" means here:
 
@@ -310,8 +321,11 @@ this page will not move it earlier by counting them as M5. What the same central
 row produced later on 2026-10-02 is in the second repository, not in this one,
 and the rest of this section reads it there.
 
-The run on the second repository has now reached thirty gate verdicts: sixteen
-refusals and fourteen passes. From that repository's working directory,
+Early on 2026-10-03, before RT-07 was reissued, the run on the second repository
+had reached thirty gate verdicts: sixteen refusals and fourteen passes. Every
+journal count from here up to the paragraphs on RT-07 was printed then, and what
+RT-07's merge changed is read at 13:50 +0300, in those paragraphs and the one
+after them. From that repository's working directory,
 `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl` printed `16` and
 `grep -c '"type":"GATE_PASSED"' factory/state/events.jsonl` printed `14` on
 2026-10-03. The first pass, dated 2026-09-29, is not counted here as the
@@ -374,8 +388,8 @@ repository's working directory,
 does `grep '"type":"MERGED"' factory/state/events.jsonl | grep -c '"reason":"pushed '`:
 its own landings are bootstrap blocks, recorded by hand.
 
-The tenth task the gate judged that day, RT-07, was not merged. Its subject is
-the CLI's single entry point, and it is the one task of the ten whose candidate
+The tenth task the gate judged that day, RT-07, was not merged that day. Its
+subject is the CLI's single entry point, and it is the one task of the ten whose candidate
 changes a file already in the repository rather than only adding its own: in
 that repository's checkout, `git diff --name-status 8338b5a 482b9d3` marks
 `package.json` modified (`M`) beside four added files (`A`). The gate refused
@@ -387,30 +401,59 @@ the measurement, the goal evaluator and the integration evidence passed, and
 condition 2 read `error` only because a held-out item had failed, the binding
 `decisions/0043-the-two-retirement-rules-permanent-and-bound-to-the-holdout.md`
 records. Between the two, the fix cycle repaired a defect the first refusal had
-found, and the reviewer had passed both candidates. The held-out check was
+found, and the reviewer had passed both candidates. Both refusals ran on the
+same base, the ninth merge: in any clone, no commit follows `8338b5a` on
+`main`'s first-parent line until one dated the next morning -
+`git log --first-parent --format='%h %ci' -2 fd4e6fb` prints
+`fd4e6fb 2026-10-03 09:46:20 +0300` and `8338b5a 2026-10-02 21:43:58 +0300` -
+and in that repository's checkout the two integration commits, each a refused
+candidate merged onto the base and neither ever pushed, name `8338b5a` as
+their first parent:
+`git log -1 --format='%h %p %ci' b06a106` prints
+`b06a106 8338b5a 776c1ef 2026-10-02 21:51:45 +0300`, and the same for `596e1d9`
+prints `596e1d9 8338b5a 482b9d3 2026-10-02 22:00:02 +0300`. The held-out check was
 written when the base held a single check (`git ls-tree --name-only 8a76f79 src/`
 in a clone of the second repository prints `src/commit-range.ts` and
-`src/index.ts`), and it no longer fits the ten checks the base held by
-2026-10-02 (`git ls-tree --name-only 8338b5a src/ | grep -vc index.ts` prints
-`10`), so the seat reads the second refusal as the held-out check gone stale,
-not the candidate, and is repairing the check outside the repository. That
-reading rests on the check's output, which is not published; on 2026-10-03 the
-seat re-ran a copy of the check over the same candidate, which reproduced the
-refusal, and a repaired copy passed it while still refusing the first
-candidate's defect. The row is `BLOCKED` in the factory's
-`queue`, and `metrics` counts it as `failed_out` `1`, which puts
-`verified_merge_rate` at `0.9091` - ten of eleven.
+`src/index.ts`), and it no longer fits the ten checks of `8338b5a`
+(`git ls-tree --name-only 8338b5a src/ | grep -vc index.ts` prints `10`), so the
+seat reads the check as stale at both refusals, not only at the second: the
+first candidate also carried the defect the fix cycle repaired, and the second
+was refused by the stale check alone. That reading rests on the check's output,
+which is not published; on 2026-10-03 the seat re-ran a copy of the check over
+the second candidate, which reproduced the refusal, and a repaired copy passed it
+while still refusing the first candidate's defect.
+
+The operator then cancelled that version of the task and reissued it with the
+held-out check repaired outside the repository - `a355722` there, `chore:
+reissue RT-07 - its holdout was stale, not its last candidate` - and on
+2026-10-03 the factory rebuilt it, the gate passed it and the factory merged
+it, the tenth merge: in any clone,
+`git log -1 --format='%h %ci %p' fcf6d3b` prints
+`fcf6d3b 2026-10-03 13:46:11 +0300 a355722 231fb30`, and
+`git rev-list --merges --count 9eb3692..fcf6d3b` prints `10`. The command that
+runs the checks is on that repository's `main` now. From its working directory
+at 13:50 the factory's `queue` printed the new version `DONE`, and `metrics`
+printed `0` for `failed_out` and `1` for `verified_merge_rate`.
 
 `DESIGN.md` section 1 makes `$` per verified merged task the objective, and on
-the second repository nine of the ten verified merges it divides by are the
-gate's. From that repository's working directory on 2026-10-03, the factory's
-`metrics` printed `10` for `verified_merges` - the nine above and the first
-task's - and `1.8779` for `usd_and_tokens_per_verified_merge.cost_usd`, which
-is `priced_verified_merges.usage.cost_usd`, `18.7787462`, over the ten. That
-numerator is every attempt of the ten merged rows, the refused ones included,
-and nothing else. Every worker run the journal prices, with the cancelled
-versions of a spec and the blocked task added, comes to more than twice as much
-per verified merge:
+the second repository ten of the eleven verified merges it divides by are the
+gate's. From that repository's working directory at 13:50 on 2026-10-03, after
+RT-07's merge, the factory's `metrics` printed `11` for `verified_merges` - the
+ten merges above and the first task's - and `1.7906` for
+`usd_and_tokens_per_verified_merge.cost_usd`, which is
+`priced_verified_merges.usage.cost_usd`, `19.6967615`, over the eleven. That
+numerator is every attempt of the eleven merged rows, the refused ones included,
+and nothing else. Every worker run the journal prices, with every cancelled
+version of a spec added, comes to more than twice as much per verified merge.
+In the same directory at the same minute:
+
+```sh
+node -e 'const fs=require("fs");let n=0,s=0;for(const l of fs.readFileSync("factory/state/events.jsonl","utf8").split("\n")){if(!l.includes("\"type\":\"AGENT_FINISHED\""))continue;const c=JSON.parse(l).payload.cost_usd;if(typeof c==="number"){n++;s+=c;}}console.log("AGENT_FINISHED priced",n,"sum",s.toFixed(4))'
+# AGENT_FINISHED priced 114 sum 49.3092 - over the 11, 4.48
+```
+
+Not every attempt record carries a cost. Early on 2026-10-03, before RT-07 was
+reissued, when `metrics` printed `10` and `1.8779`, the same journal held these:
 
 ```sh
 jq -s '[.[] | select(.type=="AGENT_FINISHED") | .payload.cost_usd // 0] | add' factory/state/events.jsonl             # 48.39120730000001; over the 10, 4.84
@@ -420,7 +463,7 @@ jq -c -s '[.[] | select(.type=="AGENT_FINISHED" and .payload.cost_usd == null) |
 # {"builder":4,"goal_evaluator":1,"resumed_seat":30,"reviewer":4}
 ```
 
-All four printed on 2026-10-03 in that repository's working directory. The 150
+All four printed then, in that repository's working directory. The 150
 are attempt records. Of the 39 with no cost, 30 are seats resumed from a
 carried reply, on which no worker is called, and 9 are worker runs that a
 crash, a stall or a timeout ended before a cost was recorded - so both figures

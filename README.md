@@ -45,8 +45,9 @@ factory itself, under supervision - no tick was started by the timer.**
 Measured on **2026-10-03** against the private `main` at
 `1f0b09f93172e4fa709ae6ead59fb33e4e666958` - one landing, `merge: M0-136`, after
 the commit the previous snapshot named - with `git -C <repo> ... main`. The rows
-on the second repository are read in its working directory, except the merge
-count, which any clone of it prints:
+on the second repository are read in its working directory - the three gate-verdict
+rows early that day, the last four at 13:50 +0300, after `RT-07` merged there - except
+the merge count, which any clone of it prints:
 
 | Measurement | Value | Command |
 |---|---|---|
@@ -62,11 +63,11 @@ count, which any clone of it prints:
 | Gate verdicts on the second repository, refused / passed | `16` / `14` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
 | Of those passes, with the held-out acceptance check run and passed | `13` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
 | Tasks of the second repository the gate has judged, refused or passed | `10` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
-| Merges the gate made into the second repository's `main` | `9` | in any clone of it: `git rev-list --merges --count 9eb3692..8338b5a` |
-| Verified merges there, as the factory counts them | `10` | from its working directory, the factory's `metrics`: the line `verified_merges` |
-| `$` per verified merge there, the factory's metric - the attempts of the merged rows only | `1.8779` | the same `metrics`: the line `usd_and_tokens_per_verified_merge.cost_usd` |
-| `$` per verified merge there, all in - every worker run the journal prices, over the same ten | `4.84` | from its working directory: `jq -s '[.[] \| select(.type=="AGENT_FINISHED") \| .payload.cost_usd // 0] \| add' factory/state/events.jsonl` -> `48.39...`, divided by `10` |
-| Soak-ladder rung there | `2`, and rung `3` offered | from its working directory, the factory's `ladder status`: the lines `rung`, `next` and `offered` |
+| Merges the gate made into the second repository's `main` | `10` | in any clone of it: `git rev-list --merges --count 9eb3692..fcf6d3b` |
+| Verified merges there, as the factory counts them | `11` | from its working directory, the factory's `metrics`: the line `verified_merges` |
+| `$` per verified merge there, the factory's metric - the attempts of the merged rows only | `1.7906` | the same `metrics`: the line `usd_and_tokens_per_verified_merge.cost_usd` |
+| `$` per verified merge there, all in - every worker run the journal prices, over the same eleven | `4.48` | from its working directory: the sum over the journal's priced `AGENT_FINISHED` records, by the command in `TIMELINE.md`, "Where the snapshot stands" -> `49.3092`, divided by `11` |
+| Soak-ladder rung there | `2`; rung `3` not offered, at a false-block rate of `33.33333333333333` against at most `10%` | from its working directory, the factory's `ladder status`: the lines `rung`, `offer`, `offered` and `fact.false_block_percent` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
@@ -99,14 +100,17 @@ The same day the gate passed nine tasks on all seven conditions, each with its
 held-out check run and passed, and the factory merged each candidate onto the
 base it had just fetched and pushed the result: nine two-parent merge commits,
 each adding one check and its tests, each carrying the trailers `DESIGN.md`
-section 10 names. A tenth task was refused twice that evening by its held-out
-check alone and is blocked. The factory's own metric puts a verified merge
-there at under two dollars of model cost, counting every attempt of the rows
-that merged, the refused ones included; with the cancelled versions of a spec
-and the blocked task added, it is more than twice that, and both are the price
-the CLI reports for its runs, not a bill. The ladder now offers the third rung, two
-parallel builders, and it has not been taken (`TIMELINE.md`, "Where the
-snapshot stands"). The earlier series of ticks are recorded, with their
+section 10 names. A tenth task, the command that runs the checks, was refused
+twice that evening by its held-out check alone; reissued with that check
+repaired, it was merged the next day. The factory's own metric puts a verified
+merge there at under two dollars of model cost, counting every attempt of the
+rows that merged, the refused ones included; with every cancelled version of a
+spec added, it is more than twice that, and both are the price the CLI reports
+for its runs, not a bill. The ladder offered the third rung, two parallel
+builders, and it was not taken; since that tenth merge the ladder reads one of
+the three refusals in the second rung's window as overturned, a false-block
+rate over the 10% the third rung allows, and no longer offers it (`TIMELINE.md`,
+"Where the snapshot stands"). The earlier series of ticks are recorded, with their
 commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.
@@ -160,9 +164,16 @@ one check and its tests; `git log -1 --format=%p <sha>` names two parents for
 each, the base and the candidate. Its first task, `RT-01`, landed before them
 and was accepted by hand. The task that gives the checks their single
 command-line entry point, `RT-07`, is the one the gate refused twice that
-evening and left blocked: the checks are on `main`, and the command that runs
-them is not yet. `TIMELINE.md`, "Where the snapshot stands", quotes the nine
-lines and what the gate recorded for each.
+evening. Reissued with its held-out check repaired, it was merged on 2026-10-03
+as the tenth merge, so the command that runs the checks is on `main` now:
+`git log -1 --format='%h %ad %s' --date=short fcf6d3b` prints
+
+```text
+fcf6d3b 2026-10-03 merge: RT-07 - One entry point - `repo-truth check` runs the checks and answers with records
+```
+
+`TIMELINE.md`, "Where the snapshot stands", quotes the nine lines and what the
+gate recorded for each, and reads `RT-07`'s two refusals.
 
 ## What is here and what is not
 
