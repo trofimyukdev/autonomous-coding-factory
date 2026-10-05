@@ -1,6 +1,6 @@
 # Millwright - design
 
-> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at 87e45c3753e93de9e34c5e9bebc3704df68e9034 taken 2026-10-03; private paths and the private consumer's name removed.
+> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at cd51a05ea84a03963e90c655337df308930f70b9 taken 2026-10-05; private paths and the private consumer's name removed.
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
@@ -235,6 +235,26 @@ Only the controller performs transitions, transactionally. Key edges:
 
 - `BUILDING -> RETRY_WAIT`: infrastructure failure; spends no quality attempt, sets
   `not_before = now + backoff`.
+- `READY_TO_INTEGRATE -> RETRY_WAIT`: a verified row whose integration never
+  claimed it rests here with no lease. Five roads lead there, each after the walk
+  released the lease: the process died; the integrator refused at its lock; it
+  refused at a STOP read at integration step 1; or the gate phase returned before
+  `integrate()` - with a candidate it could not bring out of the workspace, or
+  with a checks configuration it could not read. The reaper lands the row in
+  `RETRY_WAIT` with the counters its recovery decided: one infrastructure retry
+  after a refusal at the integration lock (ADR 0046 decision (c), carried out by
+  M0-286), and otherwise none when the candidate and the attempt that built it
+  survived. A refusal at the STOP read at integration step 1 is landed
+  uncharged by M0-286, a departure from the letter of the recommendation
+  decision (c) answered, which named the STOP beside the lock; that departure is
+  the operator's to confirm (**[operator-confirmable]**, 2026-10-05 - it stands
+  unless the operator vetoes it). Every other running state already had this
+  landing; without it the sweep could only report the row. A run that throws
+  while the row stands here lands on the same edge, on the infrastructure
+  counter. The edge itself was decided on the operator's word of 2026-10-04
+  (ADR 0046); that the word puts the lock's charge into this bullet is the
+  seat's reading (**[operator-confirmable]**, 2026-10-04 - it stands unless the
+  operator vetoes it).
 - `VERIFYING -> BUILDING`: fix cycle with a fresh builder and a FailurePacket;
   `quality_attempts++`.
 - `INTEGRATING -> BUILDING`: the same fix cycle, bought by a gate refusal. The
@@ -426,7 +446,7 @@ the numbering below, and the order the stages are recorded in, are unchanged.
 | Stage | Name | Cost | Content |
 |---|---|---|---|
 | 0 | Identity | 0 | expected task/branch/workspace; `base_sha` as recorded; candidate is a descendant of base; clean tree; no foreign refs touched |
-| 1 | Scope and anti-cheat | 0 | diff within `allowed_paths`; forbidden paths untouched; no secrets; no deleted or weakened tests (`.skip`/`.only`, lowered thresholds, snapshot refreshes); factory gates and config not disabled; only a `factory_admin` task may change the factory's own core (ADR 0018 section 3 (f)); no unexplained lockfile drift; commit-range ASCII and identity hygiene over `base..candidate` (M0-07) |
+| 1 | Scope and anti-cheat | 0 | a non-empty diff (M0-69); diff within `allowed_paths`; forbidden paths untouched; no secrets; no deleted or weakened tests (`.skip`/`.only`, lowered thresholds, snapshot refreshes); factory gates and config not disabled; only a `factory_admin` task may change the factory's own core (ADR 0018 section 3 (f)), the manifest's `scripts` field included (M0-69); no unexplained lockfile drift; commit-range ASCII, identity and subject-convention hygiene over `base..candidate` (M0-07; the subject half, M0-163) |
 | 2 | Deterministic ladder | 0 LLM | from `checks.yaml`, but for the focused tests, which come from the TaskSpec (section 5): format -> focused tests -> typecheck -> lint -> unit -> build -> project truth checks -> full suite |
 | 3 | Runtime smoke | 0..low | triggered when startup/routes/DI/schema/CLI/lifecycle are touched: start it, hit it, check it, stop it by PID |
 | 4 | Semantic reviewer | LLM | fresh context, read-only *tools* (it walks the repo and runs read/test commands rather than reading a bare diff). Input: TaskSpec, SHA, diff, deterministic results. Not input: the builder's narrative or confidence. Output: a schema verdict - `verdict`, `findings[{severity, claim, evidence, would_block}]`, `unverified_dimensions` |

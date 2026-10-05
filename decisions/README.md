@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 45 ADRs, measured on 2026-10-03 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `45`.
-Twenty-seven of them are reproduced here: the ones that decide something a reader of
+The private repository carries 48 ADRs, measured on 2026-10-05 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `48`.
+Twenty-nine of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the twenty-seven
+inside `DESIGN.md` name files in the private repository. Only the twenty-nine
 listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -53,15 +53,25 @@ rather than by its identifier.
 | [0042](0042-the-ten-task-programme-and-its-standing-tick-word.md) | 2026-09-30 | A ten-task programme on the second repository, run one tick at a time under a standing word at the ladder's first rung, its task packet approved by the operator and the move to rung 2 left to him - and the fact that the successor seat's first tick under that standing word was refused by the agent harness before it ran. |
 | [0043](0043-the-two-retirement-rules-permanent-and-bound-to-the-holdout.md) | 2026-10-01 | The temporary rules of 0035 and 0038 become permanent but bound to the holdout: an unverified entry either rule would retire leaves condition 2's count only on a candidate whose held-out checks ran and passed; 0036's scope is made permanent as it stands. |
 | [0045](0045-m0-222-behind-the-three-rt-08-waits-and-item-4-taken.md) | 2026-10-03 | Three operator words: the metric by model and role is built right after the three rows already above the roadmap line, before the builder's model is compared, and the reviewer keeps its model until that comparison; the second repository's next task waits for those four rows, with ticks there stopped meanwhile; and a batch of edits to the factory's procedures and to `DESIGN.md` sections 7, 8 and 13 is taken - among them the default 0032 left to the operator: a worker's transcript stays off. |
+| [0046](0046-the-m0-117-ledger-decided-and-the-spend-loop-row-above-the-line.md) | 2026-10-04 | The operator's word on a state-machine edge a landing had added and asked him for: a verified row that no integration claimed returns to the retry queue instead of being reported on every sweep, a recovery with no edge of its own comes back the same way, and the loop that edge opens under a lock that stays held gets a row of its own, above every roadmap row, before any tick resumes. |
+| [0048](0048-the-written-procedure-for-soak-rungs-3-4-and-5.md) | 2026-10-05 | The written procedure for the soak ladder's third, fourth and fifth rungs: which clauses each climb reads and whose they are - the design's, the code's or the operator's - what a seat prints before it puts a climb to him, and what refuses a promotion in code and what does not. It takes no promotion. |
 
-Two ADRs were filed on 2026-10-03, after the previous published snapshot:
-0044 and 0045. 0045 is added above. 0044 is held, for the reason 0023 is
-(below): one of its five decisions sets a rule for what the factory's public
-outputs may carry, and publishing it would describe what the rule keeps out.
-Of its other decisions, the two a reader of this repository needs - the
-second rung of the soak ladder taken on the second repository, with shadow
-mode off, and the third left waiting - are stated with their facts in
+Three ADRs were filed after the previous published snapshot, on 2026-10-04
+and 2026-10-05: 0046, 0047 and 0048. 0046 and 0048 are added above. 0047 is
+held, for the reason 0023 is (below): one of its five decisions, and the words
+it quotes for it, concern material this repository does not publish. Its
+other decisions a reader of this repository needs - the stage-1 row of
+`DESIGN.md` section 8 rewritten to name every condition stage 1 runs, the
+second repository's last task reissued with the interface the operator chose,
+and the M5 chain's central row closed - are in `DESIGN.md` itself and in
 `TIMELINE.md`, "Where the snapshot stands".
+Two ADRs were filed on 2026-10-03: 0044 and 0045. 0045 is reproduced above.
+0044 is held, for the reason 0023 is (below): one of its five decisions sets
+a rule for what the factory's public outputs may carry, and publishing it
+would describe what the rule keeps out. Of its other decisions, the two a
+reader of this repository needs - the second rung of the soak ladder taken on
+the second repository, with shadow mode off, and the third left waiting - are
+stated with their facts in `TIMELINE.md`, "Where the snapshot stands".
 Of the fourteen filed between the snapshots of 2026-09-22 and 2026-10-02
 (0030 to 0043), thirteen are reproduced. 0040 is held: its one
 decision is the figure at which the seats that build the factory pause their
@@ -74,9 +84,11 @@ Two older ones are still deliberately not reproduced.
 this repository's own publication boundary, and its load-bearing half is the list
 of what is never published; publishing that list would publish the shape of what
 it excludes. 0027 (the M5 chain and the run on the second repository) records a
-chain that is still in flight - its central row has not landed - and this
-repository does not carry a claim ahead of the commit that proves it
-(`PRINCIPLES.md`, discipline 3). Both are candidates for a later snapshot.
+chain that is still in flight - its central row was closed on 2026-10-04, on
+the strength of the first merge the gate made in the second repository, and
+three of its rows are still open - and this repository does not carry a claim
+ahead of the commit that proves it (`PRINCIPLES.md`, discipline 3). Both are
+candidates for a later snapshot.
 
 0020 is reproduced with one paragraph it did not carry at the 2026-09-14
 snapshot: the question its section 2 (a) left open was closed on 2026-09-19, and
@@ -87,7 +99,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-03 with, for each file:
+2026-10-05 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
