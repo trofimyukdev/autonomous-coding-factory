@@ -36,31 +36,32 @@ the non-goals it excludes.
 ## Status
 
 **Bootstrap. M0 to M4 landed; M5 - the first consumer in production - in
-progress.** The factory builds against its own repository and, since 2026-09-12,
+progress: every row of its chain is closed, and its definition of done is not
+met.** The factory builds against its own repository and, since 2026-09-12,
 drives the queue of a second one from outside its own tree. **On 2026-10-02 it
 merged through its own gate for the first time: nine tasks into that second
 repository's public `main`, each passed by the gate and merged and pushed by the
 factory itself, under supervision - no tick was started by the timer.**
 
-Measured on the morning of **2026-10-05** against the private `main` at
-`cd51a05ea84a03963e90c655337df308930f70b9` - six landings after the commit the
-previous snapshot named on the evening of 2026-10-03, five M0 rows and M5-04 -
-with `git -C <repo> ... main`. The rows on the second repository are read in
-its working directory between 06:10 and 06:26 +0300 that morning, except the
-merge count, which any clone of it prints:
+Measured on the morning of **2026-10-06** against the private `main` at
+`b2019e1a2954b44329f355345335742b3897364f` - five landings after the commit the
+previous snapshot named on the morning of 2026-10-05, M5-05 to M5-07 and two M0
+rows - with `git -C <repo> ... main`. The rows on the second repository are
+read in its working directory between 07:01 and 07:07 +0300 that morning,
+except the merge count, which any clone of it prints:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1338` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `144` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-10-05` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1364` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `149` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-10-06` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
-| M5 landings | `3` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
+| M5 landings | `6` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `354` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| TaskSpecs in the queue | `356` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
 | ADRs | `48` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| Landings since 2026-09-12 | `48` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
-| Of those, M5 landings - every other one is M0 | `1` | the same, with `grep -c 'merge: M5-'` in place of `wc -l` |
+| Landings since 2026-09-12 | `53` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
+| Of those, M5 landings - every other one is M0 | `4` | the same, with `grep -c 'merge: M5-'` in place of `wc -l` |
 | Gate verdicts on the second repository, refused / passed | `17` / `17` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
 | Of those passes, with the held-out acceptance check run and passed | `16` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
 | Tasks of the second repository the gate has judged, refused or passed | `12` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
@@ -78,19 +79,29 @@ is "soak ladder through step 5", and the landings did not meet it:
 `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` is the reading that
 says so, and it is published here for exactly that reason. The ladder now stands
 at the second of its six rungs.
-M5 has seven rows filed and three landings, and its central row - the one that
-runs the factory against the second repository - was closed on 2026-10-04 on
-the strength of the first merge the gate made there. Until 2026-10-05 the last
-landing of any milestone was dated 2026-09-12: of the forty-eight landings
-since, forty-seven are M0 rows, nearly all of them repairing the mechanisms the
-M5 run keeps finding - the fix cycle a bounded tick could not hold, the edge a
-gate refusal had no route through, the ladder's blindness to the verdict its
-first rung counts, the one worker home every seat of a pass shared, a goal
-evaluator whose reply the gate could not read, a ladder that measured the
-consumer's working tree instead of the commit, and since then the gate's own
-errors in both directions. The forty-eighth is M5-04, the written procedure a
-seat follows before it puts one of the ladder's next three rungs to the
-operator (`decisions/0048-the-written-procedure-for-soak-rungs-3-4-and-5.md`).
+M5 has seven rows filed and six landings, and all seven rows are closed: its
+central row - the one that runs the factory against the second repository - on
+2026-10-04, on the strength of the first merge the gate made there, and its
+last three on 2026-10-05. Those three land readings rather than changes: the
+router's choice is computed from the database and printed but applied to no
+seat, the statistic the lens order would be recomputed from is declared
+unavailable, and rung 6's threshold is measured on rung 5 while the clock
+around the day waits on a packet for the operator. M5's definition of done -
+"30-50 real tasks; router and lens order recomputed from data" - is not met:
+the lens order has not been recomputed, and the second repository has thirteen
+verified merges, not thirty. So M5 is not done, by the same rule that keeps M4
+open. Until 2026-10-05 the last landing of any milestone was
+dated 2026-09-12: of the fifty-three landings since, forty-nine are M0 rows,
+nearly all of them repairing the mechanisms the M5 run keeps finding - the fix
+cycle a bounded tick could not hold, the edge a gate refusal had no route
+through, the ladder's blindness to the verdict its first rung counts, the one
+worker home every seat of a pass shared, a goal evaluator whose reply the gate
+could not read, a ladder that measured the consumer's working tree instead of
+the commit, and since then the gate's own errors in both directions. The other
+four are M5-04, the written procedure a seat follows before it puts one of the
+ladder's next three rungs to the operator
+(`decisions/0048-the-written-procedure-for-soak-rungs-3-4-and-5.md`), and the
+chain's last three rows.
 
 **On the second repository the gate has gone from verdicts to merges.** Its
 first pass is recorded as a false one: `decisions/0039-the-factory-fixes-its-own-gate-first.md`
@@ -123,7 +134,7 @@ ticks there stopped meanwhile
 they landed, and on the night of 2026-10-05 the factory merged that task, a
 GitHub Action wrapper, and one more that repaired four residuals of the
 earlier merges - the eleventh and twelfth merges there. No task is open there
-now. The earlier series of ticks are recorded, with their
+now, and no tick has run there since. The earlier series of ticks are recorded, with their
 commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.

@@ -1,6 +1,6 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 48 ADRs, measured on 2026-10-05 with
+The private repository carries 48 ADRs, measured on 2026-10-06 with
 `git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `48`.
 Twenty-nine of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
@@ -56,8 +56,12 @@ rather than by its identifier.
 | [0046](0046-the-m0-117-ledger-decided-and-the-spend-loop-row-above-the-line.md) | 2026-10-04 | The operator's word on a state-machine edge a landing had added and asked him for: a verified row that no integration claimed returns to the retry queue instead of being reported on every sweep, a recovery with no edge of its own comes back the same way, and the loop that edge opens under a lock that stays held gets a row of its own, above every roadmap row, before any tick resumes. |
 | [0048](0048-the-written-procedure-for-soak-rungs-3-4-and-5.md) | 2026-10-05 | The written procedure for the soak ladder's third, fourth and fifth rungs: which clauses each climb reads and whose they are - the design's, the code's or the operator's - what a seat prints before it puts a climb to him, and what refuses a promotion in code and what does not. It takes no promotion. |
 
-Three ADRs were filed after the previous published snapshot, on 2026-10-04
-and 2026-10-05: 0046, 0047 and 0048. 0046 and 0048 are added above. 0047 is
+No ADR was filed after the previous published snapshot, of the morning of
+2026-10-05. 0048 is reproduced with the five dated corrections its original
+gained on 2026-10-06; each keeps the sentence it corrects verbatim, as the
+record of what was written.
+Three ADRs were filed between the snapshots of 2026-10-03 and 2026-10-05, on
+2026-10-04 and 2026-10-05: 0046, 0047 and 0048. 0046 and 0048 are added above. 0047 is
 held, for the reason 0023 is (below): one of its five decisions, and the words
 it quotes for it, concern material this repository does not publish. Its
 other decisions a reader of this repository needs - the stage-1 row of
@@ -83,12 +87,17 @@ Two older ones are still deliberately not reproduced.
 0023 (the public showcase and the second repository) is the decision that defines
 this repository's own publication boundary, and its load-bearing half is the list
 of what is never published; publishing that list would publish the shape of what
-it excludes. 0027 (the M5 chain and the run on the second repository) records a
-chain that is still in flight - its central row was closed on 2026-10-04, on
-the strength of the first merge the gate made in the second repository, and
-three of its rows are still open - and this repository does not carry a claim
-ahead of the commit that proves it (`PRINCIPLES.md`, discipline 3). Both are
-candidates for a later snapshot.
+it excludes. 0027 (the M5 chain and the run on the second repository) was held
+while its chain was in flight, because this repository does not carry a claim
+ahead of the commit that proves it (`PRINCIPLES.md`, discipline 3). That
+reason has lapsed: every row of the chain is closed - its central row on
+2026-10-04, on the strength of the first merge the gate made in the second
+repository, and its last three on 2026-10-05 - while the milestone the chain
+plans is not done (`TIMELINE.md`, "Where the snapshot stands"). It stays held
+for now for another reason: its argument rests in several places on the run of
+the first (private) consumer and on 0023, neither of which this repository
+publishes, and a copy without those passages would not carry the argument.
+Both are candidates for a later snapshot.
 
 0020 is reproduced with one paragraph it did not carry at the 2026-09-14
 snapshot: the question its section 2 (a) left open was closed on 2026-09-19, and
@@ -99,7 +108,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-05 with, for each file:
+2026-10-06 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1

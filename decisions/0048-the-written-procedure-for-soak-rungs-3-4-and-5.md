@@ -86,6 +86,14 @@ WHOSE CLAUSES THEY ARE.
   `tasks`, one clause more than the design states there. Rung 2's `note` in
   `RUNGS` gives the code's reason: "zero double merges over zero tasks is a
   promotion on silence, and section 18's own first sentence forbids that."
+  *[CORRECTED 2026-10-06 by carrier #95: "first" is the code's ordinal and
+  not the design's. `DESIGN.md` section 18 opens with the sentence that
+  begins "The factory does not go into cron until its own fault-injection
+  suite is green and", and the threshold sentence, "The soak ladder promotes
+  only on measured thresholds, never on "looks fine".", opens its second
+  paragraph. This record corrects no code: the quote stays as the code's
+  reason at 054b668. The bullet is kept verbatim as the record of what was
+  written.]*
 - The climbs to rungs 4 and 5 read lists the design never states. The
   `RUNGS` docstring says so -
   ` * THE DESIGN STATES A THRESHOLD FOR THE FIRST TWO ARROWS AND FOR NO OTHER, and`
@@ -102,6 +110,17 @@ rung 5's own list is empty (`    promotion: [],`), AND rung 6
 definition of done that `TOP_RUNG_IN_DOD` derives from the table. Rung 6's
 threshold - in `RUNGS`' terms, rung 5's list - is M5-07's subject and not
 this record's.
+*[CORRECTED 2026-10-06 by carrier #95: rung 5's own list is no longer
+empty. Since 8da69af (M5-07, merged 7cb3e31) its entry under
+`    name: "unattended cron by day",` (src/controller/ladder.ts) carries the
+four clauses -
+`git log -S'promotion: ["tasks", "no_policy_violations", "no_double_merges", "false_block_rate"],' --format='%h %ad' --date=short 5bbff03 -- src/controller/ladder.ts`
+printed 8da69af 2026-10-05 (rung 5's list) and ead4813 2026-09-11 (M4-07,
+rungs 3 and 4) on 2026-10-06. So one disjunct of the three holds there -
+rung 6's `withinDoD: false` - and the code still offers no promotion off
+rung 5. That list is rung 6's threshold, M5-07's, written down in
+factory/systemd/RUNG-6.md. The paragraph is kept verbatim as the record of
+what was written.]*
 
 ## 2. The clauses, their facts and their bounds
 
@@ -126,6 +145,14 @@ by its configuration key and its code default and states no figure as his:
   (`  tasks_per_rung: positive("Tasks a rung must judge cleanly before the next rung is offered.", 10),`).
   The figure is the one section 18 calls "an agreed number of tasks".
 
+*[CORRECTED 2026-10-06 by carrier #95: "THE FIGURES ARE HIS." stands bare
+here, while section 7's bracket of 2026-10-05 - the one under its bullet
+that opens "- **The figures** of `[ladder] tasks_per_rung` and" - marks the
+same claim THE SEAT'S reading, **[operator-confirmable]**. This bracket
+points at that one and answers nothing of the rung-3 research's section 7
+item 9. The heading
+is kept verbatim as the record of what was written.]*
+
 A consumer's `factory/millwright.toml` may set either key; a default is not
 a figure anybody agreed to. As a dated reading only: repo-truth's
 `factory/millwright.toml` held no `[ladder]` block on 2026-10-05 at 01:40 -
@@ -148,6 +175,14 @@ THE WINDOW. Every fact is counted from the current rung's own `since`
 and a climb restarts it (`    const changed = !existing || previous.rung !== input.rung;`,
 `recordSoakRung` in src/store/store.ts). The tasks that earned one rung are
 not the tasks that earn the next.
+*[CORRECTED 2026-10-06 by carrier #95: the window is a time filter over
+events. `readSoakFacts` (src/controller/ladder.ts) skips an event older
+than the rung's `since` (the line quoted above) and adds a task's stem for
+every gate event inside the window
+(`    if (GATE_EVENTS.includes(event.type)) judged.add(stem);`), so a task
+judged on both sides of a climb counts in both windows: verdicts, not
+tasks, separate them (block #183's NIT-1). The sentence is kept verbatim as
+the record of what was written.]*
 
 THE CLAUSE THAT CAN BE UNMEASURED. The rule is the code's:
 ` * A clause whose fact is null is NOT MET, and that is the rule that keeps an`.
@@ -300,6 +335,15 @@ under `src/` is this row's.
    "is true of" `   * exactly one rung: the last one inside the current definition of done has`,
    and rungs 5 AND 6 both carry `    promotion: [],`. The rows that own
    src/controller/ladder.ts by name are its homes.
+   *[CORRECTED 2026-10-06 by carrier #95: closed by M5-07's landing
+   (8da69af, merged 7cb3e31). The docstring now reads
+   "   * from here, which is true of exactly one rung: the sixth, the top of the"
+   (src/controller/ladder.ts); rung 6 alone carries `    promotion: [],` -
+   `git grep -c -F '    promotion: [],' 5bbff03 -- src/controller/ladder.ts`
+   printed 1 on 2026-10-06 - and the item's quoted anchor is gone:
+   `git grep -c -F 'exactly one rung: the last one inside the current definition of done has' 5bbff03 -- src`
+   printed nothing, rc 1, the same day. The item is kept verbatim as the
+   record of what was written.]*
 3. **The ladder verbs do not read the STOP file** (low, a fact and not a
    judgement). Whether a promotion under an armed STOP is wanted is nowhere
    stated; this record states the fact and decides nothing.
