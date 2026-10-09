@@ -1,6 +1,6 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 48 ADRs, measured on 2026-10-06 with
+The private repository carries 48 ADRs, measured on 2026-10-09 with
 `git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `48`.
 Twenty-nine of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
@@ -56,10 +56,14 @@ rather than by its identifier.
 | [0046](0046-the-m0-117-ledger-decided-and-the-spend-loop-row-above-the-line.md) | 2026-10-04 | The operator's word on a state-machine edge a landing had added and asked him for: a verified row that no integration claimed returns to the retry queue instead of being reported on every sweep, a recovery with no edge of its own comes back the same way, and the loop that edge opens under a lock that stays held gets a row of its own, above every roadmap row, before any tick resumes. |
 | [0048](0048-the-written-procedure-for-soak-rungs-3-4-and-5.md) | 2026-10-05 | The written procedure for the soak ladder's third, fourth and fifth rungs: which clauses each climb reads and whose they are - the design's, the code's or the operator's - what a seat prints before it puts a climb to him, and what refuses a promotion in code and what does not. It takes no promotion. |
 
-No ADR was filed after the previous published snapshot, of the morning of
-2026-10-05. 0048 is reproduced with the five dated corrections its original
-gained on 2026-10-06; each keeps the sentence it corrects verbatim, as the
-record of what was written.
+No ADR was filed or changed after the previous published snapshot, of the
+morning of 2026-10-06
+(`git -C <repo> log --oneline b2019e1..main -- docs/decisions/ | wc -l` -> `0`
+on 2026-10-09), so every copy here stands as it was published then.
+No ADR had been filed between that snapshot and the one of the morning of
+2026-10-05 either. 0048 is reproduced with the five dated corrections its
+original gained on 2026-10-06; each keeps the sentence it corrects verbatim, as
+the record of what was written.
 Three ADRs were filed between the snapshots of 2026-10-03 and 2026-10-05, on
 2026-10-04 and 2026-10-05: 0046, 0047 and 0048. 0046 and 0048 are added above. 0047 is
 held, for the reason 0023 is (below): one of its five decisions, and the words
@@ -108,7 +112,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-06 with, for each file:
+2026-10-09 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
