@@ -41,36 +41,39 @@ met.** The factory builds against its own repository and, since 2026-09-12,
 drives the queue of a second one from outside its own tree. **On 2026-10-02 it
 merged through its own gate for the first time: nine tasks into that second
 repository's public `main`, each passed by the gate and merged and pushed by the
-factory itself, under supervision - no tick was started by the timer.**
+factory itself, under supervision - no tick was started by the timer. By the
+morning of 2026-10-12 its gate had made twenty-nine merges there, and that
+morning the operator took the soak ladder's third rung, two parallel builders,
+at a moment the ladder was not offering it.**
 
-Measured on the afternoon of **2026-10-09** against the private `main` at
-`886b98d68e24df0d38337343d23d204c6399f263` - two landings after the commit the
-previous snapshot named on the morning of 2026-10-06, M0-215 and M0-114 - with
-`git -C <repo> ... main`. The rows on the second repository are read in its
-working directory at 15:16 +0300 that afternoon, except the merge count, which
-any clone of it prints:
+Measured on the morning of **2026-10-12** against the private `main` at
+`378c366c57774a7138ecc2d141fb9ebbf3ed1b96` - three landings after the commit the
+previous snapshot named on the afternoon of 2026-10-09, M0-292, M0-293 and
+M0-289 - with `git -C <repo> ... main`. The rows on the second repository are
+read in its working directory between 10:50 and 10:54 +0300 that morning,
+except the merge count, which any clone of it prints:
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1373` | `git rev-list --count main` |
-| Landings (subject begins `merge: `) | `151` | `git log --format='%s' main \| grep -c '^merge: '` |
-| First / latest commit date | `2026-08-17` / `2026-10-07` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
+| Commits on `main` | `1394` | `git rev-list --count main` |
+| Landings (subject begins `merge: `) | `154` | `git log --format='%s' main \| grep -c '^merge: '` |
+| First / latest commit date | `2026-08-17` / `2026-10-12` | `git log --format='%ad' --date=short --reverse main \| head -1`; same without `--reverse` |
 | M4 landings | `7` | `git log --format='%s' main \| grep -c '^merge: M4-'` |
 | M5 landings | `6` | `git log --format='%s' main \| grep -c '^merge: M5-'` |
 | M5 rows filed in the queue | `7` | `git ls-tree --name-only main factory/tasks/ \| grep -c 'M5-'` |
-| TaskSpecs in the queue | `356` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| ADRs | `48` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| Landings since 2026-09-12 | `55` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
+| TaskSpecs in the queue | `358` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| ADRs | `50` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| Landings since 2026-09-12 | `58` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
 | Of those, M5 landings - every other one is M0 | `4` | the same, with `grep -c 'merge: M5-'` in place of `wc -l` |
-| Gate verdicts on the second repository, refused / passed | `24` / `21` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
-| Of those passes, with the held-out acceptance check run and passed | `20` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
-| Tasks of the second repository the gate has judged, refused or passed | `17` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
-| Merges the gate made into the second repository's `main` | `16` | in any clone of it: `git rev-list --merges --count 9eb3692..dac3668` |
-| Verified merges there, as the factory counts them | `17` | from its working directory, the factory's `metrics`: the line `verified_merges` |
-| Tasks there that failed out, blocked or given up on | `1` | the same `metrics`: the line `failed_out` |
-| `$` per verified merge there, the factory's metric - the attempts of the merged rows only | `1.747` | the same `metrics`: the line `usd_and_tokens_per_verified_merge.cost_usd` |
-| `$` per verified merge there, all in - every worker run the journal prices, over the same seventeen | `3.7482` | from its working directory: the sum over the journal's priced `AGENT_FINISHED` records, by the command in `TIMELINE.md`, "Where the snapshot stands" -> `63.7193`, divided by `17` |
-| Soak-ladder rung there | `2`; rung `3` offered and not taken, at a false-block rate of `9.090909090909092` against at most `10%` | from its working directory, the factory's `ladder status`: the lines `rung`, `offer`, `offered` and `fact.false_block_percent` |
+| Gate verdicts on the second repository, refused / passed | `32` / `34` | from that repository's working directory: `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl`; the same with `GATE_PASSED` |
+| Of those passes, with the held-out acceptance check run and passed | `33` | from the same directory: `grep '"type":"GATE_PASSED"' factory/state/events.jsonl \| grep -c 'holdout acceptance item(s) passed'` |
+| Tasks of the second repository the gate has judged, refused or passed | `30` | from the same directory: `grep -E '"type":"GATE_(PASSED\|FAILED)"' factory/state/events.jsonl \| grep -o '"task_id":"RT-[0-9]*' \| sort -u \| wc -l` |
+| Merges the gate made into the second repository's `main` | `29` | in any clone of it: `git rev-list --merges --count 9eb3692..78b6479` |
+| Verified merges there, as the factory counts them | `30` | from its working directory, the factory's `metrics`: the line `verified_merges` |
+| Tasks there that failed out, blocked or given up on | `0` | the same `metrics`: the line `failed_out` |
+| `$` per verified merge there, the factory's metric - the attempts of the merged rows only | `1.6357` | the same `metrics`: the line `usd_and_tokens_per_verified_merge.cost_usd` |
+| `$` per verified merge there, all in - every worker run the journal prices, over the same thirty | `2.9815` | from its working directory: the sum over the journal's priced `AGENT_FINISHED` records up to seq `6082`, by the command in `TIMELINE.md`, "Where the snapshot stands" -> `89.4442`, divided by `30` |
+| Soak-ladder rung there | `3`, taken while not offered; rung `4` not offered, with `3` judged tasks in its window against at least `10` | from its working directory, the factory's `ladder status`: the lines `rung`, `fact.tasks`, `offer` and `offered`; and for the promotion, `jq -r 'select(.seq==5728) \| .payload.offered' factory/state/events.jsonl` -> `false` |
 
 **Landed is not the same fact as done, and this repository will not let the two
 blur.** Every mechanism `DESIGN.md` section 17 puts in M4 - the tick wrapper, the
@@ -79,7 +82,7 @@ fault-injection categories, the soak ladder - has landed. M4's definition of don
 is "soak ladder through step 5", and the landings did not meet it:
 `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` is the reading that
 says so, and it is published here for exactly that reason. The ladder now stands
-at the second of its six rungs.
+at the third of its six rungs.
 M5 has seven rows filed and six landings, and all seven rows are closed: its
 central row - the one that runs the factory against the second repository - on
 2026-10-04, on the strength of the first merge the gate made there, and its
@@ -89,10 +92,11 @@ seat, the statistic the lens order would be recomputed from is declared
 unavailable, and rung 6's threshold is measured on rung 5 while the clock
 around the day waits on a packet for the operator. M5's definition of done -
 "30-50 real tasks; router and lens order recomputed from data" - is not met:
-the lens order has not been recomputed, and the second repository has seventeen
-verified merges, not thirty. So M5 is not done, by the same rule that keeps M4
+the second repository now has thirty verified merges, the lower bound the line
+names, but the lens order has not been recomputed and the router's choice is
+applied to no seat. So M5 is not done, by the same rule that keeps M4
 open. Until 2026-10-05 the last landing of any milestone was
-dated 2026-09-12: of the fifty-five landings since, fifty-one are M0 rows,
+dated 2026-09-12: of the fifty-eight landings since, fifty-four are M0 rows,
 nearly all of them repairing the mechanisms the M5 run keeps finding - the fix
 cycle a bounded tick could not hold, the edge a gate refusal had no route
 through, the ladder's blindness to the verdict its first rung counts, the one
@@ -123,7 +127,7 @@ twice that evening by its held-out check alone; reissued with that check
 repaired, it was merged the next day. The factory's own metric puts a verified
 merge there at under two dollars of model cost, counting every attempt of the
 rows that merged, the refused ones included; with every cancelled version of a
-spec added, it is more than twice that, and both are the price the CLI reports
+spec added, it is about 1.8 times that, and both are the price the CLI reports
 for its runs, not a bill. The ladder offered the third rung, two parallel
 builders, and it was not taken; from that tenth merge the ladder read one of
 the refusals in the second rung's window as overturned - a false-block rate
@@ -139,11 +143,19 @@ the sixteenth - and gave the fifth up: an end-to-end suite that changes no
 TypeScript under `src/` but tests, refused four times on the one entry its reviewer could
 not verify, a stage-5 measurement that had nothing to measure in it and so
 never ran. The sixth was split by the operator
-into three smaller tasks, which wait in that repository's queue. Those seven
-refusals left the one overturned refusal at one in eleven, under the 10%, so
-the ladder offers the third rung again; the promotion is the operator's, and
-it has not been taken (`TIMELINE.md`, "Where the snapshot stands"). No tick
-has run there since. The earlier series of ticks are recorded, with their
+into three smaller tasks. Those seven refusals left the one overturned
+refusal at one in eleven, under the 10%, and the ladder offered the third rung
+again. From 2026-10-10 to the morning of 2026-10-12 the factory merged thirteen
+more there, the last of them the twenty-ninth merge its gate made - among them
+the end-to-end suite it had given up on, offered again once the gate could
+retire the entry it had been refused on
+(`decisions/0049-the-tests-only-mark-on-stage-5-bound-to-the-holdout.md`),
+and the three tasks of the split. The refusals of 2026-10-11 and the merges
+after them took the share of refusals the ladder reads as overturned above the
+10% the third rung allows, and the ladder no longer offered it; on the morning
+of 2026-10-12 the operator took the third rung all the same, and the record of
+the promotion names the clause he set aside (`TIMELINE.md`, "Where the
+snapshot stands"). The earlier series of ticks are recorded, with their
 commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.

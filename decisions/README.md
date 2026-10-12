@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 48 ADRs, measured on 2026-10-09 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `48`.
-Twenty-nine of them are reproduced here: the ones that decide something a reader of
+The private repository carries 50 ADRs, measured on 2026-10-12 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `50`.
+Thirty-one of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the twenty-nine
+inside `DESIGN.md` name files in the private repository. Only the thirty-one
 listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -55,13 +55,25 @@ rather than by its identifier.
 | [0045](0045-m0-222-behind-the-three-rt-08-waits-and-item-4-taken.md) | 2026-10-03 | Three operator words: the metric by model and role is built right after the three rows already above the roadmap line, before the builder's model is compared, and the reviewer keeps its model until that comparison; the second repository's next task waits for those four rows, with ticks there stopped meanwhile; and a batch of edits to the factory's procedures and to `DESIGN.md` sections 7, 8 and 13 is taken - among them the default 0032 left to the operator: a worker's transcript stays off. |
 | [0046](0046-the-m0-117-ledger-decided-and-the-spend-loop-row-above-the-line.md) | 2026-10-04 | The operator's word on a state-machine edge a landing had added and asked him for: a verified row that no integration claimed returns to the retry queue instead of being reported on every sweep, a recovery with no edge of its own comes back the same way, and the loop that edge opens under a lock that stays held gets a row of its own, above every roadmap row, before any tick resumes. |
 | [0048](0048-the-written-procedure-for-soak-rungs-3-4-and-5.md) | 2026-10-05 | The written procedure for the soak ladder's third, fourth and fifth rungs: which clauses each climb reads and whose they are - the design's, the code's or the operator's - what a seat prints before it puts a climb to him, and what refuses a promotion in code and what does not. It takes no promotion. |
+| [0049](0049-the-tests-only-mark-on-stage-5-bound-to-the-holdout.md) | 2026-10-10 | A candidate that changes only tests: stage 5 writes a positive mark on its record when every changed path is a test path, and the reviewer's pointer at that record leaves condition 2's count only when the candidate's held-out checks ran and passed; the other half of the question - an unverified entry blocking only when it is about a stated requirement - is set aside, because the controller cannot yet tell. |
+| [0050](0050-a-hung-mutant-is-detected-and-the-bound-is-priced-from-the-baseline.md) | 2026-10-10 | A mutant run past its bound counts as a detected mutant, apart from the kills, when a control run of the unmutated file finishes inside the same bound; the bound per mutant is priced from the file's own baseline run with a floor of about 15 seconds in place of 60; and a stage-5 pass that leans on such a count is bound to the held-out checks. The proposal is recorded as the seat's, not the operator's. |
 
-No ADR was filed or changed after the previous published snapshot, of the
-morning of 2026-10-06
-(`git -C <repo> log --oneline b2019e1..main -- docs/decisions/ | wc -l` -> `0`
-on 2026-10-09), so every copy here stands as it was published then.
-No ADR had been filed between that snapshot and the one of the morning of
-2026-10-05 either. 0048 is reproduced with the five dated corrections its
+Two ADRs were filed after the previous published snapshot, of the afternoon
+of 2026-10-09, both on 2026-10-10: 0049 and 0050, the operator's words on
+two of the gate's false refusals - a tests-only candidate's empty mutation
+measurement, and a mutant run that hangs. Both are reproduced above,
+sanitized as 0041 to 0048 are: transcript paths and row identifiers removed,
+rows named by their time, seat and session names removed, a private
+configuration path written as `<control-root>`, and the private archive
+named as such. No other ADR changed:
+`git -C <repo> diff --name-only 886b98d..main -- docs/decisions/` printed
+those two files and no other on 2026-10-12, so every earlier copy here stands
+as it was published.
+No ADR had been filed or changed between the snapshots of the morning of
+2026-10-06 and the afternoon of 2026-10-09
+(`git -C <repo> log --oneline b2019e1..886b98d -- docs/decisions/ | wc -l`
+-> `0` on 2026-10-12), and none had been filed between that of 2026-10-06
+and the one of the morning of 2026-10-05. 0048 is reproduced with the five dated corrections its
 original gained on 2026-10-06; each keeps the sentence it corrects verbatim, as
 the record of what was written.
 Three ADRs were filed between the snapshots of 2026-10-03 and 2026-10-05, on
@@ -112,7 +124,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-09 with, for each file:
+2026-10-12 with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
