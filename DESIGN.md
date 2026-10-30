@@ -1,6 +1,6 @@
 # Millwright - design
 
-> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at cd51a05ea84a03963e90c655337df308930f70b9 taken 2026-10-05; private paths and the private consumer's name removed.
+> Public copy of the ratified design (ratified 2026-08-19); snapshot of the private main at b72a2bafb8873a36e09bec810e4a95ed9020cc06 taken 2026-10-30; private paths and the private consumer's name removed.
 >
 > References below to "the blueprint" and to the founding-research archive point
 > to a private archive that is not published. Paths of the form
@@ -142,8 +142,11 @@ A consumer repository holds configuration only:
 Installation is a version pin (`npm i -D millwright@<version>` or a git tag), never
 a file copy: the core has exactly one home, consumers hold configuration, and an
 upgrade is a version bump plus `doctor` plus a canary tick. `compat.json`
-pins both versions; `doctor` refuses to run against an untested millwright,
-while the Claude CLI is gated on the tested minimum (section 12).
+pins both versions, and only the Claude CLI's half is checked:
+`claude_cli.version` gates the tested minimum, `claude_cli.tested` the
+tested version itself and `claude_cli.capabilities` the flags (section
+12), while no `doctor` check compares millwright's own version with its
+pin yet (ADR 0063 section 2).
 
 Integration of the first consumer (private, not published) follows blueprint section 19:
 `checks.yaml` from its existing test command, its proven project rules moved
@@ -160,6 +163,7 @@ One task is one YAML file in `factory/tasks/`. Fields:
 | `repo`, `priority`, `title` | routing and ordering |
 | `outcome` | what changes for the user or the system - never how |
 | `measure` | commands, not adjectives |
+| `creates_test_files` | optional, the test files the task's block creates; a spec without it stays valid (ADR 0054 decision 1). That a `measure` command may name such a file before it exists (ADR 0054 reading 1), and the field's name and checking rule as M0-108's block built them (reading 5), are THE SEAT'S readings, **[operator-confirmable]**; the rule's home is the section "The measured test files" of src/controller/queue.ts |
 | `not_done_if` | anti-criteria (e.g. "accepted but the route is not wired") |
 | `acceptance[]` | the machine half of the DoD: `type: command` (with `required`, optional `holdout`) and `type: behavior` statements |
 | `allowed_paths`, `forbidden_paths` | enforced by the controller against the diff, not requested in a prompt |
@@ -289,12 +293,19 @@ Only the controller performs transitions, transactionally. Key edges:
   Only the two states a version is born in have this edge, which is what leaves a
   version that a worker already holds alone.
 - `DONE -> QUEUED`: a close recorded in error is withdrawn and the row goes back
-  to the head of the chain. It is the only edge that takes a record back rather
-  than carrying the row anywhere, which is why DONE stays terminal: nothing
-  carries a closed row further, and a withdrawal carries nothing. The named store
-  operation is the only thing in the factory that walks it, and it is what makes
-  the event say what was withdrawn and why; the edge itself is checked like every
-  other, so nothing is special-cased past the machine.
+  to the head of the chain. It and `DONE -> BLOCKED` below are the only edges that
+  take a record back rather than carrying the row anywhere, which is why DONE stays
+  terminal: nothing carries a closed row further, and a withdrawal carries nothing.
+  The named store operation is the only thing in the factory that walks it, and it
+  is what makes the event say what was withdrawn and why; the edge itself is
+  checked like every other, so nothing is special-cased past the machine.
+- `DONE -> BLOCKED`: a merged task's holdout, re-run after later merges, failed
+  on the later base (section 10, ADR 0060). It takes the record back as
+  `DONE -> QUEUED` does and parks the row where the operator finds it: an incident
+  is written, the operator is notified, and nothing is reverted; a newer version
+  of its spec waiting in the queue is paused with it, so nothing is rebuilt
+  without the operator. Its own named store operation is the only thing that
+  walks it. Not built yet.
 - `SUPERSEDED -> QUEUED|NEEDS_SPEC`: the task file was reverted to this captured
   version. `UNIQUE(repo_id, spec_hash)` means it cannot be captured a second
   time, so the row itself comes back - into the state that version is born in, so
@@ -357,16 +368,61 @@ integration, update reports, exit.
 
 ```text
  0. STOP file present -> exit 0 (the wrapper checks first and keeps the skip log)
+ 0b. park: a pass parked by a limit signal returns before anything is asked or
+     spent -> exit 75
+ 0c. breakers: a circuit that refuses the pass returns -> exit 75 (section 12)
+ 0d. ladder: a pass shaped above the soak ladder's rung returns -> exit 75
+     (section 18)
+ 0e. manifest: the CLI's version is asked and the run's manifest is written,
+     before doctor-lite asks the machine anything
  1. doctor-lite: database writable, git valid, origin reachable, claude --version
     within compat, no stray ANTHROPIC_API_KEY, subscription rate limits below the
     configured threshold
- 2. janitor (start is recovery): expired leases -> the recovery above; targeted
-    reaping of orphans by PID (never a pattern kill; the predicate is in section
-    13); tmp older than 36 h; run trees past their expiry (src/workspace/reclaim.ts),
-    each deregistered by its own path and never by `git worktree prune`;
-    delete bot branches of merged tasks
- 3. base branch green? if not -> circuit OPEN, notify, exit 75
- 4. budget: available = caps - spent - reservations; no room -> exit 0
+ 1b. every check of `DOCTOR_LITE_CHECK_IDS` (src/controller/tick.ts) is asked
+     at once, and "claude --version within compat" is two of them since M0-318 -
+     the minimum's and the tested version's, answered out of one read of the CLI
+     (`checkClaudeCli`, src/doctor/doctor.ts); a failure in the recovery half -
+     the database, git and origin, which the janitor and the post-merge tail
+     need - refuses the pass here, before the janitor
+ 2. janitor (start is recovery; src/controller/janitor.ts): expired leases ->
+    the recovery above, as `reap` (src/controller/reaper.ts) decides it, and the
+    reservations it frees; a RETRY_WAIT row whose backoff is over -> READY;
+    worker processes a tick recorded (src/controller/children.ts) and still
+    alive are reported by PID and not stopped (`orphanedChildren`); run trees
+    past their expiry (src/workspace/reclaim.ts), each deregistered by its own
+    path and never by `git worktree prune`. Not done today: stopping an orphan
+    by its PID under section 13's predicate, and removing the factory's own
+    temporary directories after 36 h (M0-319). No bot branch is deleted
+    because the factory makes none, carrier #112's reading of the code (ADR
+    0058): every tree it checks out is detached -
+    `git worktree add --detach` (src/workspace/worktree.ts:200,
+    src/controller/fix-cycle.ts:1630) and `git checkout --quiet --detach`
+    (src/workspace/clone.ts:106, src/controller/fix-cycle.ts:1668,
+    src/controller/deferred-seat.ts:943) - and test/unit/shadow.test.ts
+    refuses a branch-making flag on a git call in src/
+ 2b. a failure in the dispatch half - the CLI's minimum and its tested version,
+     the credential, the weekly room - refuses the pass here, after the janitor,
+     so a pass that cannot start a worker still recovers a dead lease (M0-143); a
+     doctor-lite refusal exits 78, or 75 when every failure is temporary, and
+     from cron a permanent failure opens the infrastructure circuit instead and
+     exits 75; doctor notices are journaled and alerted
+ 2c. login probe (M0-318): the first pass that gets here on a pair of CLI
+     versions, the installed one and the consumer's tested one, that no earlier
+     pass probed (`loginProbedBefore`, src/controller/tick.ts) sends one minimal
+     request before step 3 - the call doctor's `auth.minimal_request` makes
+     (`loginProbe`, src/doctor/doctor.ts) - and journals CLI_LOGIN_PROBED, so a
+     pair is probed once; a probe that did not answer journals no
+     CLI_LOGIN_PROBED and refuses the pass as a permanent doctor-lite failure,
+     2b's road
+ 3. base branch green? Acted on only under `checks.strict_base_green`: a red
+    base -> circuit OPEN, notify, exit 75; an unmeasured base - no green baseline
+    for the base fetched from the remote, or a base that could not be read -
+    opens no circuit by itself: it counts one failure on the infrastructure
+    breaker, which opens at its threshold (section 12), and exits 75. Either
+    return runs the post-merge tail (8c) before it exits. With the switch off
+    the pass goes on, and its report carries the reading as a caveat
+ 4. budget: available = caps - spent - reservations; no room -> exit 0, after the
+    post-merge tail (8c)
  5. schedule up to max_tasks ready tasks (dependencies DONE, no resource conflict,
     low predicted file overlap, not factory-admin) whose spec is still "open" -
     no row of that spec id has reached DONE, which is what editing an already
@@ -376,11 +432,31 @@ integration, update reports, exit.
     here, enforced there
  6. per task: lease -> worktree pinned to a base SHA -> builder in the background,
     in its own process group and cgroup, within the slot limits
+ 6b. scout: a scouted spec opens a read-only scout seat on the worktree after the
+     lease and before the builder (src/controller/scout.ts)
  7. on builder completion: the verify DAG (section 8); pass -> READY_TO_INTEGRATE
  8. integrator: strictly one at a time per base branch (section 10)
- 9. journal, metrics, STATUS.md, morning report, notifications
+ 8a. gate phase: a passing walk takes the pass's turn at the integrator; inside
+     the integrator's lock the candidate is merged on the fetched base, the gate
+     (section 9) rules on the integration SHA, and only its pass is pushed
+     (src/controller/gate-phase.ts)
+ 8b. breaker feed: each dispatch's builder class and gate verdict feed the two
+     breakers (section 12), and a transition that alerts is sent at once
+ 8c. post-merge tail (section 10): the rows resting on MERGED -> POST_MERGE_CHECK
+     -> DONE are walked; it also runs before step 3 or step 4 returns (M0-143)
+ 9. journal and reports: every step journals its events as it goes and the run's
+    last event closes it; notifications go out when their event happens
+    (section 14), not here; the morning report is asked at the top of the pass,
+    above step 0, so a stopped factory still sends it; this step writes the live
+    atlas, factory/generated/ATLAS.md (src/report/atlas.ts). The tick writes no
+    STATUS.md and no metrics file - the metrics are read from the database
 10. exit with an honest code (section 15)
 ```
+
+The order is `runTick`'s (src/controller/tick.ts), and steps 5 to 8a run
+inside its `schedulePass` (src/controller/schedule.ts): stated here, enforced
+there. A lettered sub-step is one the archive's list does not number, so the
+numbering 0-10 stays the blueprint's.
 
 Frequent bounded ticks (15 minutes) beat one long pass: smaller blast radius,
 faster recovery, configuration is picked up naturally, an API outage does not hold
@@ -539,7 +615,11 @@ and evidence attached, auto-merging only after CI and policy; it is the recommen
 trust step before `auto`, and is recommended for protected branches.
 
 Post-merge: a fast smoke on the exact merged SHA; a regression triggers the
-task-class revert policy, or a circuit plus notification. **Deploy is not merge:** a
+task-class revert policy, or a circuit plus notification. After later merges the
+holdouts of tasks merged earlier are re-run, and a holdout that fails there takes
+the circuit-plus-notification branch and never a revert: the row leaves DONE for
+BLOCKED by the withdrawal edge section 6 names, an incident is written and the
+operator is notified (ADR 0060; not built yet). **Deploy is not merge:** a
 separate deterministic adapter, run only behind an explicit operator flag.
 
 ## 11. Model routing and economics
@@ -645,8 +725,11 @@ Every run writes a manifest: millwright and claude CLI versions, models,
 `config_hash`, tick budgets. `claude --version` is checked against
 `factory/compat.json`, which pins three things and not two: the tested version, the
 minimum version, and the capabilities the factory requires of the CLI. Below the
-minimum the circuit opens instead of a fleet starting; a version above the minimum
-but outside the tested set notifies rather than passing in silence; and a version
+minimum the circuit opens instead of a fleet starting; a version above the tested
+one notifies rather than passing in silence; a version other than the
+consumer's tested one is also refused by a tick before any worker call, and an
+attended `doctor` reports that refusal as a failing check beside the version's
+own (ADR 0059), done by M0-318, merged at 033db0c; and a version
 that is new enough but has lost a required capability is the case a version number
 alone cannot express, which is why the capabilities are pinned separately and
 `doctor` asserts them against the CLI that is actually installed.
@@ -714,8 +797,8 @@ timeout is set at two to three times the
 typical duration of the call, and it is set whether or not the CLI is believed to
 bound itself. Blind pattern-based process killing is forbidden to everyone,
 always; workers may not kill anything outside their own children; the controller's
-janitor may reap only specific PIDs selected by "parent is init, older than 120 s, command
-line matches a worker".
+janitor may reap only specific PIDs selected by "parent is init or the user's service
+manager (systemd --user), older than 120 s, command line matches a worker" (ADR 0059).
 
 **Sandboxing.** The built-in Claude Code sandbox is enabled for maximum autonomy,
 with `failIfUnavailable`, no unsandboxed commands, a strict network allowlist whose
@@ -763,6 +846,15 @@ cost_per_confirmed_blocker          false_blocker_rate
 cache_read_share                    weekly_quota_burn
 human_intervention_share            operator review time
 ```
+
+A verified merge, the unit `usd_and_tokens_per_verified_merge` and
+`verified_merge_rate` count, is a row in DONE whether its post-merge check passed,
+measured nothing or never ran (a landing recorded by hand), and once M0-327 lands
+`metrics` prints beside it how many of those rows carry each post-merge verdict; once
+repo-truth's journal holds five consecutive factory merges whose post-merge check
+passed, a verified merge becomes a DONE row whose check passed, and every other
+DONE row is printed on a line of its own (ADR 0060, amending ADR 0021 decision
+(e)).
 
 A new engine rule must move one of these or it is deleted at the weekly review.
 

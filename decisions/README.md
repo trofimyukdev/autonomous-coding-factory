@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 50 ADRs, measured on 2026-10-12 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `50`.
-Thirty-one of them are reproduced here: the ones that decide something a reader of
+The private repository carries 63 ADRs, measured on the night of 2026-10-30 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `63`.
+Thirty-five of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the thirty-one
+inside `DESIGN.md` name files in the private repository. Only the thirty-five
 listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -17,7 +17,7 @@ English translation beside it.
 
 A name in angle brackets inside a command or a quoted output line - `<repo>`,
 `<repo-truth>`, `<home>`, `<control-root>`, `<claude-install>`, `<transcript>`,
-`<subagent>`, `<command>` and the like - stands for a path or an identifier on
+`<subagent>`, `<command>`, `<lister>`, `<first-consumer>` and the like - stands for a path or an identifier on
 the private machine that is not published. The command is otherwise as it was
 run, and its output is otherwise quoted as it printed.
 Inside a quoted message, a seat's own name is replaced by a description in
@@ -57,9 +57,63 @@ rather than by its identifier.
 | [0048](0048-the-written-procedure-for-soak-rungs-3-4-and-5.md) | 2026-10-05 | The written procedure for the soak ladder's third, fourth and fifth rungs: which clauses each climb reads and whose they are - the design's, the code's or the operator's - what a seat prints before it puts a climb to him, and what refuses a promotion in code and what does not. It takes no promotion. |
 | [0049](0049-the-tests-only-mark-on-stage-5-bound-to-the-holdout.md) | 2026-10-10 | A candidate that changes only tests: stage 5 writes a positive mark on its record when every changed path is a test path, and the reviewer's pointer at that record leaves condition 2's count only when the candidate's held-out checks ran and passed; the other half of the question - an unverified entry blocking only when it is about a stated requirement - is set aside, because the controller cannot yet tell. |
 | [0050](0050-a-hung-mutant-is-detected-and-the-bound-is-priced-from-the-baseline.md) | 2026-10-10 | A mutant run past its bound counts as a detected mutant, apart from the kills, when a control run of the unmutated file finishes inside the same bound; the bound per mutant is priced from the file's own baseline run with a floor of about 15 seconds in place of 60; and a stage-5 pass that leans on such a count is bound to the held-out checks. The proposal is recorded as the seat's, not the operator's. |
+| [0051](0051-a-candidate-set-aside-with-no-finding-is-resumed-and-the-lock-loser-waits.md) | 2026-10-12 | The operator's words on the rows his freeze of 2026-10-11 keeps: a candidate the gate refused with nothing measured false is checked again by the next pass instead of rebuilt; a candidate refused at the integration lock its own pass holds waits for its sibling's integration and lands on top of it in the same pass; and the uncharged carry of one candidate is bounded before the fourth rung. |
+| [0055](0055-the-operator-word-of-2026-10-17-a-second-reject-closed-by-tests-or-comments-lands.md) | 2026-10-18 | A rule of the hand-run blocks that build the factory: when an independent verifier's second rejection concerns only tests or comments, the block fixes them within the same attempt and lands with two quality attempts counted; a second rejection on the code's logic still stops the block. |
+| [0059](0059-the-operator-word-of-2026-10-21-a-tick-refuses-an-untested-cli.md) | 2026-10-21 | A tick refuses, before any worker, a version of the coding agent's CLI other than the one the consumer has tested; and the janitor's test for an orphaned worker process accepts the user's service manager as well as init as its parent, with every other clause unchanged. |
+| [0060](0060-the-operator-words-of-2026-10-22-stage-five-unfenced-the-holdout-rerun-and-the-verified-merge.md) | 2026-10-22 | A test-strength stage handed no fence starts nothing and answers `error`; a merged task whose held-out check fails after later merges goes from DONE to BLOCKED by a second withdrawal edge, with an incident and a notification and no revert; and what counts as a verified merge: how many merges the post-merge check measured is printed beside the count, and once the second repository has five merges in a row measured `passed`, the objective divides only by those. The first decision was built when it was taken; the rows that build the other two were still queued at this snapshot. |
 
-Two ADRs were filed after the previous published snapshot, of the afternoon
-of 2026-10-09, both on 2026-10-10: 0049 and 0050, the operator's words on
+Thirteen ADRs were filed after the previous published snapshot, of the
+morning of 2026-10-12, between 2026-10-12 and 2026-10-26: 0051 to 0063.
+No earlier ADR changed: `git -C <repo> diff --name-only 378c366..main -- docs/decisions/ | wc -l`
+printed `13` on the night of 2026-10-30, the thirteen new files and no other,
+so every earlier copy here stands as it was published. Four of the thirteen
+are reproduced above - 0051, 0055, 0059 and 0060 - sanitized as 0049 and
+0050 are: transcript paths and row identifiers removed, rows named by their
+time, seat and session names removed, a private configuration path written
+as `<control-root>`, the tool that lists a transcript's rows as `<lister>`,
+the first consumer's checkout as `<first-consumer>`, and the private archive
+named as such. Nine are held:
+
+- 0052 (2026-10-13) records five decisions of one night; two of them - a
+  spending word for the seats that build the factory, and a documentation
+  agent the operator runs across his own projects split from the factory's
+  own - concern material this repository does not publish, the reason 0040
+  and 0047 are held. Its rule on gate condition 2 is built by M0-297, in `TIMELINE.md`'s
+  milestone table.
+- 0053 (2026-10-15) records a day of the operator's words, several of them
+  on the seats' spending and on the session tooling, which this repository
+  does not publish. The count of overturned refusals it decides is built by
+  M0-238, in the same table, and the ladder readings that rest on it are in
+  `TIMELINE.md` with their dates.
+- 0054 (2026-10-17): the optional TaskSpec field it takes is in `DESIGN.md`
+  section 5, and its other word, how often the foreman seat is replaced, is
+  an operating rule of the seats that build the factory, held for the reason
+  0040 is.
+- 0056 (2026-10-19): its word answers a message that also carries the
+  operator's session tooling; what it decides - one exit code for a refusal
+  to spend, a queue row cancelled, and `DESIGN.md` section 7 brought to the
+  order the tick runs in - is readable in `DESIGN.md` sections 7 and 15 and
+  in M0-153's row of the milestone table.
+- 0057 (2026-10-20): two of its three words are the same operating rule of
+  the foreman seat as 0054's; the third, a silence bound that does not take
+  a silent but working worker for a hung one, is built by M0-313, in the
+  milestone table.
+- 0058 (2026-10-21) records fourteen answers of one evening, several of
+  them on the operator's private tooling; the version protection it leads
+  to is 0059, reproduced above.
+- 0061 (2026-10-24): its argument for the soak ladder's fifth rung on the
+  second repository as the factory's next proof rests on a comparison with
+  the first (private) consumer, which this repository does not publish -
+  the reason 0027 is held. The promotion that followed is in `TIMELINE.md`,
+  "Where the snapshot stands".
+- 0062 (2026-10-24) and 0063 (2026-10-26) record the operator's words on the
+  factory's plans beyond the second repository, on an audit of how the seats
+  work and on the seats' night routine - none of which this repository
+  publishes. The order of work they set for the fifth rung is in
+  `TIMELINE.md` as what was done.
+
+Two ADRs were filed between the snapshots of the afternoon of 2026-10-09
+and the morning of 2026-10-12, both on 2026-10-10: 0049 and 0050, the operator's words on
 two of the gate's false refusals - a tests-only candidate's empty mutation
 measurement, and a mutant run that hangs. Both are reproduced above,
 sanitized as 0041 to 0048 are: transcript paths and row identifiers removed,
@@ -124,7 +178,7 @@ with the marks "temporary" they carry: 0043 is the later record that answers
 them, and none of the three was edited by it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-2026-10-12 with, for each file:
+the night of 2026-10-30, for all thirty-five, with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1

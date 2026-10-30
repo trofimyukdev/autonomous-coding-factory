@@ -1,26 +1,40 @@
 # Timeline
 
-Every number on this page is printed by the command beside it. All of them were
-re-run on the morning of **2026-10-12** against the private `main` at
-`378c366c57774a7138ecc2d141fb9ebbf3ed1b96`, but for the readings dated otherwise
-where they appear, and none is copied from an upstream document - a figure
-inherited from another file is an assumption wearing a number's clothes
-(discipline 1, `PRINCIPLES.md`). The previous snapshot named `886b98d`, the
-afternoon of 2026-10-09. Twenty-one commits have reached the private `main`
-since (`git log --oneline 886b98d..main | wc -l` -> `21`), and three of them are
-landings (`git log --format='%s' 886b98d..main | grep -c '^merge: '` -> `3`):
-M0-292, M0-293 and M0-289, all three in the milestone table below. Seven of the
-other eighteen are those three landings' own work, and eleven are two packages
-of queue, decision and procedure records, which file the two ADRs of
-2026-10-10 and the rows that carry them out. Ten of the twenty-one touch a
-TaskSpec or an ADR
-(`git log --oneline 886b98d..main -- factory/tasks/ docs/decisions/ DESIGN.md PRINCIPLES.md | wc -l`
--> `10`), and none touches `DESIGN.md` or `PRINCIPLES.md`
-(`git log --oneline 886b98d..main -- DESIGN.md PRINCIPLES.md | wc -l` -> `0`).
-On the second repository the factory ran again from 2026-10-10 to the morning
-of 2026-10-12 - thirty-seven ticks, thirteen more merges, among them the task
-it had given up on, offered again - and the operator took the soak ladder's
-third rung while the ladder was not offering it; its journal is read in the
+Every number on this page is printed by the command beside it. The commands
+over the private repository were re-run on the night of **2026-10-30**, between
+23:59 that night and 00:30 the next morning (+0200), against the private `main`
+at `b72a2bafb8873a36e09bec810e4a95ed9020cc06`, and none is copied from an
+upstream document - a figure inherited from another file is an assumption
+wearing a number's clothes (discipline 1, `PRINCIPLES.md`). The readings of the
+second repository's journal are the exception, and each carries its own date:
+the factory was running there while this snapshot was taken, so its journal
+was not read again, and the counts taken from it are those of the earlier
+snapshots unless a later date stands beside them. What any clone of that
+repository prints - its merges - was re-run.
+
+The previous snapshot named `378c366`, the morning of 2026-10-12. Three hundred
+and thirty-five commits have reached the private `main` since
+(`git log --oneline 378c366..main | wc -l` -> `335`), and forty-nine of them
+are landings (`git log --format='%s' 378c366..main | grep -c '^merge: '` ->
+`49`), every one of them an M0 row and every one in the milestone table below.
+A hundred and fifty-four of the others are those landings' own work, brought in
+by their merges (`git rev-list --count 378c366..main` minus
+`git rev-list --first-parent --count 378c366..main` -> `335 - 181`), and a
+hundred and thirty-two were committed on `main` itself
+(`git rev-list --first-parent --no-merges --count 378c366..main` -> `132`): a
+hundred and thirty-one of them are twenty-five packages of queue, decision and
+procedure records, and one is a fix to a test of M0-268's landing. A hundred and
+twenty-eight of the three hundred and thirty-five touch a TaskSpec, an ADR or
+the design
+(`git log --oneline 378c366..main -- factory/tasks/ docs/decisions/ DESIGN.md PRINCIPLES.md | wc -l`
+-> `128`), ten of them `DESIGN.md` and none `PRINCIPLES.md`
+(`git log --oneline 378c366..main -- DESIGN.md PRINCIPLES.md | wc -l` -> `10`,
+and the same over `PRINCIPLES.md` alone -> `0`). No commit has reached the
+private `main` since the morning of 2026-10-26. On the second repository the
+factory merged fifty-four more tasks between the morning of 2026-10-12 and the
+first minutes of 2026-10-31, and the operator took the soak ladder's fourth rung and then its
+fifth, the rung at which a timer may start a tick by day, each time while the
+ladder was not offering it; no timer has been armed. Its record is read in the
 last section.
 
 `<repo>` below stands for the private repository's checkout. The commands are run
@@ -30,23 +44,23 @@ with `git -C <repo> ... main`; they read history and write nothing.
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1394` | `git rev-list --count main` |
-| Calendar days with a commit | `44` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
+| Commits on `main` | `1729` | `git rev-list --count main` |
+| Calendar days with a commit | `58` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
 | First commit | `2026-08-17` | `git log --format='%ad' --date=short --reverse main \| head -1` |
-| Latest commit in this snapshot | `2026-10-12` | `git log --format='%ad' --date=short main \| head -1` |
-| Landings (commits whose subject begins `merge: `) | `154` | `git log --format='%s' main \| grep -c '^merge: '` |
-| ADRs | `50` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| TaskSpecs in the queue | `358` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| `.ts` files under `src/` | `128` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
-| `.ts` files under `test/` | `82` | `git ls-tree -r --name-only main test/ \| grep -c '\.ts$'` |
-| Lines of `DESIGN.md` | `830` | `git show main:DESIGN.md \| wc -l` |
+| Latest commit in this snapshot | `2026-10-26` | `git log --format='%ad' --date=short main \| head -1` |
+| Landings (commits whose subject begins `merge: `) | `203` | `git log --format='%s' main \| grep -c '^merge: '` |
+| ADRs | `63` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `413` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| `.ts` files under `src/` | `133` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
+| `.ts` files under `test/` | `89` | `git ls-tree -r --name-only main test/ \| grep -c '\.ts$'` |
+| Lines of `DESIGN.md` | `922` | `git show main:DESIGN.md \| wc -l` |
 
 Landings by milestone, from
 `for p in M0 M1 M2 M3 M4 M5; do git log --format='%s' main | grep -c "^merge: $p-"; done`:
 
 | Milestone | Landings |
 |---|---|
-| M0 | `102` |
+| M0 | `151` |
 | M1 | `1` |
 | M2 | `25` |
 | M3 | `13` |
@@ -60,19 +74,20 @@ landings, not blocks, and the earlier blocks are visible only as their `feat: `
 commits in the last table on this page. The milestones themselves are in
 `DESIGN.md` section 17.
 
-The six milestone counts add to `154`, which is the landings row above: no
+The six milestone counts add to `203`, which is the landings row above: no
 landing is outside a milestone, and none is counted twice.
 
-**M0 carries 102 landings, three more than at the previous snapshot; no other
-count has moved** (M0 stood at `99` on the afternoon of 2026-10-09, with `151`
-landings in total, and M5 at `6` then too; at `97` on the morning of
+**M0 carries 151 landings, forty-nine more than at the previous snapshot; no
+other count has moved** (M0 stood at `102` on the morning of 2026-10-12, with
+`154` landings in total, and M5 at `6` then too; at `99` on the afternoon of
+2026-10-09, with `151`; at `97` on the morning of
 2026-10-06, with `149`; at `95` on the morning of
 2026-10-05, with `144`; at `90` on the evening of 2026-10-03, with `138`; at
 `89` on 2026-10-02, with `137`; at `58` on 2026-09-22, with `106`; at `57` on
 2026-09-20, with `105`; at `48` on 2026-09-14, with `96`).
 That is not M0 being re-opened: M0 is where this repository files the rows that
-repair a mechanism a later milestone leans on, and fifty-four of the
-fifty-eight landings since 2026-09-12 are M0 rows, nearly all of that kind - the fix cycle, the tick's wall, the ladder's sight
+repair a mechanism a later milestone leans on, and a hundred and three of the
+hundred and seven landings since 2026-09-12 are M0 rows, nearly all of that kind - the fix cycle, the tick's wall, the ladder's sight
 of a gate verdict, one worker home per seat of a pass, the mutant ceiling inside
 a tick, the base a pass builds on, the goal evaluator's reply, the debug mode the
 operator asked for in the factory itself
@@ -105,7 +120,8 @@ from the reply envelope the CLI writes rather than from an exit code it never
 printed - the move
 `decisions/0033-the-budget-exit-the-design-names-is-not-the-clis.md` made for
 the mechanism - and the doctor now walks every row's journal of state events
-against the state the database holds. The three since are of the first kind
+against the state the database holds. The three between the snapshots of
+2026-10-09 and 2026-10-12 are of the first kind
 too, and two of them build the operator's words of 2026-10-10 on two false
 refusals of the gate: a candidate that changes only tests is no longer
 refused for a mutation measurement it gives nothing to measure, once its
@@ -116,11 +132,37 @@ control run clears it, under a bound priced from the file's own run
 (`decisions/0050-a-hung-mutant-is-detected-and-the-bound-is-priced-from-the-baseline.md`).
 The third keeps a race between two dispatches of one pass, at the
 integration lock, from spending the refused row's infrastructure retries.
-The other four of the fifty-eight are M5: M5-04, a written procedure rather
+The forty-nine since the snapshot of 2026-10-12 are of the first kind as
+well. The gate stops paying for what it found nothing wrong with: a
+candidate refused with nothing measured false, or set aside at the
+integration lock, is walked again by the next pass instead of being rebuilt
+(`decisions/0051-a-candidate-set-aside-with-no-finding-is-resumed-and-the-lock-loser-waits.md`);
+a free-form entry of the reviewer's list no longer refuses a candidate whose
+held-out checks and every other condition passed; and a held-out check or a
+goal evaluator that the tick's deadline or an unreadable reply stopped is
+carried to the next pass instead of refused. Two builders of one pass can
+both land: the second waits for its sibling's integration, and the refs a
+pass moves itself no longer read as a foreign move. The OS fence that held
+the builder now holds every other place a candidate's code runs - the
+integration and post-merge ladders, stage 2, the mutation probe - and the
+scout, which may no longer write. The mutation probe measures only a modified
+file's changed lines and plants no mutant that does not parse; the verify
+walk asks the tick's deadline between its steps; a tick refuses a CLI version
+other than the tested one
+(`decisions/0059-the-operator-word-of-2026-10-21-a-tick-refuses-an-untested-cli.md`);
+the objective prices every row of a delivered spec once, and every builder
+of a pass runs under a budget reservation of its own; and the ladder counts
+a refusal as overturned by two readings the operator gave. The last four
+prepare unattended running: the unit the tick's failure handler names, a
+skip log that keeps every line, a ping to an external dead-man switch on
+every road out of the tick wrapper, and an infrastructure breaker that reads
+every seat after the builder. The rest are verbs, reports and sentences
+brought to what the code does.
+The other four of the hundred and seven are M5: M5-04, a written procedure rather
 than a mechanism
 (`decisions/0048-the-written-procedure-for-soak-rungs-3-4-and-5.md`), and
 M5-05 to M5-07, the chain's last three rows, read in "Where the snapshot
-stands". The last table on this page names fifty-one of the fifty-eight.
+stands". The last table on this page names a hundred of the hundred and seven.
 
 ## Commits per day
 
@@ -170,31 +212,47 @@ From `git log --format='%ad' --date=short main | sort | uniq -c | sort -k2`:
       4 2026-10-07
      11 2026-10-10
       7 2026-10-11
-      3 2026-10-12
+     12 2026-10-12
+     21 2026-10-13
+     24 2026-10-14
+     25 2026-10-15
+     23 2026-10-16
+     26 2026-10-17
+     24 2026-10-18
+     27 2026-10-19
+     34 2026-10-20
+     30 2026-10-21
+     19 2026-10-22
+     18 2026-10-23
+     26 2026-10-24
+     23 2026-10-25
+      6 2026-10-26
 ```
 
 Thirteen dates between the first and the last commit are absent from that
 output because no commit carries them: 2026-08-28, 2026-09-01, 2026-09-02,
 2026-09-03, 2026-09-09, 2026-09-13, 2026-09-16, 2026-09-17, 2026-09-18,
-2026-09-24, 2026-09-25, 2026-10-08 and 2026-10-09. The last row is a part of a
-day: its three commits are M0-289's landing, the last of them its merge at
-`2026-10-12 01:45:12 +0300` (`git log -1 --format='%ad' --date=iso main`), and
-the snapshot was taken on the morning of 2026-10-12. 2026-10-10 and 2026-10-11
-are whole days: the eleven commits of 2026-10-10 are the two packages of
-queue, decision and procedure records named above, and the seven of
-2026-10-11 the work and the merges of M0-292 and M0-293.
+2026-09-24, 2026-09-25, 2026-10-08 and 2026-10-09. Every date from 2026-10-12
+to 2026-10-26 carries a commit, and no later date does: the last commit on
+`main` is dated `2026-10-26 08:42:53 +0200`
+(`git log -1 --format='%ad' --date=iso main`), and the snapshot was taken on
+the night of 2026-10-30, so every row is a whole day. 2026-10-12 now carries
+twelve commits, against the three the previous snapshot counted that
+morning: M0-289's landing in the small hours, then a package of queue and
+decision records, carrier #98's six commits, and the first three of M0-294's
+work. The six commits of 2026-10-26 are one such package, carrier #122's.
 2026-10-02 is a whole day: its last commit is the merge of M0-279 at 07:19
 (`git log --format='%ad %s' --date=iso main | grep '^2026-10-02' | head -1`),
 and the merges the gate made later that day, in the last section, are commits
 of the second repository and not of this one. Of the whole days that are
-present, the five lowest are 2026-10-07 (`4`), 2026-09-23 (`5`), 2026-08-31
-(`6`), and 2026-10-02 and 2026-10-11 (`7` each). The four commits of
-2026-10-07 are the work and the merge of one landing, M0-114, in the last
-table; 2026-08-31 is the day both public repositories were created; and the
-seven commits of 2026-10-02 are the work and the merges of the landings M0-278
-and M0-279, as the seven of 2026-10-11 are those of M0-292 and M0-293, all four
-in the last table. The other one is one package of queue and decision records,
-committed within a single minute:
+present, the six lowest are 2026-10-07 (`4`), 2026-09-23 (`5`), 2026-08-31 and
+2026-10-26 (`6` each), and 2026-10-02 and 2026-10-11 (`7` each). The four
+commits of 2026-10-07 are the work and the merge of one landing, M0-114, in
+the last table; 2026-08-31 is the day both public repositories were created;
+and the seven commits of 2026-10-02 are the work and the merges of the
+landings M0-278 and M0-279, as the seven of 2026-10-11 are those of M0-292
+and M0-293, all four in the last table. 2026-09-23 is one package of queue
+and decision records, committed within a single minute:
 
 ```sh
 git log --format='%ad %s' --date=iso main | grep -c '^2026-09-23 12:04'   # 5
@@ -300,6 +358,55 @@ skeleton, and the two `chore:` commits that planned and filed the M3 chain.
 | 2026-10-11 | `merge: M0-292 - stage 5 marks a diff of test paths alone, and the gate retires its pointer under ADR 0049 on a passed holdout` | The operator's word of 2026-10-10, built: stage 5 marks its record when every path a candidate changes is a test path, and the reviewer's pointer at that record leaves condition 2's count only when the candidate's held-out checks ran and passed. It is the road back for the task the second repository had given up on, read in the last section. |
 | 2026-10-11 | `merge: M0-293 - a mutant run past its bound counts detected when its control run clears it, the floor is 15 seconds, and the gate binds such a pass to the holdout` | The operator's second word of 2026-10-10, built: a mutant run that hangs past its bound counts as detected, apart from the kills, when a control run of the unmutated file finishes inside the same bound; the bound's floor is 15 seconds in place of 60; and a stage-5 pass that leans on such a count retires a pointer only beside passed held-out checks. |
 | 2026-10-12 | `merge: M0-289 - a refusal at the integration lock that a dispatch of its own pass held is recorded as a sibling's, and the sweep lands it uncharged` | Two builders of one pass can reach the integration lock together. The one the lock refuses because its own pass's other dispatch holds it is now recorded as refused by a sibling, and the sweep that recovers it charges none of its infrastructure retries; every other refusal at the lock is charged as before. |
+| 2026-10-13 | `merge: M0-294 - a candidate set aside with no confirmed finding is walked again by the next pass instead of rebuilt` | ADR 0051's first word, built: a candidate the gate refused with nothing measured false, or one stranded with no confirmed finding against it, is walked again by the next pass over the same candidate instead of being paid for a second time. |
+| 2026-10-13 | `merge: M0-295 - the second candidate of a pass waits in line for its sibling's dispatch and integrates on top of it in the same pass` | Two builders of one pass: the second candidate, refused at the lock its own pass holds, waits for its sibling's integration and lands on top of it in the same pass - ADR 0051's second word. |
+| 2026-10-13 | `merge: M0-296 - a repeated uncharged carry of one candidate is charged one infra retry, so the loop of a wall-cut winner and its sibling ends at DEAD_LETTER` | A candidate carried again and again with nothing landed now costs an infrastructure retry from its second carry, so the loop ends at the spec's own ceiling - the protection ADR 0051 put before the fourth rung. |
+| 2026-10-14 | `merge: M0-297 - condition 2 retires an entry with no record when the holdout ran and passed, every other condition passed and the reviewer passed, and reads two more spellings of the declaration head` | Condition 2 stops refusing a sound candidate on a free-form entry of the reviewer's list when its held-out checks ran and passed, every other condition passed and the reviewer passed; the entry stays in the evidence. |
+| 2026-10-14 | `merge: M0-298 - a pass records the ref moves its own integrations make, and a sibling's or fix walk's foreign_refs and refs reading excuse exactly those` | A pass records the refs its own integrations move, so a sibling's or a fix walk's reading of the control checkout's refs excuses exactly those moves and no other - the first condition for two builders to return. |
+| 2026-10-14 | `merge: M0-299 - the carries of one candidate are bounded in total by every road, and an integration whose tick was killed is the fourth carry` | Every road by which one candidate is carried across passes counts toward one total, an integration whose tick was killed included, so no carry stays free without end. |
+| 2026-10-14 | `merge: M0-234 - an unverified entry is typed by its one home, and an answer in the old string form is still read` | Each entry of the reviewer's unverified list is typed in one home, so the reviewer's brief stops stating a rule the gate does not apply, and a reply in the older form is still read. |
+| 2026-10-14 | `merge: M0-290 - the rung-6 packet reads exit 75 and exit 78 by every road, names which bounds of rung 5's threshold are keys and which constants, and six more sentences claim only what their commands read` | The packet that would arm a clock around the day reads the tick wrapper's exit codes by every road and says which of rung 5's bounds are settings and which are constants. A document, not a mechanism. |
+| 2026-10-14 | `merge: M0-216 - the CLI's own list of refused calls is read onto the attempt's result, as reported, none reported, or no list` | When the CLI reports the calls its permission rules refused, the list is kept on the attempt's result - as reported, as none reported, or as no list - measured on three live calls. |
+| 2026-10-15 | `merge: M0-82 - the race behind the verify-stages flake is measured and each ending of a live overrun is forced and pinned` | The cause of a flaky case among the verification stages' tests is measured, and each way a live overrun can end is forced and pinned by a case of its own. |
+| 2026-10-15 | `merge: M0-130 - the gate reads the refs row, so a ref moved during the walk refuses the candidate instead of merging` | Gate condition 5 reads the record of the control checkout's refs, so a candidate whose walk moved a ref after stage 0 is refused instead of merged. |
+| 2026-10-15 | `merge: M0-83 - the inactivity bound's configuration says what it is under the worker's json format, and its comment carries the measured reading and a recommendation whose cost sentences are true` | The setting that bounds a worker's silence says what it measures under the worker's output format, with the measured reading beside it; a comment, not a change of behaviour. |
+| 2026-10-15 | `merge: M0-134 - a stated quality-attempts count names its basis from a closed set, sets the column, is checked by a verb, and every refusal on the column's path names no writer of it` | A stated count of quality attempts names its basis from a closed set, sets the row's column, and is checked by a verb. |
+| 2026-10-16 | `merge: M0-137 - the tick's text view prints the gate phase's counts, the released total and the reserved-elsewhere term, and its conflict, hold, post-merge and parked strings fail a case` | The tick's text view prints the gate phase's counts, the reservations its sweep released and the money reserved elsewhere, in the words its refusals use. |
+| 2026-10-16 | `merge: M0-140 - shadow_merge_refused is the shadow verb's row alone, and a tick pass that pushes no longer tells the store that no integrator exists` | A merge refused in shadow mode is recorded by the shadow verb alone, and a tick pass that pushes no longer records that no integrator exists. |
+| 2026-10-16 | `merge: M0-143 - recovery sits below the gates it does not need: the janitor runs between the two halves of doctor-lite, and the post-merge tail runs before step 3 and step 4 return` | Recovery runs below the gates it does not need: a row an earlier pass merged is concluded, and a stuck row recovered, on a pass the tick refuses for its base, its budget, a credential, the CLI's version or the weekly cap. |
+| 2026-10-16 | `merge: M0-301 - the integration workspace gets its own dependency install before its ladder runs, and a failed install is an infrastructure refusal, never condition 7's evidence` | The integration workspace installs its own dependencies before its ladder runs, and a failed install is an infrastructure refusal, never evidence against the candidate. |
+| 2026-10-16 | `merge: M0-144 - the integrator's four RETRY_WAIT landings go through one seam that schedules the backoff, and the STOP landing is left due on purpose` | The integrator's four roads back to the retry queue go through one seam that schedules the backoff, so a refused integration no longer wakes on the very next pass. |
+| 2026-10-16 | `merge: M0-145 - a spec with no budget table is bounded by the configured infra_retries_default, and the janitor's and the shadow landings' notes name the state the store reached` | A spec with no budget table is bounded by the configured default count of infrastructure retries, on every road that charges one. |
+| 2026-10-17 | `merge: M0-108 - intake refuses a spec whose measure names a test file neither in the tree nor declared in creates_test_files, leaving alone only the version a DONE row carries` | Intake refuses a spec whose measurement names a test file that is neither in the tree nor declared as one the task creates - the optional TaskSpec field `DESIGN.md` section 5 now carries. |
+| 2026-10-17 | `merge: M0-146 - the brief a fix cycle paid for survives its builder, and the shadow verb, the reaper and the dispatcher each answer the ceiling with a record` | The brief a fix cycle paid for survives the builder it was given to, and the shadow verb, the reaper and the dispatcher each answer a row at its ceiling with a record. |
+| 2026-10-18 | `merge: M0-89 - the diagnostic call loads no settings source and offers no built-in tool; the env-guard threat model names every channel of each construction` | The diagnostic call loads no settings source and is offered no built-in tool, and the environment guard's threat model names every channel each construction opens. |
+| 2026-10-18 | `merge: M0-147 - the commit-range provenance rule is narrowed to the operator's script, and stage 1 says in its evidence that it did not run` | The commit-range provenance rule is narrowed to the one script that names the ref it fetched, and stage 1 says in its evidence when the rule did not run. |
+| 2026-10-18 | `merge: M0-149 - millwright evidence reads a landing's evidence and a held candidate's acceptance packet, never typed` | `millwright evidence` prints a landing's evidence, or a held candidate's acceptance packet, each section beside the command that re-runs it. |
+| 2026-10-18 | `merge: M0-152 - a consumer's atlas says which sections its layout does not supply, and its snapshot directory is configurable` | A consumer's generated atlas says which of its sections the consumer's layout does not supply instead of failing, and its snapshot directory is configurable. |
+| 2026-10-18 | `merge: M0-153 - the backend's refusal to spend exits 78 with its own sentence, and a scheduler no longer reads it as a crash` | The command that would start a worker where nothing opted in to spending exits 78, the configuration code of `DESIGN.md` section 15, with its own sentence, instead of an internal error. |
+| 2026-10-19 | `merge: M0-156 - the reservation ledger's refusals are proved at the call, and one release settles both of a row's promises` | Each guard against releasing a budget reservation twice is proved by a case through the call that uses it, and one release settles both of a row's promises. |
+| 2026-10-19 | `merge: M0-160 - the scout runs behind a fence that refuses its writes, and a pass whose scout moved HEAD is BLOCKED` | The scout, the read-only seat that looks before a builder, runs behind a fence that refuses its writes, and a pass whose scout moved HEAD is blocked. |
+| 2026-10-19 | `merge: M0-161 - a goal evaluator the weekly limit stopped draws no infra retry, and the packet names the stopped seat` | A goal evaluator stopped by the weekly limit draws no infrastructure retry, and the failure packet names the seat that stopped. |
+| 2026-10-20 | `merge: M0-162 - the scout's landing writes the class beside the counter in one transition, so a row a scout ended names its ending` | A row the scout ended names its ending: the class is written beside the counter in one transition. |
+| 2026-10-20 | `merge: M0-164 - the integration and post-merge ladders run the candidate's code behind an OS fence, never plainly in the control checkout's worktree` | The integration and post-merge ladders run the candidate's code behind the OS fence, never plainly in a worktree of the control checkout. |
+| 2026-10-20 | `merge: M0-166 - step 5 of the integration walk is declared not built at its seam, and stage 4's review field never carries the walk's record` | The integration's semantic delta review, `DESIGN.md` section 10 step 5, is declared not built at its seam, and stage 4's review field never carries the walk's record. |
+| 2026-10-20 | `merge: M0-313 - a json-silent worker call is handed a silence bound above its wall plus its kill grace, held to the timer's range, so its wall and not the silence clock ends it` | A worker that is silent but working is not taken for a hung one: its silence bound lies above its wall plus the kill grace, so its wall is what ends it. |
+| 2026-10-21 | `merge: M0-169 - every builder of a pass runs under a durable reservation of its own, at the ceiling its route carries` | Every builder of a pass runs under a durable budget reservation of its own, at the ceiling its route carries. |
+| 2026-10-21 | `merge: M0-170 - the north-star metric prices a spec's every row that reached an outcome, and a delivered spec is never also a failure` | `$` per verified merged task prices a delivered spec once, over every row of it that reached an outcome, and a delivered spec is never also counted as a failure. |
+| 2026-10-21 | `merge: M0-172 - the limit journal states the real radius of a forged park, and the StopFailure hook prints no document the CLI rejects` | The rate-limit reader states how far one forged limit line can park the factory, and the hook the CLI calls when it stops prints no document the CLI rejects. |
+| 2026-10-22 | `merge: M0-317 - the mutation probe plants on a modified file's changed lines` | Stage 5's mutation probe narrows a modified file to the lines the candidate added or replaced; an added file is still measured whole. |
+| 2026-10-22 | `merge: M0-268 - stage 2 and the controller's probe run the candidate's code behind the OS fence` | Stage 2 and stage 5 run the candidate's tests behind the OS fence on the controller's road, and a stage 5 handed no fence starts nothing - the word ADR 0060 records. |
+| 2026-10-23 | `merge: M0-336 - the mutation catalogue plants no mutant that does not parse` | The mutation catalogue no longer plants mutants that do not parse - on a type argument, on a call that continues the line before it, on `return undefined;` - and how a mutant is scored is stated once. |
+| 2026-10-23 | `merge: M0-318 - a tick refuses a Claude CLI other than the tested one, and probes the login once per pair` | A tick refuses, before any worker, a Claude CLI other than the tested one, and probes the login once per pair - the word ADR 0059 records. |
+| 2026-10-23 | `merge: M0-180 - the verify walk asks the tick's deadline between its rungs` | The verify walk asks the tick's deadline before each early stage and between the rungs of stage 2, and a walk stopped there marks the stage it stopped at as past the deadline. |
+| 2026-10-23 | `merge: M0-337 - the tick's verify walk asks the deadline the tick hands it, before stages 3 and 5 too` | The tick hands the verify walk its deadline, so M0-180's stop is live in a tick, and it is asked before stages 3 and 5 as well; a stopped walk never answers pass. |
+| 2026-10-24 | `merge: M0-238 - the gate names the version it judged, and the overturn count reads his two readings` | Every gate record names the row it judged, and the ladder counts a refusal as overturned when its own candidate merged later, or when it held only `error` statuses and its task merged later - the operator's two readings. |
+| 2026-10-24 | `merge: M0-338 - a holdout the tick's deadline stopped is carried to the next pass, not refused` | A held-out check the tick's deadline stopped is carried to the next pass instead of being counted as a refusal. |
+| 2026-10-24 | `merge: M0-339 - a goal evaluator that ends infra_format is carried to the next pass, not refused` | A goal evaluator that ended with no reply its schema accepts is carried to the next pass instead of being counted as a refusal. |
+| 2026-10-25 | `merge: M0-200 - the notify unit the tick's OnFailure names, and its packet step` | The notify unit the tick unit's failure handler has named since M4-02 exists: a failed tick hands one alert to one executable the operator owns. |
+| 2026-10-25 | `merge: M0-195 - the skip log keeps every line, STOP still reports, and the wall fits the wrapper's timeout` | The tick wrapper's skip log keeps every line, a STOP still reports, and the tick's wall fits inside the wrapper's timeout. |
+| 2026-10-25 | `merge: M0-340 - the tick wrapper pings an external dead-man switch on every road out` | The tick wrapper pings an external dead-man switch as it starts and on every road out, so a timer that stops firing can be noticed from outside the machine. |
+| 2026-10-25 | `merge: M0-341 - the infrastructure breaker reads every seat after the builder, and a seat's billing or budget ending blocks the row on the pass that met it` | The infrastructure breaker reads every seat after the builder, not the builder alone, and a seat that ends on billing or budget blocks its row on the pass that met it. |
 
 ## Where the snapshot stands
 
@@ -314,14 +421,17 @@ git log --format='%ad %s' --date=short main | grep '^\S* merge: M5-' | head -1
 
 **Every M4 mechanism has landed and the milestone's own definition of done has
 not been met**, which is the distinction ADR 0026 exists to make: `DESIGN.md`
-section 17 ends M4 at "soak ladder through step 5", and the ladder stands at the
-third of the six rungs section 18 names. On the second repository it was set to
-rung 1 on 2026-09-14, moved to rung 2 on 2026-10-02 and to rung 3 on
-2026-10-12: from that repository's working directory,
-`grep -c '"type":"LADDER_RUNG_CHANGED"' factory/state/events.jsonl`
+section 17 ends M4 at "soak ladder through step 5", and on the second
+repository the ladder now stands at the fifth of the six rungs section 18
+names - unattended cron by day - with no timer armed, so no tick there has run
+the way that rung means. It was set to rung 1 on 2026-09-14, moved to rung 2
+on 2026-10-02 and to rung 3 on 2026-10-12: from that repository's working
+directory, `grep -c '"type":"LADDER_RUNG_CHANGED"' factory/state/events.jsonl`
 printed `3` on 2026-10-12 - the setting, from rung 1 to rung 1, on 2026-09-14,
 and the operator's promotions from rung 1 to rung 2 on 2026-10-02 and from
-rung 2 to rung 3 on 2026-10-12. The mechanisms
+rung 2 to rung 3 on 2026-10-12. He took rung 4 on 2026-10-17 and rung 5 on the
+night of 2026-10-25, both read below from the records those promotions
+printed when they ran. The mechanisms
 are counted by their landings; the DoD is not a count, and the ADR says so rather
 than letting the seven landings stand in for it.
 
@@ -375,11 +485,16 @@ that repository had been started by the timer, whose wrapper runs
 `grep '"type":"RUN_STARTED"' factory/state/events.jsonl | grep -c '"trigger":"operator"'`
 printed `143` there at 10:53 +0300, as many as
 `grep -c '"type":"RUN_STARTED"' factory/state/events.jsonl` - the last of them
-a tick that was running then. The ladder reads a
-refusal as overturned only when the task has merged and a row of that task
-still carries the very candidate the gate refused - not when a fix cycle or a
+a tick that was running then. On the night of 2026-10-30 no timer of the
+factory's was armed on its machine (`systemctl --user list-timers`, read
+then). Up to 2026-10-24 the ladder read a
+refusal as overturned only when the task had merged and a row of that task
+still carried the very candidate the gate refused - not when a fix cycle or a
 fresh build replaced that candidate with the one that merged - so not every
-refusal of a task that later merged is read as overturned. Of the eleven
+refusal of a task that later merged was read as overturned; since M0-238's
+landing that day (the milestone table) it also reads as overturned a refusal
+that held only `error` statuses, once its task merged. The rest of this
+paragraph is the reading of 2026-10-09 and 2026-10-12. Of the eleven
 refusals it counted on 2026-10-09, two are RT-07's, below, one is RT-02's, one is RT-13's, a
 task refused once on the night of 2026-10-05 and merged the same night, one
 each is RT-14's, RT-16's and RT-18's, and four are RT-17's, all seven dated
@@ -425,7 +540,8 @@ git ls-tree --name-only main factory/tasks/ | grep -c 'M5-'      # 7
 git log --format='%s' main | grep -c '^merge: M5-'               # 6
 ```
 
-Both re-run on 2026-10-12 at `378c366`. Of the seven rows, M5-03 - the chain's
+Both re-run on the night of 2026-10-30 at `b72a2ba`; neither has moved since
+2026-10-05. Of the seven rows, M5-03 - the chain's
 central row, the one that runs the factory against the second repository -
 was closed on 2026-10-04 as done, by an override the seat had recommended and
 reads the operator's answer as taking, which cites the first merge the gate
@@ -439,21 +555,22 @@ applied to no seat, the statistic the lens order would be recomputed from is
 declared unavailable, and the clock around the day in M5's content column
 waits on an operator packet that is corrected before it is put to him.
 `DESIGN.md` section 17 ends M5 at "30-50 real tasks; router and lens order
-recomputed from data", and that is not met. Its first half now stands at its
-lower bound: the second repository has thirty verified merges by the factory's
-own count, below, twenty-nine of them merges its gate made - against the
-thirty to fifty the line names, and against seventeen at the previous
-snapshot. Its second half does not: the lens order has not been recomputed,
+recomputed from data", and that is not met. Its first half is now past the
+top of its range: the gate has made eighty-three merges in the second
+repository - in any clone of it, `git rev-list --merges --count 9eb3692..5e7d9f2`
+prints `83` - against the thirty to fifty the line names, and against
+twenty-nine at the previous snapshot. Its second half is not met: no landing
+since has touched either reading, so the lens order has not been recomputed,
 and the router's choice is printed and applied to no seat. So M5's rows are
 closed and M5 is not done - the distinction
 `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` drew for M4.
 
 **Until 2026-10-05 no milestone landing was dated later than 2026-09-12: of
-the fifty-eight landings since, fifty-four are M0 and four are M5, M5-04 to
-M5-07, all four dated 2026-10-05**
+the hundred and seven landings since, a hundred and three are M0 and four are
+M5, M5-04 to M5-07, all four dated 2026-10-05**
 (`git log --format='%ad %s' --date=short main | grep '^\S* merge: ' | awk '$1 > "2026-09-12"' | wc -l`
--> `58`, and the same with `grep -c 'merge: M5-'` in place of `wc -l` -> `4`,
-2026-10-12). That is the
+-> `107`, and the same with `grep -c 'merge: M5-'` in place of `wc -l` -> `4`,
+2026-10-30). That is the
 honest shape of the weeks since 2026-09-12: the M5 chain's central row runs the
 factory against the second repository, and until 2026-10-02 each attempt at it
 returned a defect in a mechanism M0 owns - the fix cycle a bounded tick
@@ -467,10 +584,16 @@ its own verification seats wrote, a mutation run its time budget cut and the
 gate read as a refusal, holdout acceptance that nothing ran, an advisory
 survivor charged as a confirmed finding, a hung mutant run that outlived its
 bound, and a gate that passed a spec declaring no held-out check. Those are the
-landings above, and the three since the previous snapshot are of the same
+landings above, and the three of the snapshot of 2026-10-12 are of the same
 kind: a gate that refused a tests-only candidate for a measurement it gave
 nothing to measure, a hung mutant read as a gap rather than a catch, and a
-race at the integration lock charged to the row that lost it. The milestone
+race at the integration lock charged to the row that lost it. So are the
+forty-nine since: a candidate rebuilt where nothing had been found wrong with
+it, the candidate's code run outside the OS fence in two more places, a
+free-form entry of the reviewer's that refused a sound candidate, a deadline
+or an unreadable reply read as a refusal, a tick that would have run on a CLI
+version nobody had tested - and, last, four rows that prepare the timer's
+unattended runs. The milestone
 does not advance until they stop arriving, and
 this page will not move it earlier by counting them as M5. Of the four M5
 landings among them, M5-04 adds no mechanism: it is the written procedure a
@@ -487,7 +610,8 @@ thirty-four gate verdicts, seventeen refusals and seventeen passes; the ticks
 of 2026-10-07 added eleven, seven refusals and four passes; and the ticks of
 2026-10-10 to the morning of 2026-10-12 added twenty-one, eight refusals and
 thirteen passes. Every count of that repository's journal from here to the end
-of this page was printed on the morning of 2026-10-12, between 10:50 and 10:54
+of this page, but for the ones dated 2026-10-30 where they appear, was printed
+on the morning of 2026-10-12, between 10:50 and 10:54
 +0300, in its working directory, while a tick that had started at 10:51 was
 running: the factory's `status` printed `seq 6082 RUN_FINISHED` as the
 journal's last record at 10:50, the end of the tick before it, and no gate
@@ -561,7 +685,7 @@ prints `["pass"]` for each of the nine gate passes: all seven conditions passed.
 They are the first merges the factory's gate has made. In the private
 repository's working directory,
 `grep -c '"type":"GATE_PASSED"' factory/state/events.jsonl` printed `0` on
-2026-10-12, and so did
+2026-10-30, and so did
 `grep '"type":"MERGED"' factory/state/events.jsonl | grep -c '"reason":"pushed '`:
 its own landings are bootstrap blocks, recorded by hand, and none has reached
 its `main` through its own gate.
@@ -659,7 +783,7 @@ dac3668 2026-10-07 merge: RT-18 - Dependency sources - a dependency the range ad
 ```
 
 and last `15befcd`, the commit of the split read below, which was that
-repository's `main` at the previous snapshot.
+repository's `main` at the snapshot of 2026-10-09.
 `git rev-list --merges --count 9eb3692..dac3668` prints `16`, and the `jq`
 above with `2026-10-07` in place of `2026-10-02` prints `["pass"]` for each of
 the four gate passes - all seven conditions passed. Each of the four merges
@@ -757,11 +881,130 @@ roadmap's first stage, were filed on the morning of 2026-10-12 (`7392a48`),
 and RT-29 and RT-30 were merged at 10:03 and 10:31, the first two merges at
 the third rung.
 
-`DESIGN.md` section 1 makes `$` per verified merged task the objective, and on
-the second repository twenty-nine of the thirty verified merges it divides by
-are the gate's. From that repository's working directory at 10:50 +0300 on
+From the morning of 2026-10-12 to the first minutes of 2026-10-31 the factory
+merged fifty-four more tasks there. In any clone,
+`git rev-list --merges --count 9eb3692..5e7d9f2` prints `83`, the same from
+`78b6479` prints `54`, and every one of the eighty-three merges carries the
+`Millwright-Task-ID:` trailer
+(`git log --merges --format=%B 5e7d9f2 | grep -c '^Millwright-Task-ID:'`
+prints `83`). Between them sit forty commits that carry no merge
+(`git rev-list --first-parent --no-merges --count 78b6479..5e7d9f2` prints
+`40`), all of them the operator's: the tasks he filed in packets, each with a
+held-out item, the repository's settings and its README. The merges, from
+`git log --first-parent --merges --reverse --format='%h %ad %s' --date=short 78b6479..5e7d9f2`:
+
+```text
+206d282 2026-10-12 merge: RT-32 - Action inputs - `checks` names the checks the Action runs and `format` the form it prints them in
+fcfac37 2026-10-12 merge: RT-31 - Suppression directives - a comment the range adds that tells the type checker, the linter or the coverage tool not to look
+06f9545 2026-10-12 merge: RT-33 - Ladder commands changed - an entry of a package.json's scripts that the range adds, removes or changes
+93ce5b0 2026-10-14 merge: RT-34 - Compiler strictness lowered - a strict option of a tsconfig that the range turns off or removes
+b600405 2026-10-14 merge: RT-35 - Except and list - `--except <name>` runs every registered check but the named, and `repo-truth list` prints the registered names
+9a5327b 2026-10-14 merge: RT-36 - Suite strength, suppression directives - tests that fail on the defects the mutation probe found unasserted in src/checks/suppressions.ts
+1191342 2026-10-14 merge: RT-37 - Suite strength, dependency sources - tests that fail on the defects the mutation probe found unasserted in src/dependency-sources.ts
+b7c9067 2026-10-15 merge: RT-38 - Suite strength, compiler strictness - tests that fail on the defects the mutation probe found unasserted in src/checks/strictness.ts
+533872f 2026-10-16 merge: RT-39 - Suite strength, the command - tests that fail on the defects the mutation probe found unasserted in src/cli.ts
+1d61412 2026-10-16 merge: RT-40 - The job summary - the Action writes its records to the run's summary page, beside the log
+532c99f 2026-10-17 merge: RT-41 - Suite strength, the Action's program - tests that fail on the defects the mutation probe found unasserted in src/action.ts
+9cef439 2026-10-17 merge: RT-42 - Suite strength, ladder commands changed - tests that fail on the defects the mutation probe found unasserted in src/checks/script-changes.ts
+7586ddb 2026-10-18 merge: RT-44 - Suite strength, stray files - tests that fail on the defects the mutation probe found unasserted in src/stray-files.ts
+173c410 2026-10-18 merge: RT-43 - Suite strength, conflict markers - tests that fail on the defects the mutation probe found unasserted in src/conflict-markers.ts
+8964358 2026-10-18 merge: RT-46 - Suite strength, credentials - tests that fail on the defects the mutation probe found unasserted in src/checks/credentials.ts
+1e92d82 2026-10-18 merge: RT-45 - Suite strength, raised timeouts - tests that fail on the defects the mutation probe found unasserted in src/checks/raised-timeouts.ts
+efd3680 2026-10-19 merge: RT-48 - Suite strength, snapshot refreshes - tests that fail on the defects the mutation probe found unasserted in src/snapshot-refreshes.ts
+5d76d79 2026-10-19 merge: RT-47 - Suite strength, the measurement rule - tests that fail on the defects the mutation probe found unasserted in src/measurement-rule.ts
+6d0fef6 2026-10-19 merge: RT-49 - Suite strength, portable paths - tests that fail on the defects the mutation probe found unasserted in src/portable-paths.ts
+24d7ed6 2026-10-21 merge: RT-51 - Suite strength, weakened tests - a test file of its own for a skip line moved within a test file while a document gains the same line
+22e1b93 2026-10-21 merge: RT-52 - Suite strength, commit-range hygiene - tests that fail on the defects the mutation probe finds unasserted in src/commit-range.ts
+f3e5970 2026-10-21 merge: RT-53 - Suite strength, figure claims - tests that fail on the defects the mutation probe found unasserted in src/figure-claims.ts
+fe0a912 2026-10-21 merge: RT-50 - Suite strength, weakened tests - tests that fail on the defects the mutation probe found unasserted in src/weakened-tests.ts
+f72dd02 2026-10-21 merge: RT-54 - The configuration file - repo-truth.json read from the base commit and checked against the options each check declares
+b2a959f 2026-10-21 merge: RT-55 - Binary files - a file the range adds or changes whose content git would read as binary
+4d8ed94 2026-10-21 merge: RT-57 - Path policy - a path the range touches that the repository's own policy forbids, or that no allowed pattern covers
+d65645d 2026-10-21 merge: RT-56 - Weakened workflows - a CI workflow the range deletes, or into which it writes a line that lets a failing job pass
+b8bf958 2026-10-22 merge: RT-59 - The registry declares each check's options and hands them to the check
+d241fa3 2026-10-23 merge: RT-58 - Weakened tests read a marker only in code - the text of a string literal on a line of a test file is no skip or focus marker
+2f1192b 2026-10-24 merge: RT-64 - Conflict markers read a path whose type changes as one path - a link replaced by a file is no refusal
+cf60c6c 2026-10-24 merge: RT-60 - The command reads repo-truth.json at the base, or the file `--config` names, and refuses a bad one with exit 2
+7f701d9 2026-10-24 merge: RT-61 - The Action's `config` input reaches the command as `--config`
+9cad412 2026-10-24 merge: RT-62 - The end-to-end suite runs the built command with a configuration file, and the checks added since it was written by `--check`
+1f56ce7 2026-10-25 merge: RT-67 - Suite strength, configuration reader - tests that fail on the defects the mutation probe leaves unasserted in src/config.ts
+3558c48 2026-10-25 merge: RT-65 - The command hands every check the path `--config` names, as the reserved option `config`
+0350f31 2026-10-25 merge: RT-68 - Suite strength, binary files - tests that fail on the defects the mutation probe leaves unasserted in src/checks/binary-files.ts
+a66be82 2026-10-25 merge: RT-66 - A range that adds, changes, deletes or renames the configuration file the command read fails, unless a commit message sanctions it
+560f118 2026-10-25 merge: RT-69 - Suite strength, weakened workflows - tests that fail on the defects the mutation probe leaves unasserted in src/checks/workflow-weakening.ts
+113dcb4 2026-10-25 merge: RT-70 - Suite strength, path policy - tests that fail on the defects the mutation probe leaves unasserted in src/checks/path-policy.ts
+4a2b7f4 2026-10-25 merge: RT-71 - Suite strength, landing trailers - tests that fail on the defects the mutation probe leaves unasserted in src/trailers.ts
+833513a 2026-10-25 merge: RT-72 - Suite strength, autosquash leftovers - tests that fail on the defects the mutation probe leaves unasserted in src/checks/autosquash.ts
+6c7ae9e 2026-10-25 merge: RT-73 - Suite strength, figure text - tests that fail on the defects the mutation probe leaves unasserted in src/figure-text.ts
+2fa033e 2026-10-25 merge: RT-76 - Suite strength, replayed figures - tests that fail on the defects the mutation probe leaves unasserted in src/replayed-figures.ts
+b4c89c1 2026-10-25 merge: RT-77 - Suite strength, replay plans - tests that fail on the defects the mutation probe leaves unasserted in src/replay-plan.ts
+f8b8ee5 2026-10-25 merge: RT-78 - Suite strength, the registry - tests that fail on the defects the mutation probe leaves unasserted in src/registry.ts
+aeb521e 2026-10-25 merge: RT-79 - Suite strength, configuration changes - tests that fail on the defects the mutation probe leaves unasserted in src/checks/config-changes.ts
+8ab70a9 2026-10-25 merge: RT-80 - Suite strength, portable paths, a case pair of a name that is not UTF-8 - tests that fail on the defects the mutation probe leaves unasserted in src/portable-paths.ts
+f7f24ba 2026-10-26 merge: RT-74 - The end-to-end suite runs the configuration-change check (RT-66) through the built command
+ce4a343 2026-10-26 merge: RT-75 - A configuration document that gives one name twice in an object is refused, each repeat named by its path
+fa8faae 2026-10-26 merge: RT-83 - Suite strength, conflict markers, again after RT-64, a path that is not UTF-8 - tests that fail on the defects the mutation probe leaves unasserted in src/conflict-markers.ts
+62a1378 2026-10-26 merge: RT-82 - Suite strength, the command, again after RT-60 and RT-65 - tests that fail on the defects the mutation probe leaves unasserted in src/cli.ts
+29437fc 2026-10-26 merge: RT-84 - Suite strength, the configuration reader, again after RT-75, names and values - tests that fail on the defects the mutation probe leaves unasserted in src/config.ts
+b0d29e7 2026-10-26 merge: RT-81 - The settings are read from repo-truth.json at the repository's top directory, wherever in the repository the command runs
+5e7d9f2 2026-10-31 merge: RT-85 - The end-to-end suite runs the built command in a subdirectory, where it reads and watches the top directory's repo-truth.json
+```
+
+The last of them, RT-85, was merged at 00:00:55 +0200 on 2026-10-31, while
+this snapshot was being taken, from a task the operator had filed nine
+minutes before: `git log -1 --format=%p 5e7d9f2` names `8d883c4`, that task's
+commit, and the candidate `c591039`.
+
+**The fourth rung was taken on 2026-10-17 and the fifth on the night of
+2026-10-25, both by the operator's own line and both while the ladder was not
+offering them.** The fourth, normal concurrency: the promotion printed, when
+it ran, `was 3 (two parallel builders)`, the rung's clauses as measured -
+twelve tasks, no policy violation and no double merge, each met, and a
+false-block rate of 25 against the 10 the clause allows, not met - `offered
+no`, and `since 2026-10-17T08:29:56.815Z`. The fifth, unattended cron by day:
+the promotion printed `was 4 (normal concurrency)`, thirty-seven tasks, no
+policy violation and no double merge, each met, a false-block rate of 60, not
+met, and `target rung 5 is the rung the offer measures, and it is not
+offered`, then `since 2026-10-25T21:27:56.573Z`. The three refusals that rate
+counts as overturned all came before 2026-10-24, the day M0-339 landed - a
+goal evaluator's unreadable reply carried to the next pass instead of
+refused, in the milestone table - and the operator had set his own condition
+for the fifth rung the day before: ten tasks there judged after that fix
+with no new overturned refusal. Both promotions are records in the second
+repository's journal, quoted as they printed when they ran; the journal was
+not read again for this snapshot.
+
+What the fifth rung admits is a tick started by a timer by day; ticks the
+operator starts run as before. No timer has been armed (above). Arming it is
+the operator's act, and the order of work set before it puts a few more of
+the factory's own rows first - among them a login check of the tick that
+tells a weekly limit from a dead credential, and cases the fault-injection
+suite still lacks - and a fresh reading of the pre-autonomy checklist
+`DESIGN.md` section 18 points at. So the ladder stands at the fifth rung, and the step
+M4's definition of done names - days of ticks started by the timer - has not
+been run.
+
+Each merge there is followed by a post-merge check. By the operator's words
+of 2026-10-22 (`decisions/0060-the-operator-words-of-2026-10-22-stage-five-unfenced-the-holdout-rerun-and-the-verified-merge.md`)
+a merge is to count toward the objective as verified only once that check
+has measured it `passed`, and the repository's own roadmap sets its goal at
+forty merges so measured
+(`git show 5e7d9f2:ROADMAP.md | grep -c 'at least forty verified merges'`
+prints `1`). In that repository's working directory at 06:41 +0200 on
+2026-10-30, before RT-85 was filed,
+`grep '"type":"POST_MERGE_CHECKED"' factory/state/events.jsonl | grep -c '"verdict":"passed"'`
+printed `30`, and the factory's `status` printed `83` for `state.DONE`, `17`
+for `state.CANCELLED` and `4` for `state.SUPERSEDED`, of `104` rows, none of
+them open. Those readings were taken by the seat that runs the factory that
+morning and are quoted, not re-run.
+
+`DESIGN.md` section 1 makes `$` per verified merged task the objective. Its
+figures on the second repository below are those of the morning of
+2026-10-12, when twenty-nine of the thirty verified merges it divided by were
+the gate's; neither `metrics` nor the journal there was read again for this
+snapshot. From that repository's working directory at 10:50 +0300 on
 2026-10-12, the factory's `metrics` printed `30` for `verified_merges` - the
-twenty-nine merges above and the first task's - `0` for `failed_out`, `1` for
+twenty-nine merges made by then and the first task's - `0` for `failed_out`, `1` for
 `verified_merge_rate`, and `1.6357` for
 `usd_and_tokens_per_verified_merge.cost_usd`, which is
 `priced_verified_merges.usage.cost_usd`, `49.0722332`, over the thirty. That
