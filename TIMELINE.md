@@ -1,41 +1,47 @@
 # Timeline
 
 Every number on this page is printed by the command beside it. The commands
-over the private repository were re-run on the night of **2026-10-30**, between
-23:59 that night and 00:30 the next morning (+0200), against the private `main`
-at `b72a2bafb8873a36e09bec810e4a95ed9020cc06`, and none is copied from an
+over the private repository were re-run on the evening of **2026-11-05**, from
+21:37 (+0200), against the private `main` at
+`3dfc7abfadf6edcd420387f0b0fc8567b485eeb1`, and none is copied from an
 upstream document - a figure inherited from another file is an assumption
 wearing a number's clothes (discipline 1, `PRINCIPLES.md`). The readings of the
-second repository's journal are the exception, and each carries its own date:
-the factory was running there while this snapshot was taken, so its journal
-was not read again, and the counts taken from it are those of the earlier
-snapshots unless a later date stands beside them. What any clone of that
-repository prints - its merges - was re-run.
+second repository's journal each carry their own date. That journal was read
+again for this snapshot, at 21:38 +0200 on 2026-11-05, while no tick ran
+there - its last record is the end of a tick at 21:50 +0200 on 2026-11-02 -
+and the counts dated 2026-11-05 are that reading; the others are those of the
+earlier snapshots, with their dates. What any clone of that repository
+prints - its merges - was re-run.
 
-The previous snapshot named `378c366`, the morning of 2026-10-12. Three hundred
-and thirty-five commits have reached the private `main` since
-(`git log --oneline 378c366..main | wc -l` -> `335`), and forty-nine of them
-are landings (`git log --format='%s' 378c366..main | grep -c '^merge: '` ->
-`49`), every one of them an M0 row and every one in the milestone table below.
-A hundred and fifty-four of the others are those landings' own work, brought in
-by their merges (`git rev-list --count 378c366..main` minus
-`git rev-list --first-parent --count 378c366..main` -> `335 - 181`), and a
-hundred and thirty-two were committed on `main` itself
-(`git rev-list --first-parent --no-merges --count 378c366..main` -> `132`): a
-hundred and thirty-one of them are twenty-five packages of queue, decision and
-procedure records, and one is a fix to a test of M0-268's landing. A hundred and
-twenty-eight of the three hundred and thirty-five touch a TaskSpec, an ADR or
-the design
-(`git log --oneline 378c366..main -- factory/tasks/ docs/decisions/ DESIGN.md PRINCIPLES.md | wc -l`
--> `128`), ten of them `DESIGN.md` and none `PRINCIPLES.md`
-(`git log --oneline 378c366..main -- DESIGN.md PRINCIPLES.md | wc -l` -> `10`,
-and the same over `PRINCIPLES.md` alone -> `0`). No commit has reached the
-private `main` since the morning of 2026-10-26. On the second repository the
-factory merged fifty-four more tasks between the morning of 2026-10-12 and the
-first minutes of 2026-10-31, and the operator took the soak ladder's fourth rung and then its
-fifth, the rung at which a timer may start a tick by day, each time while the
-ladder was not offering it; no timer has been armed. Its record is read in the
-last section.
+The previous snapshot named `b72a2ba`, the night of 2026-10-30. A hundred and
+seventy-six commits have reached the private `main` since
+(`git log --oneline b72a2ba..main | wc -l` -> `176`), and thirty-four of them
+are landings (`git log --format='%s' b72a2ba..main | grep -c '^merge: '` ->
+`34`), every one of them an M0 row and every one in the milestone table below.
+A hundred and three of the others are those landings' own work, brought in
+by their merges (`git rev-list --count b72a2ba..main` minus
+`git rev-list --first-parent --count b72a2ba..main` -> `176 - 73`), and
+thirty-nine were committed on `main` itself
+(`git rev-list --first-parent --no-merges --count b72a2ba..main` -> `39`):
+thirty-six of them are twelve packages of queue, decision and procedure
+records, carriers #123 to #134
+(`git log --first-parent --no-merges --format=%s b72a2ba..main | grep -c 'carrier #'`
+-> `36`); two revert a landing whose merge had turned this repository's own
+baseline red, each landed again under a row of its own (the same with
+`grep -c '^revert: '` -> `2`, and the milestone table); and one edits the
+repository's instructions to the agents that build it. Thirty-two of the
+hundred and seventy-six touch a TaskSpec, an ADR or the design
+(`git log --oneline b72a2ba..main -- factory/tasks/ docs/decisions/ DESIGN.md PRINCIPLES.md | wc -l`
+-> `32`), and none of them `DESIGN.md` or `PRINCIPLES.md`
+(`git log --oneline b72a2ba..main -- DESIGN.md PRINCIPLES.md | wc -l` -> `0`).
+On the second repository the factory merged ten more tasks between the first
+minutes of 2026-10-31 and the evening of 2026-11-02, the ninety-third merge
+its gate made among them; forty-one of its merges have now been measured
+`passed` after they landed, past the forty that repository's roadmap set as
+its goal; and on 2026-11-02 the operator released its version 0.1.0 - a tag
+on GitHub, with the npm publication still pending. The soak ladder stands at
+its fifth rung, and no timer has been armed. Its record is read in the last
+section.
 
 `<repo>` below stands for the private repository's checkout. The commands are run
 with `git -C <repo> ... main`; they read history and write nothing.
@@ -44,15 +50,15 @@ with `git -C <repo> ... main`; they read history and write nothing.
 
 | Measurement | Value | Command |
 |---|---|---|
-| Commits on `main` | `1729` | `git rev-list --count main` |
-| Calendar days with a commit | `58` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
+| Commits on `main` | `1905` | `git rev-list --count main` |
+| Calendar days with a commit | `64` | `git log --format='%ad' --date=short main \| sort -u \| wc -l` |
 | First commit | `2026-08-17` | `git log --format='%ad' --date=short --reverse main \| head -1` |
-| Latest commit in this snapshot | `2026-10-26` | `git log --format='%ad' --date=short main \| head -1` |
-| Landings (commits whose subject begins `merge: `) | `203` | `git log --format='%s' main \| grep -c '^merge: '` |
-| ADRs | `63` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
-| TaskSpecs in the queue | `413` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
-| `.ts` files under `src/` | `133` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
-| `.ts` files under `test/` | `89` | `git ls-tree -r --name-only main test/ \| grep -c '\.ts$'` |
+| Latest commit in this snapshot | `2026-11-05` | `git log --format='%ad' --date=short main \| head -1` |
+| Landings (commits whose subject begins `merge: `) | `237` | `git log --format='%s' main \| grep -c '^merge: '` |
+| ADRs | `65` | `git ls-tree --name-only main docs/decisions/ \| wc -l` |
+| TaskSpecs in the queue | `426` | `git ls-tree --name-only main factory/tasks/ \| wc -l` |
+| `.ts` files under `src/` | `135` | `git ls-tree -r --name-only main src/ \| grep -c '\.ts$'` |
+| `.ts` files under `test/` | `92` | `git ls-tree -r --name-only main test/ \| grep -c '\.ts$'` |
 | Lines of `DESIGN.md` | `922` | `git show main:DESIGN.md \| wc -l` |
 
 Landings by milestone, from
@@ -60,7 +66,7 @@ Landings by milestone, from
 
 | Milestone | Landings |
 |---|---|
-| M0 | `151` |
+| M0 | `185` |
 | M1 | `1` |
 | M2 | `25` |
 | M3 | `13` |
@@ -74,20 +80,28 @@ landings, not blocks, and the earlier blocks are visible only as their `feat: `
 commits in the last table on this page. The milestones themselves are in
 `DESIGN.md` section 17.
 
-The six milestone counts add to `203`, which is the landings row above: no
-landing is outside a milestone, and none is counted twice.
+The six milestone counts add to `237`, which is the landings row above: no
+landing is outside a milestone, and none is counted twice. Two of the
+thirty-four landings since the previous snapshot were reverted on `main`
+within the hour, each because its merge had turned this repository's own
+baseline red, and each returned under a row of its own: M0-316's merge
+`6c4f6b4` by `fd46d96` and M0-345's merge `2f05675` by `804cd46`
+(`git log -1 --format='%h %ad %s' --date=iso <sha>` for each of the four).
+A reverted landing stays in these counts, and its return is a landing of
+its own.
 
-**M0 carries 151 landings, forty-nine more than at the previous snapshot; no
-other count has moved** (M0 stood at `102` on the morning of 2026-10-12, with
-`154` landings in total, and M5 at `6` then too; at `99` on the afternoon of
+**M0 carries 185 landings, thirty-four more than at the previous snapshot; no
+other count has moved** (M0 stood at `151` on the night of 2026-10-30, with
+`203` landings in total; at `102` on the morning of 2026-10-12, with
+`154`, and M5 at `6` then too; at `99` on the afternoon of
 2026-10-09, with `151`; at `97` on the morning of
 2026-10-06, with `149`; at `95` on the morning of
 2026-10-05, with `144`; at `90` on the evening of 2026-10-03, with `138`; at
 `89` on 2026-10-02, with `137`; at `58` on 2026-09-22, with `106`; at `57` on
 2026-09-20, with `105`; at `48` on 2026-09-14, with `96`).
 That is not M0 being re-opened: M0 is where this repository files the rows that
-repair a mechanism a later milestone leans on, and a hundred and three of the
-hundred and seven landings since 2026-09-12 are M0 rows, nearly all of that kind - the fix cycle, the tick's wall, the ladder's sight
+repair a mechanism a later milestone leans on, and a hundred and thirty-seven of the
+hundred and forty-one landings since 2026-09-12 are M0 rows, nearly all of that kind - the fix cycle, the tick's wall, the ladder's sight
 of a gate verdict, one worker home per seat of a pass, the mutant ceiling inside
 a tick, the base a pass builds on, the goal evaluator's reply, the debug mode the
 operator asked for in the factory itself
@@ -158,11 +172,35 @@ skip log that keeps every line, a ping to an external dead-man switch on
 every road out of the tick wrapper, and an infrastructure breaker that reads
 every seat after the builder. The rest are verbs, reports and sentences
 brought to what the code does.
-The other four of the hundred and seven are M5: M5-04, a written procedure rather
+The thirty-four since the snapshot of 2026-10-30 are of the first kind too,
+and ten of them land the eight rows set to land before a timer may start a
+tick - two of those twice, reverted and returned under rows of their own. The
+tick's login probe waits out a weekly limit or an overloaded API instead of
+opening the circuit. The OS fence hides the home directory's credential
+stores and the factory's own control home from every fenced run, and the
+hand verbs - `millwright verify`, `millwright shadow`, `millwright baseline`
+and onboarding - walk behind it as a tick does. A seat whose wall fires has
+its worker's whole process group stopped before the attempt is recorded,
+and no group signal is sent for a group id that could reach past one
+worker. The reviewer and the goal evaluator a pass has open hold durable
+budget reservations, so a tick in another process subtracts them from the
+room it may spend, and a configuration whose worst-case pass exceeds the
+tick's dollar cap is refused
+(`decisions/0065-the-operator-word-of-2026-11-01-rule-a-a-worst-case-pass-within-the-tick-cap.md`).
+A second echelon of alerts reaches the one notify command, and the
+fault-injection suite gains a hung check and a workspace removed under a
+live run, each driven through a real tick. The rest repair the verify walk,
+intake and the gate's inputs - a scout's uncommitted write, a workspace that
+vanished read as the candidate's fault, a check named the way stage 2 names
+its own, evidence lines a builder could forge, and a refuter for the
+reviewer's blocking findings, built and not yet called by any pass - and add
+cases for surviving mutants.
+The other four of the hundred and forty-one are M5: M5-04, a written procedure rather
 than a mechanism
 (`decisions/0048-the-written-procedure-for-soak-rungs-3-4-and-5.md`), and
 M5-05 to M5-07, the chain's last three rows, read in "Where the snapshot
-stands". The last table on this page names a hundred of the hundred and seven.
+stands". The last table on this page names a hundred and thirty-four of the
+hundred and forty-one.
 
 ## Commits per day
 
@@ -227,20 +265,28 @@ From `git log --format='%ad' --date=short main | sort | uniq -c | sort -k2`:
      26 2026-10-24
      23 2026-10-25
       6 2026-10-26
+     27 2026-10-31
+     16 2026-11-01
+     18 2026-11-02
+     28 2026-11-03
+     67 2026-11-04
+     20 2026-11-05
 ```
 
-Thirteen dates between the first and the last commit are absent from that
+Seventeen dates between the first and the last commit are absent from that
 output because no commit carries them: 2026-08-28, 2026-09-01, 2026-09-02,
 2026-09-03, 2026-09-09, 2026-09-13, 2026-09-16, 2026-09-17, 2026-09-18,
-2026-09-24, 2026-09-25, 2026-10-08 and 2026-10-09. Every date from 2026-10-12
-to 2026-10-26 carries a commit, and no later date does: the last commit on
-`main` is dated `2026-10-26 08:42:53 +0200`
-(`git log -1 --format='%ad' --date=iso main`), and the snapshot was taken on
-the night of 2026-10-30, so every row is a whole day. 2026-10-12 now carries
-twelve commits, against the three the previous snapshot counted that
-morning: M0-289's landing in the small hours, then a package of queue and
-decision records, carrier #98's six commits, and the first three of M0-294's
-work. The six commits of 2026-10-26 are one such package, carrier #122's.
+2026-09-24, 2026-09-25, 2026-10-08, 2026-10-09, 2026-10-27, 2026-10-28,
+2026-10-29 and 2026-10-30. Every date from 2026-10-12 to 2026-10-26 carries a
+commit, and so does every date from 2026-10-31 to 2026-11-05: the last commit
+on `main` is dated `2026-11-05 18:20:42 +0200`
+(`git log -1 --format='%ad' --date=iso main`), and the snapshot was taken
+that evening, so the row of 2026-11-05 counts that day up to the snapshot
+and every other row is a whole day. 2026-10-12 carries twelve commits,
+against the three the snapshot of that morning counted: M0-289's landing in
+the small hours, then a package of queue and decision records, carrier #98's
+six commits, and the first three of M0-294's work. The six commits of
+2026-10-26 are one such package, carrier #122's.
 2026-10-02 is a whole day: its last commit is the merge of M0-279 at 07:19
 (`git log --format='%ad %s' --date=iso main | grep '^2026-10-02' | head -1`),
 and the merges the gate made later that day, in the last section, are commits
@@ -407,6 +453,40 @@ skeleton, and the two `chore:` commits that planned and filed the M3 chain.
 | 2026-10-25 | `merge: M0-195 - the skip log keeps every line, STOP still reports, and the wall fits the wrapper's timeout` | The tick wrapper's skip log keeps every line, a STOP still reports, and the tick's wall fits inside the wrapper's timeout. |
 | 2026-10-25 | `merge: M0-340 - the tick wrapper pings an external dead-man switch on every road out` | The tick wrapper pings an external dead-man switch as it starts and on every road out, so a timer that stops firing can be noticed from outside the machine. |
 | 2026-10-25 | `merge: M0-341 - the infrastructure breaker reads every seat after the builder, and a seat's billing or budget ending blocks the row on the pass that met it` | The infrastructure breaker reads every seat after the builder, not the builder alone, and a seat that ends on billing or budget blocks its row on the pass that met it. |
+| 2026-10-31 | `merge: M0-342 - a pass that resumes a carried seat and cannot pin its candidate or open the resumed attempt lands under the resume failure's names, not the wall's` | A pass that resumes a seat carried from an earlier pass, and cannot pin the candidate or open the resumed attempt, now lands the row under that failure's own names instead of the tick wall's. |
+| 2026-10-31 | `merge: M0-312 - a scout that leaves a write uncommitted at the pinned HEAD blocks the pass, and no builder starts on its tree` | A read-only scout that leaves an uncommitted write in the workspace blocks the pass, as a moved HEAD already did, so no builder starts on a tree the scout changed. |
+| 2026-10-31 | `merge: M0-343 - the tick's login probe waits out a weekly limit or an overload instead of opening the circuit` | The tick's login probe carries its own hook for the CLI's stop, so a weekly limit or an overloaded API met by an unattended tick is a wait, not a circuit left open until a person resets it - one of the rows set to land before a timer is armed. |
+| 2026-11-01 | `merge: M0-192 - a pass prices a sibling by the seats it has not yet opened, asks a later row for its own set and a fix cycle for its second set, prices the scout pair as one sum, and names a shortfall and a refusal no retry can fix` | The budget admission prices a sibling dispatch by the seats it has not yet opened, asks a later row and a fix cycle for their own set of seats, prices the scout and the larger builder as one sum, and names a shortfall that no retry can fix. |
+| 2026-11-01 | `merge: M0-196 - a weekly figure above 100 reads over, a payload with no five-hour window writes the weekly one, a stale reading names both causes where no fresh trace says which, and a failed write leaves no temporary` | The weekly-limit reading: a figure above 100 reads as over the limit, a payload with no five-hour window still writes the weekly one, and a stale reading names both of its possible causes where no fresh trace says which. |
+| 2026-11-01 | `merge: M0-316 - the ladder fence hides HOME's credential stores and the control home from every fenced run but the holdout road for the whole run, a file the host replaces included, and refuses nested user namespaces unless the repository says its ladder nests` | The OS fence of every fenced ladder run hides the home directory's credential stores and the factory's control home, a file the host replaces included, and refuses nested user namespaces unless the repository says its ladder nests. Reverted 36 minutes later: it also hid the baseline walks this repository's own ladder reads, and turned its baseline red. M0-352 is its return. |
+| 2026-11-02 | `merge: M0-352 - the ladder fence returns with each repository's baseline walk given back, so this repository's suite passes behind it from the checkout where the baseline verb walks` | M0-316's fence, landed again in the form that gives each repository's baseline walk back, so this repository's own suite passes behind it. |
+| 2026-11-02 | `merge: M0-344 - the second alarm echelon is whole: a row a pass leaves BLOCKED, NEEDS_SPEC or DEAD_LETTER and a run of passes with no progress reach the one notify command as quieter alerts, a post-merge BLOCKED and an infra_auth ending as urgent ones` | The second echelon of alerts: a row a pass leaves blocked, waiting for a spec or dead-lettered, and a run of passes with no progress reach the one notify command as quieter alerts; a blocked post-merge check and a failed login reach it as urgent ones. |
+| 2026-11-02 | `merge: M0-334 - the hand verbs millwright verify and millwright shadow hand stage 2 the ladder fence, and millwright baseline and onboard walk the base ladder behind it, each with the repository's own nesting answer` | The hand verbs walk behind the same fence as a tick: `millwright verify` and `millwright shadow` hand stage 2 the ladder fence, and `millwright baseline` and onboarding walk the base ladder behind it - with M0-316, one of the rows set to land before a timer is armed. |
+| 2026-11-03 | `merge: M0-345 - when a seat's wall fires on the asynchronous road, runSeat stops the worker's whole process group through stopRun before the attempt is kept or classified, and stopRun refuses a group id that would signal outside one worker's group` | A seat whose wall fires has its worker's whole process group stopped before the attempt is recorded. Reverted 40 minutes later: its merge turned this repository's baseline red, and the fix's fenced walk showed a road the wall check did not see. M0-353 and M0-354 are its return. |
+| 2026-11-03 | `merge: M0-346 - the reviewer and the goal evaluator a pass has open hold a durable reservation row, so another process's tick subtracts them from its room` | The reviewer and the goal evaluator a pass has open hold durable reservation rows, so a tick in another process subtracts them from the room it may spend. |
+| 2026-11-03 | `merge: M0-353 - a process group id that is not an integer above 1 is refused before any group signal, in stopRun and in the bounded-run supervisor, and every fixture run handle carries a group id no process can hold` | A process group id that is not an integer above 1 is refused before any group signal, in the run stopper and in the bounded-run supervisor, and every test fixture carries a group id no process can hold - after a hand-run mutant on 2026-11-02 signalled every process of the machine's user. |
+| 2026-11-03 | `merge: M0-356 - a workspace that vanished under a live run is an unanswered stage 0, not a refused candidate, and the landing note no longer names the removed path as where anything is kept` | A workspace removed under a live run is an unanswered stage 0 - an infrastructure retry in a fresh workspace - and no longer a refused candidate charged a quality attempt. |
+| 2026-11-03 | `merge: M0-347 - a hung check and a workspace removed under a live run have cases in the fault-injection suite through a real tick, and the task-branch item says why it has no object` | The fault-injection suite gains a hung check and a workspace removed under a live run, each driven through a real tick, and says why a deleted task branch has no case: the factory creates none. ADR 0026's note of 2026-11-03 reads what it covered and what it did not. |
+| 2026-11-03 | `merge: M0-351 - a configuration whose worst-case first set exceeds the tick cap is refused when it is resolved, the shipped scout ceiling moves to 2.2, the import cycle is cut by a leaf, and the wrapper's dollar floor rises to 12.00` | ADR 0065's rule (A), built: a configuration whose worst-case first set of seats exceeds the tick's dollar cap is refused when it is resolved; the shipped scout ceiling moves from 3 to 2.2 dollars so that the shipped tables pass, and the tick wrapper's dollar floor rises from 8 to 12. |
+| 2026-11-03 | `merge: M0-354 - a seat's fired wall stops the worker's whole group before the attempt is recorded, on GNU's kill-grace road too, with the wall read at the child's exit` | M0-345's return: a seat's fired wall stops the worker's whole process group before the attempt is recorded, also where GNU timeout's kill grace ends the child, with the wall read at the child's exit. |
+| 2026-11-04 | `merge: M0-181 - intake decides each queue issue kind in one table, refuses an unbacked count, asks the worker's fence about each command and names a version a DONE row closes` | Intake decides each kind of queue issue in one table, refuses a stated count with no measurement behind it, asks the worker's fence about each command, and names a version that a DONE row closes. |
+| 2026-11-04 | `merge: M0-182 - the shadow verb asks the tick's base question before it claims anything, and only the base's own ladder refusal on a base not known green is spared the quality attempt` | The shadow verb asks the tick's question about the base before it claims a row, and only the base's own ladder refusal, on a base not known green, is spared the quality attempt. |
+| 2026-11-04 | `merge: M0-187 - gate G3 asks a file whether the row it would write is open, so a new above-floor finding is refused on the run that would write it, and only findings in play are asked for their exception` | Drift gate G3 asks, per file, whether the row a run would write is open, so a new finding above the roadmap floor is refused on the run that would write it, and only findings in play are asked for their exception. |
+| 2026-11-04 | `merge: M0-205 - millwright shadow --model is judged by the canonical table in the loader's own words, and millwright version reads the manifest's one version reader` | `millwright shadow --model` is judged by the canonical model table, in the configuration loader's own words, and `millwright version` reads the manifest through its one version reader. |
+| 2026-11-04 | `merge: M0-206 - the integration lock's name is linked into place with its record already in it` | The integration lock's record is written whole beside the lock and hard-linked into the lock's name, so the name never exists without its content - the defect `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` section 3 (g) names. |
+| 2026-11-04 | `merge: M0-210 - a schema upgrade journals one SCHEMA_MIGRATED event and prints one line naming its range` | Opening a database whose schema is behind journals one SCHEMA_MIGRATED event, inside the transaction that applies the migrations, naming the range and each migration applied, and prints one line. |
+| 2026-11-04 | `merge: M0-186 - a workspace root with no manifest under a declaration is refused, a directory named twice is installed once in the consumer's order, and the per-root bound is pinned` | Installing the integration workspace's dependencies: a declared root with no manifest is refused as an infrastructure failure instead of answering 'not applicable', and a directory named twice is installed once, in the order the consumer wrote. |
+| 2026-11-04 | `merge: M0-219 - stage 6 puts each merge-blocking finding to an injected refuter, and a refuted one no longer blocks the verdict the gate reads` | Stage 6 puts each merge-blocking finding of the reviewer to an injected refuter, and a refuted finding no longer blocks the verdict the gate reads. No pass calls it yet: the seat that will is a row of its own. |
+| 2026-11-04 | `merge: M0-229 - record-landed records what origin carries, asked of the remote-tracking ref M0-136 settled, and fails closed when that ref cannot be read` | `record-landed` records what origin carries, read from the remote-tracking ref, and refuses with exit 78 a ref it cannot read or a commit that ref does not carry. |
+| 2026-11-04 | `merge: M0-240 - the probe's share is divided over the files that will run a baseline, and it prices on a clock that cannot step backwards` | The mutation probe divides its time share over the files that will run a baseline, and prices on a clock that cannot step backwards. |
+| 2026-11-05 | `merge: M0-226 - the fix cycle's prose names the working wall, a goal attempt the store cannot close is not reported as a seat never invoked` | The fix cycle's text names the working wall it plans by, and a goal attempt the store cannot close after its seat ran is reported as the ending it was, not as a seat never invoked. |
+| 2026-11-05 | `merge: M0-249 - readChecksConfig refuses a check named in the form stage 2 gives the task's focused commands, so a file rung can no longer crash the walk on a duplicate check row` | A checks file may not declare a check under the name stage 2 derives for a task's focused commands, so a duplicate check row can no longer crash the walk. |
+| 2026-11-05 | `merge: M0-260 - every line of a run's evidence after its first is fenced in both briefs, so a tail cannot start an entry` | Every line of a run's evidence after its first is fenced in the reviewer's and the goal evaluator's briefs, so output a builder controls cannot start or forge another entry. |
+| 2026-11-05 | `merge: M0-233 - cases for the survivors the acceptance seat named over nine landings, each failing only under its mutant` | Cases for the surviving mutants the acceptance seat named over nine landings, each failing only under its mutant; no source file is touched. |
+| 2026-11-05 | `merge: M0-261 - the reaping case's tree ends with its runner, and the builder suite leaves no directory of its own` | The reaping case's process tree ends with its test runner, and the builder suite leaves no directory of its own behind; tests only. |
+| 2026-11-05 | `merge: M0-273 - stage 1 reads a bigint literal as a BigInt and a name as the language does, and codeOnly keeps a spaced operator as code` | Stage 1's constant-condition evaluator reads a bigint literal as a BigInt and a name as the language does, so a condition that never runs is judged on the language's own terms, and mixed arithmetic is refused as undecidable. |
+| 2026-11-05 | `merge: M0-221 - a landing that meets a refusal journal still unreadable says so, and the cursor rule has one home in readRefusalJournal` | A landing that meets a refusal journal still unreadable says so instead of reporting it empty, and the rule for that journal's cursor has one home. |
+| 2026-11-05 | `merge: M0-230 - the fix cycle a gate refusal buys has its cases: a failed fix walk's packet holds no carried gate phase, and a second gate refusal at the default ceiling lands BLOCKED on the ceiling` | Cases for the fix cycle a gate refusal buys: a failed fix walk's packet carries no gate phase, and a second gate refusal at the default ceiling lands BLOCKED on the ceiling; tests only. |
 
 ## Where the snapshot stands
 
@@ -431,7 +511,11 @@ printed `3` on 2026-10-12 - the setting, from rung 1 to rung 1, on 2026-09-14,
 and the operator's promotions from rung 1 to rung 2 on 2026-10-02 and from
 rung 2 to rung 3 on 2026-10-12. He took rung 4 on 2026-10-17 and rung 5 on the
 night of 2026-10-25, both read below from the records those promotions
-printed when they ran. The mechanisms
+printed when they ran. The same command printed `5` there at 21:38 +0200 on
+2026-11-05, the last of the five the promotion to rung 5 at
+`2026-10-25T21:27:56.574Z`
+(`grep '"type":"LADDER_RUNG_CHANGED"' factory/state/events.jsonl | tail -1 | jq -r .ts`):
+no rung has moved since. The mechanisms
 are counted by their landings; the DoD is not a count, and the ADR says so rather
 than letting the seven landings stand in for it.
 
@@ -485,9 +569,11 @@ that repository had been started by the timer, whose wrapper runs
 `grep '"type":"RUN_STARTED"' factory/state/events.jsonl | grep -c '"trigger":"operator"'`
 printed `143` there at 10:53 +0300, as many as
 `grep -c '"type":"RUN_STARTED"' factory/state/events.jsonl` - the last of them
-a tick that was running then. On the night of 2026-10-30 no timer of the
-factory's was armed on its machine (`systemctl --user list-timers`, read
-then). Up to 2026-10-24 the ladder read a
+a tick that was running then. At 21:38 +0200 on 2026-11-05, with no tick
+running, the same two commands printed `237` and `237`: every tick there to
+date was started by the operator, and none by a timer. On the evening of
+2026-11-05 no timer of the factory's was armed on its machine
+(`systemctl --user list-timers`, read then). Up to 2026-10-24 the ladder read a
 refusal as overturned only when the task had merged and a row of that task
 still carried the very candidate the gate refused - not when a fix cycle or a
 fresh build replaced that candidate with the one that merged - so not every
@@ -540,8 +626,10 @@ git ls-tree --name-only main factory/tasks/ | grep -c 'M5-'      # 7
 git log --format='%s' main | grep -c '^merge: M5-'               # 6
 ```
 
-Both re-run on the night of 2026-10-30 at `b72a2ba`; neither has moved since
-2026-10-05. Of the seven rows, M5-03 - the chain's
+Both re-run on the evening of 2026-11-05 at `3dfc7ab`; neither has moved since
+2026-10-05, and in the private repository's checkout the factory's `queue`
+printed the current version of each of M5-01 to M5-07 `DONE` at 21:39 +0200
+that evening. Of the seven rows, M5-03 - the chain's
 central row, the one that runs the factory against the second repository -
 was closed on 2026-10-04 as done, by an override the seat had recommended and
 reads the operator's answer as taking, which cites the first merge the gate
@@ -555,22 +643,29 @@ applied to no seat, the statistic the lens order would be recomputed from is
 declared unavailable, and the clock around the day in M5's content column
 waits on an operator packet that is corrected before it is put to him.
 `DESIGN.md` section 17 ends M5 at "30-50 real tasks; router and lens order
-recomputed from data", and that is not met. Its first half is now past the
-top of its range: the gate has made eighty-three merges in the second
-repository - in any clone of it, `git rev-list --merges --count 9eb3692..5e7d9f2`
-prints `83` - against the thirty to fifty the line names, and against
-twenty-nine at the previous snapshot. Its second half is not met: no landing
-since has touched either reading, so the lens order has not been recomputed,
-and the router's choice is printed and applied to no seat. So M5's rows are
-closed and M5 is not done - the distinction
-`decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` drew for M4.
+recomputed from data", and that is not met. Its first half is past the top
+of its range: the gate has made ninety-three merges in the second
+repository - in any clone of it, `git rev-list --merges --count 9eb3692..837c291`
+prints `93` - against the thirty to fifty the line names, and against
+eighty-three at the previous snapshot; forty-one of them were measured
+`passed` after they landed (below). Its second half is not met: no landing
+since has changed either reading - since the previous snapshot one landing
+moved an import in the router's module, with its comment, and nothing else
+there (`git diff b72a2ba..main -- src/router/` in the private checkout), and
+none touched the lens statistic - so the lens order has not been recomputed,
+and the router's choice is printed and applied to no seat. The second
+repository's own roadmap is met up to its last stage, the release, which is
+tagged and not yet published on npm (below), but that roadmap is not this
+line. So M5's rows are closed and M5 is not done - the
+distinction `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` drew
+for M4.
 
 **Until 2026-10-05 no milestone landing was dated later than 2026-09-12: of
-the hundred and seven landings since, a hundred and three are M0 and four are
-M5, M5-04 to M5-07, all four dated 2026-10-05**
+the hundred and forty-one landings since, a hundred and thirty-seven are M0
+and four are M5, M5-04 to M5-07, all four dated 2026-10-05**
 (`git log --format='%ad %s' --date=short main | grep '^\S* merge: ' | awk '$1 > "2026-09-12"' | wc -l`
--> `107`, and the same with `grep -c 'merge: M5-'` in place of `wc -l` -> `4`,
-2026-10-30). That is the
+-> `141`, and the same with `grep -c 'merge: M5-'` in place of `wc -l` -> `4`,
+2026-11-05). That is the
 honest shape of the weeks since 2026-09-12: the M5 chain's central row runs the
 factory against the second repository, and until 2026-10-02 each attempt at it
 returned a defect in a mechanism M0 owns - the fix cycle a bounded tick
@@ -588,12 +683,19 @@ landings above, and the three of the snapshot of 2026-10-12 are of the same
 kind: a gate that refused a tests-only candidate for a measurement it gave
 nothing to measure, a hung mutant read as a gap rather than a catch, and a
 race at the integration lock charged to the row that lost it. So are the
-forty-nine since: a candidate rebuilt where nothing had been found wrong with
+forty-nine of the snapshot of 2026-10-30: a candidate rebuilt where nothing had been found wrong with
 it, the candidate's code run outside the OS fence in two more places, a
 free-form entry of the reviewer's that refused a sound candidate, a deadline
 or an unreadable reply read as a refusal, a tick that would have run on a CLI
 version nobody had tested - and, last, four rows that prepare the timer's
-unattended runs. The milestone
+unattended runs. So are the thirty-four since the snapshot of 2026-10-30: a
+login probe that opened the circuit on a weekly limit, a fence that left the
+credential stores and the control home in sight of a fenced run, a fired
+wall that left a worker's process running after its attempt was recorded,
+ticks in two processes that could jointly spend past a ceiling, a
+configuration whose worst pass exceeded its own cap, a scout's write left
+uncommitted, and a workspace that vanished read as the candidate's fault.
+The milestone
 does not advance until they stop arriving, and
 this page will not move it earlier by counting them as M5. Of the four M5
 landings among them, M5-04 adds no mechanism: it is the written procedure a
@@ -610,8 +712,8 @@ thirty-four gate verdicts, seventeen refusals and seventeen passes; the ticks
 of 2026-10-07 added eleven, seven refusals and four passes; and the ticks of
 2026-10-10 to the morning of 2026-10-12 added twenty-one, eight refusals and
 thirteen passes. Every count of that repository's journal from here to the end
-of this page, but for the ones dated 2026-10-30 where they appear, was printed
-on the morning of 2026-10-12, between 10:50 and 10:54
+of this page, but for the ones dated 2026-10-30 or 2026-11-05 where they
+appear, was printed on the morning of 2026-10-12, between 10:50 and 10:54
 +0300, in its working directory, while a tick that had started at 10:51 was
 running: the factory's `status` printed `seq 6082 RUN_FINISHED` as the
 journal's last record at 10:50, the end of the tick before it, and no gate
@@ -620,6 +722,13 @@ the last gate verdict is seq `6079`. The sums further down are cut at seq
 `6082` in the command itself. From that directory,
 `grep -c '"type":"GATE_FAILED"' factory/state/events.jsonl` printed `32` and
 `grep -c '"type":"GATE_PASSED"' factory/state/events.jsonl` printed `34`.
+At 21:38 +0200 on 2026-11-05, with no tick running there and the journal's
+last record the end of a tick at 21:50 +0200 on 2026-11-02, the same two
+commands printed `44` and `98`, and the first two `grep -c` lines of the
+block below printed `97` and `1`: every pass but the first ran its
+held-out check and passed it. The block's last line printed `5` then, the
+three passes later on 2026-10-12 included; its other lines printed what they
+print below.
 The first pass, dated 2026-09-29, is not counted here as the factory's first
 success: `decisions/0039-the-factory-fixes-its-own-gate-first.md`
 records it, as the seat reads it, as a false pass - on a candidate its own
@@ -655,6 +764,8 @@ grep '"type":"MERGED"' factory/state/events.jsonl | grep -c '"reason":"bookkeepi
 grep '"type":"MERGED"' factory/state/events.jsonl | grep -c '"reason":"pushed '       # 29
 ```
 
+At 21:38 +0200 on 2026-11-05 the same three printed `94`, `1` and `93`: one
+record of a push for each of the ninety-three merges the gate has made there.
 The one "bookkeeping:" merge is the first task's, dated 2026-09-21, a landing
 recorded by hand and not one the integrator made. The twenty-nine "pushed"
 ones are the integrator's: for each, it merged the candidate onto the base it had just
@@ -685,7 +796,7 @@ prints `["pass"]` for each of the nine gate passes: all seven conditions passed.
 They are the first merges the factory's gate has made. In the private
 repository's working directory,
 `grep -c '"type":"GATE_PASSED"' factory/state/events.jsonl` printed `0` on
-2026-10-30, and so did
+2026-11-05, and so did
 `grep '"type":"MERGED"' factory/state/events.jsonl | grep -c '"reason":"pushed '`:
 its own landings are bootstrap blocks, recorded by hand, and none has reached
 its `main` through its own gate.
@@ -951,9 +1062,53 @@ b0d29e7 2026-10-26 merge: RT-81 - The settings are read from repo-truth.json at 
 ```
 
 The last of them, RT-85, was merged at 00:00:55 +0200 on 2026-10-31, while
-this snapshot was being taken, from a task the operator had filed nine
-minutes before: `git log -1 --format=%p 5e7d9f2` names `8d883c4`, that task's
-commit, and the candidate `c591039`.
+the previous snapshot was being taken, from a task the operator had filed
+nine minutes before: `git log -1 --format=%p 5e7d9f2` names `8d883c4`, that
+task's commit, and the candidate `c591039`.
+
+From then to the evening of 2026-11-02 the factory merged ten more tasks
+there. In any clone, `git rev-list --merges --count 9eb3692..837c291` prints
+`93`, the same from `5e7d9f2` prints `10`, and every one of the ninety-three
+merges carries the `Millwright-Task-ID:` trailer
+(`git log --merges --format=%B 837c291 | grep -c '^Millwright-Task-ID:'`
+prints `93`). Between them sit eleven commits that carry no merge
+(`git rev-list --first-parent --no-merges --count 5e7d9f2..837c291` prints
+`11`), all of them the operator's: the ten tasks RT-86 to RT-95, each filed
+in a commit of its own, and the release commit read below. The merges, from
+`git log --first-parent --merges --reverse --format='%h %ad %s' --date=short 5e7d9f2..837c291`:
+
+```text
+4e3f3e8 2026-10-31 merge: RT-86 - The Action's `except` input reaches the command as `--except`, so a workflow leaves out a check without naming all the others
+e9d2a16 2026-10-31 merge: RT-87 - Submodules - a submodule the range adds or moves to another commit, or a submodule URL it changes, fails unless a commit message sanctions it
+255a048 2026-10-31 merge: RT-88 - Unpinned actions - a `uses:` reference the range adds to a workflow or an action that names a tag or a branch instead of a full commit id
+23d6934 2026-10-31 merge: RT-89 - Secret files - a file the range adds or changes whose name is one that holds secrets, such as .env, .netrc or a private key
+5d47999 2026-10-31 merge: RT-90 - The Action's `base` input runs the checks over a range it names, on any event - a push, a merge queue, a scheduled or a manual run
+170b2cf 2026-11-01 merge: RT-93 - Bidirectional controls - a line the range adds that holds a Unicode bidirectional control character, which makes code read one way to a reviewer and run another
+1a8c36e 2026-11-01 merge: RT-92 - Lint rules turned off - a lint configuration file the range changes so that a rule is set to off
+7679206 2026-11-01 merge: RT-91 - Workflow permissions - a workflow line the range adds that gives the job's token write access, or that runs the workflow on pull_request_target
+349f54e 2026-11-01 merge: RT-94 - Install scripts - a package the range adds to an npm lockfile whose entry says it runs an install script
+732ec3c 2026-11-02 merge: RT-95 - Raised timeouts read a value written with the digit separator - `300_000`, `1_000.5` - whole
+```
+
+The last of them, RT-95, was merged at 21:48:15 +0200 on 2026-11-02
+(`git log -1 --format='%h %ci' 732ec3c`). That repository's roadmap closes
+its fourth stage when "at least twenty-two checks are registered and the
+factory has made at least forty verified merges here", and its fifth and
+last is the release - "A published package under a name of its own, a
+version, and a README that says what is done and what is not", the
+maintainer's acts and not tasks (`git show 837c291:ROADMAP.md`, its last two
+sections). Thirty-eight minutes after RT-95 the operator made the release
+commit, `837c291` - `chore: release 0.1.0 as @trofimyukdev/repo-truth - the
+README for a first public release, and the package's name, version and
+publish fields` - and tagged it `v0.1.0`: in any clone,
+`git rev-parse 'v0.1.0^{commit}'` prints
+`837c291838de779a9ca333e5b49ebcac7d75c92f`, and `git show 837c291:package.json`
+names the package `@trofimyukdev/repo-truth` at version `0.1.0`. The package
+is not on npm yet: `npm view @trofimyukdev/repo-truth version` printed
+`npm error code E404` at 21:39 +0200 on 2026-11-05. Its publication is
+pending, and this page names no date for it. The README the release wrote
+is that repository's own record of how many checks 0.1.0 carries, with the
+command that counts them.
 
 **The fourth rung was taken on 2026-10-17 and the fifth on the night of
 2026-10-25, both by the operator's own line and both while the ladder was not
@@ -971,38 +1126,58 @@ goal evaluator's unreadable reply carried to the next pass instead of
 refused, in the milestone table - and the operator had set his own condition
 for the fifth rung the day before: ten tasks there judged after that fix
 with no new overturned refusal. Both promotions are records in the second
-repository's journal, quoted as they printed when they ran; the journal was
-not read again for this snapshot.
+repository's journal, quoted as they printed when they ran; on 2026-11-05
+that journal held no promotion after the fifth (above).
 
 What the fifth rung admits is a tick started by a timer by day; ticks the
 operator starts run as before. No timer has been armed (above). Arming it is
 the operator's act, and the order of work set before it puts a few more of
-the factory's own rows first - among them a login check of the tick that
-tells a weekly limit from a dead credential, and cases the fault-injection
-suite still lacks - and a fresh reading of the pre-autonomy checklist
-`DESIGN.md` section 18 points at. So the ladder stands at the fifth rung, and the step
-M4's definition of done names - days of ticks started by the timer - has not
-been run.
+the factory's own rows first, and a fresh reading of the pre-autonomy
+checklist `DESIGN.md` section 18 points at. Of those rows, the login check
+of the tick that tells a weekly limit from a dead credential landed on
+2026-10-31 (M0-343) and the cases the fault-injection suite lacked on
+2026-11-03 (M0-347), beside the fence for every fenced run and for the hand
+verbs (M0-316, returned as M0-352, and M0-334), the group stop of a seat
+whose wall fired (M0-345, returned as M0-354), the budget admission's
+pricing and the durable reservations of the reviewer and the goal evaluator
+(M0-192, M0-346), and the second echelon of alerts (M0-344) - all in the
+milestone table. So the ladder stands at the fifth rung, and the step M4's
+definition of done names - days of ticks started by the timer - has not been
+run.
 
 Each merge there is followed by a post-merge check. By the operator's words
 of 2026-10-22 (`decisions/0060-the-operator-words-of-2026-10-22-stage-five-unfenced-the-holdout-rerun-and-the-verified-merge.md`)
 a merge is to count toward the objective as verified only once that check
 has measured it `passed`, and the repository's own roadmap sets its goal at
 forty merges so measured
-(`git show 5e7d9f2:ROADMAP.md | grep -c 'at least forty verified merges'`
+(`git show 837c291:ROADMAP.md | grep -c 'at least forty verified merges'`
 prints `1`). In that repository's working directory at 06:41 +0200 on
 2026-10-30, before RT-85 was filed,
 `grep '"type":"POST_MERGE_CHECKED"' factory/state/events.jsonl | grep -c '"verdict":"passed"'`
 printed `30`, and the factory's `status` printed `83` for `state.DONE`, `17`
 for `state.CANCELLED` and `4` for `state.SUPERSEDED`, of `104` rows, none of
 them open. Those readings were taken by the seat that runs the factory that
-morning and are quoted, not re-run.
+morning and are quoted, not re-run. At 21:38 +0200 on 2026-11-05 the same
+`grep` printed `41`: the goal of forty is met. The journal holds one such
+record for each of the ninety-three merges
+(`grep -c '"type":"POST_MERGE_CHECKED"' factory/state/events.jsonl` printed
+`93`), and the fifty-two not `passed` are `unmeasured`
+(`grep '"type":"POST_MERGE_CHECKED"' factory/state/events.jsonl | grep -c '"verdict":"unmeasured"'`
+printed `52`): they are the merges made before a post-merge check was
+configured there. The last of them is stamped `2026-10-21T12:31:31.097Z`
+and the first `passed` `2026-10-21T15:36:04.644Z` (the same two `grep`s
+piped to `tail -1` and `head -1` and then `jq -r .ts`), and every merge
+since has been measured `passed`. The journal is kept in that repository's
+working directory and is not published: `factory/state/` is in its
+`.gitignore`, so these counts are readings of the working directory, not
+something a clone can re-run.
 
 `DESIGN.md` section 1 makes `$` per verified merged task the objective. Its
 figures on the second repository below are those of the morning of
 2026-10-12, when twenty-nine of the thirty verified merges it divided by were
-the gate's; neither `metrics` nor the journal there was read again for this
-snapshot. From that repository's working directory at 10:50 +0300 on
+the gate's; `metrics` was not run there for this snapshot, and the journal
+commands below are cut at seq `6082` in the command itself and printed the
+same on 2026-11-05. From that repository's working directory at 10:50 +0300 on
 2026-10-12, the factory's `metrics` printed `30` for `verified_merges` - the
 twenty-nine merges made by then and the first task's - `0` for `failed_out`, `1` for
 `verified_merge_rate`, and `1.6357` for

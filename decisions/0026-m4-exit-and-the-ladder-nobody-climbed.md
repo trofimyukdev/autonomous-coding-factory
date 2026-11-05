@@ -237,6 +237,29 @@ reproducible without root or a paid call - a full disk, exhausted descriptors
 (`ulimit -n 12` aborts node itself at `uv_loop_init`), and a worker OOM, 429 or
 expired credential.
 
+*[NOTE 2026-11-03 by carrier #132, the paragraph above kept as this exit
+reading wrote it. M0-347, merged at 74c2bf4, answered the three conditions in
+test/faultinjection/categories.ts: "a hung test" maps to the case `hung_check`,
+a ladder rung that never returns, walked by a real tick and ended by the bound
+the tick's wall gives it (the row read a hung test as a hung check); "a stale
+worktree" maps to the case `worktree_removed_under_live_run`, a run's workspace
+removed while the run is live, driven through a real tick; and "the task's
+branch is deleted under it" is answered by the coverage kind `no-object`, whose
+reason is the code read that the factory creates no task branch.
+`git grep -c -F 'kind: "not-reproducible",' 74c2bf4 -- test/faultinjection/categories.ts`
+printed 3 on 2026-11-03, the same at be6f084, against 6 at ba569c5; the three
+left are a full disk, exhausted file handles and a worker out of memory. What
+it did not do: the row read "a STALE worktree" as a worktree whose directory
+vanishes under a live run - its outcome quotes the item's old reason, "a
+worktree whose directory vanished under a live run has no case in this suite",
+and owes for it, as its item (2), "A worktree whose directory is removed while
+its run is live" (both quoted joined across their wraps in
+factory/tasks/M0-347.yaml) - so its case drives that reading alone. A
+worktree whose directory is still there and is stale in another sense, such
+as one an earlier run left behind, is not what that case drives, and this
+note does not claim it covered. The other conditions this paragraph names
+were not M0-347's subject.]*
+
 **(g) The integration lock publishes its name before its contents.** From the
 same block: `create` opens with `openSync(path, "wx")` and writes the record
 afterwards, so a competitor reading the gap is told the lock is unreadable.

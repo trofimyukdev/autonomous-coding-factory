@@ -1,14 +1,14 @@
 # Decisions (ADRs) - the published subset
 
-The private repository carries 63 ADRs, measured on the night of 2026-10-30 with
-`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `63`.
-Thirty-five of them are reproduced here: the ones that decide something a reader of
+The private repository carries 65 ADRs, measured on the evening of 2026-11-05 with
+`git -C <repo> ls-tree --name-only main docs/decisions/ | wc -l` -> `65`.
+Thirty-six of them are reproduced here: the ones that decide something a reader of
 `DESIGN.md` cannot infer from the design itself. The numbering is the private
 repository's and is left unrenumbered, so the gaps below are real gaps and not
 lost files.
 
 Cross-references of the form `docs/decisions/NNNN-...` inside these files and
-inside `DESIGN.md` name files in the private repository. Only the thirty-five
+inside `DESIGN.md` name files in the private repository. Only the thirty-six
 listed here are published.
 
 Where an ADR quotes the operator in Russian, the Russian is kept verbatim - it is
@@ -60,10 +60,30 @@ rather than by its identifier.
 | [0051](0051-a-candidate-set-aside-with-no-finding-is-resumed-and-the-lock-loser-waits.md) | 2026-10-12 | The operator's words on the rows his freeze of 2026-10-11 keeps: a candidate the gate refused with nothing measured false is checked again by the next pass instead of rebuilt; a candidate refused at the integration lock its own pass holds waits for its sibling's integration and lands on top of it in the same pass; and the uncharged carry of one candidate is bounded before the fourth rung. |
 | [0055](0055-the-operator-word-of-2026-10-17-a-second-reject-closed-by-tests-or-comments-lands.md) | 2026-10-18 | A rule of the hand-run blocks that build the factory: when an independent verifier's second rejection concerns only tests or comments, the block fixes them within the same attempt and lands with two quality attempts counted; a second rejection on the code's logic still stops the block. |
 | [0059](0059-the-operator-word-of-2026-10-21-a-tick-refuses-an-untested-cli.md) | 2026-10-21 | A tick refuses, before any worker, a version of the coding agent's CLI other than the one the consumer has tested; and the janitor's test for an orphaned worker process accepts the user's service manager as well as init as its parent, with every other clause unchanged. |
-| [0060](0060-the-operator-words-of-2026-10-22-stage-five-unfenced-the-holdout-rerun-and-the-verified-merge.md) | 2026-10-22 | A test-strength stage handed no fence starts nothing and answers `error`; a merged task whose held-out check fails after later merges goes from DONE to BLOCKED by a second withdrawal edge, with an incident and a notification and no revert; and what counts as a verified merge: how many merges the post-merge check measured is printed beside the count, and once the second repository has five merges in a row measured `passed`, the objective divides only by those. The first decision was built when it was taken; the rows that build the other two were still queued at this snapshot. |
+| [0060](0060-the-operator-words-of-2026-10-22-stage-five-unfenced-the-holdout-rerun-and-the-verified-merge.md) | 2026-10-22 | A test-strength stage handed no fence starts nothing and answers `error`; a merged task whose held-out check fails after later merges goes from DONE to BLOCKED by a second withdrawal edge, with an incident and a notification and no revert; and what counts as a verified merge: how many merges the post-merge check measured is printed beside the count, and once the second repository has five merges in a row measured `passed`, the objective divides only by those. The first decision was built when it was taken; the rows that build the other two were still queued at the snapshot of 2026-10-30. |
+| [0065](0065-the-operator-word-of-2026-11-01-rule-a-a-worst-case-pass-within-the-tick-cap.md) | 2026-11-01 | A configuration whose worst-case pass - the dearest set of seats one dispatch opens, at the configured ceilings - exceeds the tick's dollar cap is refused when it is resolved, so the cap stays a real cap rather than one read per seat; the shipped scout ceiling moves so that the shipped tables pass, a cap lowered at run time is left outside the rule, and the tick wrapper's dollar floor rises to the worst-case set. |
 
-Thirteen ADRs were filed after the previous published snapshot, of the
-morning of 2026-10-12, between 2026-10-12 and 2026-10-26: 0051 to 0063.
+Two ADRs were filed after the previous published snapshot, of the night
+of 2026-10-30: 0064 on 2026-10-31 and 0065 on 2026-11-01. Two earlier ones
+changed: `git -C <repo> diff --name-only b72a2ba..main -- docs/decisions/ | wc -l`
+printed `4` on the evening of 2026-11-05 - the two new files, 0026 and
+0062. Each of those two gained a dated note of 2026-11-03 on what M0-347's
+landing covered; 0026's copy above carries its note under the same
+substitutions as before, and 0062 stays held, its note pointing at
+0026's. 0065 is reproduced above, sanitized as 0060 is: the transcript's
+path and name and the row and session identifiers removed, rows named by
+their time, seat names removed, local times written as such, and the
+paths of a command written as `<home>`, `<repo>` and `<repo-truth>`. 0064
+is held: its words are on the factory's plans, the seats' night routine,
+a research the operator asked for and a spending word for a pilot -
+material this repository does not publish, the reasons 0040, 0062 and
+0063 are held. Its one decision a reader of this repository needs, two
+more rows to land before a timer is armed - M0-316 and M0-334 - is in
+`TIMELINE.md`'s milestone table as what was done.
+
+Thirteen ADRs were filed between the snapshots of the morning of
+2026-10-12 and the night of 2026-10-30, between 2026-10-12 and
+2026-10-26: 0051 to 0063.
 No earlier ADR changed: `git -C <repo> diff --name-only 378c366..main -- docs/decisions/ | wc -l`
 printed `13` on the night of 2026-10-30, the thirteen new files and no other,
 so every earlier copy here stands as it was published. Four of the thirteen
@@ -175,10 +195,13 @@ snapshot: the question its section 2 (a) left open was closed on 2026-09-19, and
 gained on 2026-09-23 - every seat named by a full model id - which 0031 records
 the words for. 0035, 0036 and 0038 are reproduced as their originals stand,
 with the marks "temporary" they carry: 0043 is the later record that answers
-them, and none of the three was edited by it.
+them, and none of the three was edited by it. 0026 is reproduced with the
+dated note its original gained on 2026-11-03, on what M0-347 covered of the
+three conditions its section 3 (f) names; the paragraph the note follows is
+kept as the exit reading wrote it.
 
 The `Filed` column is the date of the commit that added the file, measured on
-the night of 2026-10-30, for all thirty-five, with, for each file:
+the evening of 2026-11-05, for all thirty-six, with, for each file:
 
 ```sh
 git -C <repo> log --diff-filter=A --format='%ad' --date=short main -- docs/decisions/<file> | tail -1
