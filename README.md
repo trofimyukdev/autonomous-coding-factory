@@ -35,8 +35,9 @@ the non-goals it excludes.
 
 ## Status
 
-**At a glance, measured on 2026-11-05.** One value a line, each with the
-command that prints it; the derivation is below and in `TIMELINE.md`.
+**At a glance, measured on 2026-11-05, and the npm line on 2026-11-06.** One
+value a line, each with the command that prints it; the derivation is below
+and in `TIMELINE.md`.
 
 - **The factory's own landings: over two hundred** - `237` on the private
   `main`: `git log --format='%s' main | grep -c '^merge: '`.
@@ -49,11 +50,12 @@ command that prints it; the derivation is below and in `TIMELINE.md`.
   `grep '"type":"POST_MERGE_CHECKED"' factory/state/events.jsonl | grep -c '"verdict":"passed"'`.
   The fifty-two before them are recorded `unmeasured`: no post-merge check
   was configured there until 2026-10-21.
-- **Its version 0.1.0: tagged on GitHub on 2026-11-02, not yet on npm** - in
-  any clone, `git rev-parse 'v0.1.0^{commit}'` prints
-  `837c291838de779a9ca333e5b49ebcac7d75c92f`, and
-  `npm view @trofimyukdev/repo-truth version` printed `E404`: the npm
-  publication is pending.
+- **Its version 0.1.0: tagged on GitHub on 2026-11-02, published on npm on
+  2026-11-06** - in any clone, `git rev-parse 'v0.1.0^{commit}'` prints
+  `837c291838de779a9ca333e5b49ebcac7d75c92f`; anywhere,
+  `npm view @trofimyukdev/repo-truth version` printed `0.1.0` on 2026-11-06,
+  and `npm view @trofimyukdev/repo-truth 'time[0.1.0]'` prints
+  `2026-11-06T05:14:20.934Z`, the moment the registry recorded it.
 - **Ticks there started by a timer: none yet** - all `237` were started by
   the operator: in its working directory,
   `grep '"type":"RUN_STARTED"' factory/state/events.jsonl | grep -c '"trigger":"operator"'`,
@@ -71,8 +73,8 @@ repository's public `main`, each passed by the gate and merged and pushed by the
 factory itself, under supervision - no tick was started by the timer. By the
 evening of 2026-11-02 its gate had made ninety-three merges there, forty-one
 of them measured `passed` after they landed, and the operator had released
-that repository's version 0.1.0, tagged on GitHub, with its npm publication
-pending. He had taken the soak ladder's fourth rung and then its fifth -
+that repository's version 0.1.0, tagged on GitHub, which he published on npm
+on 2026-11-06. He had taken the soak ladder's fourth rung and then its fifth -
 unattended cron by day - each at a moment the ladder was not offering it. No
 timer has been armed, so no tick there has yet been started by one.**
 
@@ -80,7 +82,8 @@ Measured on the evening of **2026-11-05** against the private `main` at
 `3dfc7abfadf6edcd420387f0b0fc8567b485eeb1` - thirty-four landings after the
 commit the previous snapshot named on the night of 2026-10-30, every one of
 them an M0 row - with `git -C <repo> ... main`. Of the rows on the second
-repository, the merge count is re-run, as any clone of it prints it; the rows
+repository, the merge count is re-run, as any clone of it prints it, and the
+release's npm row was read from the registry on the morning of 2026-11-06; the rows
 dated 2026-11-05 were read in its working directory at 21:38 +0200 that
 evening, while no tick ran there, from the factory's journal, which that
 repository does not publish; and the rows dated 2026-10-12 were read there
@@ -101,7 +104,7 @@ printed the same on 2026-11-05:
 | Landings since 2026-09-12 | `141` | `git log --format='%ad %s' --date=short main \| grep '^\S* merge: ' \| awk '$1 > "2026-09-12"' \| wc -l` |
 | Of those, M5 landings - every other one is M0 | `4` | the same, with `grep -c 'merge: M5-'` in place of `wc -l` |
 | Merges the gate made into the second repository's `main` | `93` | in any clone of it: `git rev-list --merges --count 9eb3692..837c291` |
-| Its release: the tag `v0.1.0` names `837c291`; on npm, 2026-11-05 | not published | in any clone: `git rev-parse 'v0.1.0^{commit}'`; anywhere: `npm view @trofimyukdev/repo-truth version` (printed `E404`) |
+| Its release: the tag `v0.1.0` names `837c291`; on npm, 2026-11-06 | `0.1.0`, published 2026-11-06 | in any clone: `git rev-parse 'v0.1.0^{commit}'`; anywhere: `npm view @trofimyukdev/repo-truth version` -> `0.1.0`, and `npm view @trofimyukdev/repo-truth 'time[0.1.0]'` -> `2026-11-06T05:14:20.934Z` |
 | Soak-ladder rung there, 2026-11-05 | `5` (unattended cron by day), taken by the operator on 2026-10-25 while not offered, and not moved since | from its working directory: `grep '"type":"LADDER_RUNG_CHANGED"' factory/state/events.jsonl \| tail -1 \| jq -c '[.payload.from, .payload.to, .ts]'` -> `[4,5,"2026-10-25T21:27:56.574Z"]` |
 | Timers of the factory armed on its machine, 2026-11-05 | none | `systemctl --user list-timers` |
 | Ticks there started by the operator / by a timer, 2026-11-05 | `237` / `0` | from its working directory: `grep '"type":"RUN_STARTED"' factory/state/events.jsonl \| grep -c '"trigger":"operator"'`; the same with `cron` |
@@ -136,8 +139,8 @@ the gate has now made ninety-three merges in the second repository, past the
 top of the range the line names, but the lens order has not been recomputed
 and the router's choice is applied to no seat. That repository's own roadmap
 is met up to its last stage - its goal of forty merges measured `passed`
-after they land is met - and the release that stage names is tagged, with
-its npm publication pending; but that roadmap is not the line's second half.
+after they land is met - and the release that stage names is tagged and,
+since 2026-11-06, published on npm; but that roadmap is not the line's second half.
 So M5 is not done, by the same
 rule that keeps M4 open. Until 2026-10-05 the last landing of any milestone was
 dated 2026-09-12: of the hundred and forty-one landings since, a hundred and thirty-seven
@@ -220,8 +223,9 @@ measured `passed`. By the evening of 2026-11-02 the factory merged ten more
 there, the ninety-third merge its gate made among them, and forty-one had
 been measured `passed` - the goal met. The roadmap's last stage, the release,
 is the maintainer's own act, and it followed that evening: the commit that
-names the package and its version 0.1.0, tagged `v0.1.0`; the package is not
-yet on npm (`TIMELINE.md`, "Where the snapshot stands"). The earlier series of ticks are recorded, with their
+names the package and its version 0.1.0, tagged `v0.1.0`; the operator
+published the package on npm on the morning of 2026-11-06 (`TIMELINE.md`,
+"Where the snapshot stands"). The earlier series of ticks are recorded, with their
 commands, in `decisions/0031-the-word-on-the-series-and-the-word-on-the-models.md` and
 `decisions/0032-the-words-on-the-second-series-and-the-debug-mode.md`.
 The full derivation is `TIMELINE.md`.

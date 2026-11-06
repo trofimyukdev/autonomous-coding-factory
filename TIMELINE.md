@@ -11,7 +11,8 @@ again for this snapshot, at 21:38 +0200 on 2026-11-05, while no tick ran
 there - its last record is the end of a tick at 21:50 +0200 on 2026-11-02 -
 and the counts dated 2026-11-05 are that reading; the others are those of the
 earlier snapshots, with their dates. What any clone of that repository
-prints - its merges - was re-run.
+prints - its merges - was re-run, and its release's record on npm was read
+on the morning of 2026-11-06.
 
 The previous snapshot named `b72a2ba`, the night of 2026-10-30. A hundred and
 seventy-six commits have reached the private `main` since
@@ -39,7 +40,7 @@ minutes of 2026-10-31 and the evening of 2026-11-02, the ninety-third merge
 its gate made among them; forty-one of its merges have now been measured
 `passed` after they landed, past the forty that repository's roadmap set as
 its goal; and on 2026-11-02 the operator released its version 0.1.0 - a tag
-on GitHub, with the npm publication still pending. The soak ladder stands at
+on GitHub - which he published on npm on the morning of 2026-11-06. The soak ladder stands at
 its fifth rung, and no timer has been armed. Its record is read in the last
 section.
 
@@ -655,7 +656,7 @@ there (`git diff b72a2ba..main -- src/router/` in the private checkout), and
 none touched the lens statistic - so the lens order has not been recomputed,
 and the router's choice is printed and applied to no seat. The second
 repository's own roadmap is met up to its last stage, the release, which is
-tagged and not yet published on npm (below), but that roadmap is not this
+tagged and, since 2026-11-06, published on npm (below), but that roadmap is not this
 line. So M5's rows are closed and M5 is not done - the
 distinction `decisions/0026-m4-exit-and-the-ladder-nobody-climbed.md` drew
 for M4.
@@ -1104,9 +1105,13 @@ publish fields` - and tagged it `v0.1.0`: in any clone,
 `git rev-parse 'v0.1.0^{commit}'` prints
 `837c291838de779a9ca333e5b49ebcac7d75c92f`, and `git show 837c291:package.json`
 names the package `@trofimyukdev/repo-truth` at version `0.1.0`. The package
-is not on npm yet: `npm view @trofimyukdev/repo-truth version` printed
-`npm error code E404` at 21:39 +0200 on 2026-11-05. Its publication is
-pending, and this page names no date for it. The README the release wrote
+was not on npm when this snapshot was taken: `npm view @trofimyukdev/repo-truth version`
+printed `npm error code E404` at 21:39 +0200 on 2026-11-05. The operator
+published it on the morning of 2026-11-06: at 07:25 +0200 that day the same
+command printed `0.1.0`, `npm view @trofimyukdev/repo-truth 'time[0.1.0]'`
+printed `2026-11-06T05:14:20.934Z` - 07:14 +0200 - and the published
+tarball's sha1, `npm view @trofimyukdev/repo-truth@0.1.0 dist.shasum`,
+printed `11489bcf5fe8ed93e0c370c5af9009cc47ff528a`. The README the release wrote
 is that repository's own record of how many checks 0.1.0 carries, with the
 command that counts them.
 
